@@ -1,0 +1,86 @@
+#!/usr/bin/env ruby
+require 'gli'
+begin # XXX: Remove this begin/rescue before distributing your app
+require 'pgit'
+rescue LoadError
+  STDERR.puts "In development, you need to use `bundle exec bin/pgit` to run your app"
+  STDERR.puts "At install-time, RubyGems will make sure lib, etc. are in the load path"
+  STDERR.puts "Feel free to remove this message from bin/pgit now"
+  exit 64
+end
+
+include GLI::App
+
+program_desc 'Optimize your Pivotal Tracker and Git workflow'
+
+version Pgit::VERSION
+
+subcommand_option_handling :normal
+arguments :strict
+
+desc 'Describe some switch here'
+switch [:s,:switch]
+
+desc 'Path to the config file'
+default_value "#{ENV['HOME']}/.pivotal.yml"
+arg_name '/path/to/.pivotal.yml'
+flag [:c,:flagname]
+
+desc 'Create/Destroy a Git branch based on a Pivotal Tracker story'
+arg_name 'Describe arguments to story_branch here'
+command :story_branch do |c|
+  c.desc "Parses the title of the given Pivotal Tracker story,\n" +
+         "  makes the branch name, and does a checkout"
+  c.long_desc "
+  Makes a cURL request to Pivotal Tracker to fetch the story, based on the given story id, parses the title, appends it with the story id. It then creates a branch name with that parsed title and does a `git checkout` to it.
+  "
+  c.arg_name 'STORY_ID'
+  c.flag :s
+
+  c.desc "Merge back to staging, remove local and remote (origin?) branches"
+  c.switch :f
+
+  c.desc "Attempts to join the story-branch that, presumably, already exists"
+  c.arg_name 'STORY_ID'
+  c.flag :j
+  c.action do |global_options,options,args|
+
+    # Your command logic here
+
+    # If you have any errors, just raise them
+    # raise "that command made no sense"
+
+    puts "story_branch command ran"
+  end
+end
+
+desc 'Wraps `git commit -m` and prepends the message with story id of the branch'
+arg_name 'Describe arguments to commit here'
+command :commit do |c|
+  c.action do |global_options,options,args|
+    puts "commit command ran"
+  end
+end
+
+pre do |global,command,options,args|
+  # Pre logic here
+  # Return true to proceed; false to abort and not call the
+  # chosen command
+  # Use skips_pre before a command to skip this block
+  # on that command only
+  true
+end
+
+post do |global,command,options,args|
+  # Post logic here
+  # Use skips_post before a command to skip this
+  # block on that command only
+end
+
+on_error do |exception|
+  # Error logic here
+  # return false to skip default error handling
+  true
+end
+
+exit run(ARGV)
