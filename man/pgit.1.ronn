@@ -1,0 +1,15 @@
+pgit(1) -- optimize your Pivotal Tracker and Git workflow
+============================================================
+
+## SYNOPSIS
+
+`pgit`
+
+## DESCRIPTION
+
+**pgit** is a simple command-line tool that improves developer
+workflow.
+
+## FILES
+
+## EXAMPLES
