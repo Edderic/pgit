@@ -1,7 +1,7 @@
 require_relative '../lib/pgit'
 
 describe 'PGit::StoryBranch' do
-  describe '#new(story_id, projects)' do
+  describe '#new(story_id, config_yaml)' do
     it 'should call .to_yaml on the configuration' do
       fake_project_1 =  { "path" => "~/Therapy-Exercises-Online/some_other_project",
                           "id" => 12345,
