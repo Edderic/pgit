@@ -28,9 +28,10 @@ describe 'PGit::Story' do
       GOOD_JSON
       allow(pivotal_story).to receive(:`).with(get_request).and_return(fake_good_json)
 
-      pivotal_story.get!
+      get_result = pivotal_story.get!
 
       expect(pivotal_story).to have_received(:`).with get_request
+      expect(get_result).not_to be_nil
     end
 
     describe 'if there is an error' do
