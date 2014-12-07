@@ -18,7 +18,8 @@ module PGit
     end
 
     def get!
-      `#{get_request}`
+      request = `#{get_request}`
+      raise request if request.match(/error/)
     end
 
     def link
