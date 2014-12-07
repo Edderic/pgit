@@ -1,11 +1,11 @@
 #
-# Wrapper for a Pivotal Tracker story
+#   Wrapper for a Pivotal Tracker story
 #
 # - id: story id
 # - project_id: found in the pivotal tracker settings page
 # - api_token: found in the PT settings page
 
-module Pivotal
+module PGit
   class Story
     def initialize(id, project_id, api_token)
       @id = id

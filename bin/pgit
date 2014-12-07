@@ -18,13 +18,22 @@ version Pgit::VERSION
 subcommand_option_handling :normal
 arguments :strict
 
-desc 'Describe some switch here'
-switch [:s,:switch]
+# desc 'Describe some switch here'
+# switch [:s,:switch]
 
 desc 'Path to the config file'
-default_value "#{ENV['HOME']}/.pivotal.yml"
+default_value "#{ENV['HOME']}/.pgit.rc.yml"
 arg_name '/path/to/.pivotal.yml'
-flag [:c,:flagname]
+flag [:c,:config]
+
+desc 'Bypasses the app asking for confirmation'
+switch [:force]
+
+desc 'PivotalTracker API Token'
+arg_name 'secr3tT0ken123'
+flag [:'api-token']
+# desc 'Initialize the config file'
+
 
 desc 'Create/Destroy a Git branch based on a Pivotal Tracker story'
 arg_name 'Describe arguments to story_branch here'
@@ -35,10 +44,10 @@ command :story_branch do |c|
   Makes a cURL request to Pivotal Tracker to fetch the story, based on the given story id, parses the title, appends it with the story id. It then creates a branch name with that parsed title and does a `git checkout` to it.
   "
   c.arg_name 'STORY_ID'
-  c.flag :s
+  c.flag :s, :start
 
   c.desc "Merge back to staging, remove local and remote (origin?) branches"
-  c.switch :f
+  c.switch :f, :finish
 
   c.desc "Attempts to join the story-branch that, presumably, already exists"
   c.arg_name 'STORY_ID'
@@ -59,6 +68,15 @@ arg_name 'Describe arguments to commit here'
 command :commit do |c|
   c.action do |global_options,options,args|
     puts "commit command ran"
+  end
+end
+
+
+desc 'Initializes configuration file'
+arg_name 'path/to/config_file'
+command :init_config do |c|
+  c.action do |global_options,options,args|
+    puts "init_config command ran"
   end
 end
 
