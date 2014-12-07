@@ -1,4 +1,4 @@
-require_relative '../lib/pivotal'
+require_relative '../lib/pgit'
 
 describe 'PGit::StoryBranch' do
   describe '#new(story_id, projects)' do
