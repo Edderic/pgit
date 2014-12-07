@@ -8,7 +8,25 @@ describe 'PGit::Story' do
       api_token = 'abc10xyz'
       pivotal_story = PGit::Story.new(story_id, project_id, api_token)
       get_request = "curl -X GET -H 'X-TrackerToken: abc10xyz' 'https://www.pivotaltracker.com/services/v5/projects/321/stories/123'"
-      allow(pivotal_story).to receive(:`).with get_request
+      fake_good_json = <<-GOOD_JSON
+      {
+         "created_at": "2014-11-25T12:00:00Z",
+         "current_state": "unstarted",
+         "description": "ignore the droids",
+         "estimate": 2,
+         "id": 555,
+         "kind": "story",
+         "labels": [],
+         "name": "Bring me the passengers",
+         "owner_ids": [],
+         "project_id": 99,
+         "requested_by_id": 101,
+         "story_type": "feature",
+         "updated_at": "2014-11-25T12:00:00Z",
+         "url": "http://localhost/story/show/555"
+      }
+      GOOD_JSON
+      allow(pivotal_story).to receive(:`).with(get_request).and_return(fake_good_json)
 
       pivotal_story.get!
 
