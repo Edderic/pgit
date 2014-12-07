@@ -1,4 +1,4 @@
-require_relative '../lib/pivotal'
+require 'pgit'
 
 describe 'PGit::StoryBranch::NameParser' do
   describe '#parse' do

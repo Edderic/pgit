@@ -1,4 +1,4 @@
-require_relative '../lib/pgit'
+require 'pgit'
 
 describe 'PGit::StoryBranch' do
   describe '#new(story_id, config_yaml)' do

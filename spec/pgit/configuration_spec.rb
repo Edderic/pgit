@@ -1,4 +1,4 @@
-require_relative '../lib/pgit'
+require 'pgit'
 
 describe 'PGit::Configuration' do
   describe '#new(configuration_path)' do
