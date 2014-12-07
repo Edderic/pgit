@@ -20,5 +20,19 @@ describe 'PGit::StoryBranch::Application' do
         expect(fake_story_branch).to have_received(:start)
       end
     end
+
+    describe 'options passed in have keys that only point to nil or false' do
+      it 'should show the helpfile' do
+        global_opts = {}
+        opts = { start: nil, finish: false }
+        args = {}
+        story_branch_help_call = 'pgit story_branch --help'
+        allow_any_instance_of(PGit::StoryBranch::Application).to receive(:`).with(story_branch_help_call)
+
+        story_branch = PGit::StoryBranch::Application.new(global_opts, opts, args)
+
+        expect(story_branch).to have_received(:`).with(story_branch_help_call)
+      end
+    end
   end
 end
