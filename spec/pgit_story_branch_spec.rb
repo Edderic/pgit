@@ -32,7 +32,7 @@ describe 'PGit::StoryBranch' do
     end
   end
 
-  describe '#create' do
+  describe '#start' do
     it 'should call the backticks on the Kernel with the proper branch name' do
       fake_project_1 =  { "path" => "~/Therapy-Exercises-Online/some_other_project",
                           "id" => 12345,
@@ -86,7 +86,7 @@ describe 'PGit::StoryBranch' do
 
       allow(pg_branch).to receive(:`).with(checkout_branch_command)
 
-      pg_branch.create_and_checkout
+      pg_branch.start
 
       expect(pg_branch).to have_received(:`).with(checkout_branch_command)
     end

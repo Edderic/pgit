@@ -17,7 +17,7 @@ module PGit
       @story = Story.new(story_id, project_id, api_token)
     end
 
-    def create_and_checkout
+    def start
       story_json = JSON.parse(@story.get!)
       name = story_json["name"]
       story_id = story_json["id"]
