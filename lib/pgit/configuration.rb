@@ -8,13 +8,17 @@
 
 module PGit
   class Configuration
-    def initialize(config_path = '~/.edderic-dotfiles/config/pivotal.yml')
+    def initialize(config_path = '~/.pgit.rc.yml')
       @expanded_path = File.expand_path(config_path)
-      config_file = File.open(@expanded_path, 'r')
-      @yaml = YAML.load(config_file)
+      if File.exists? @expanded_path
+        config_file = File.open(@expanded_path, 'r')
+        @yaml = YAML.load(config_file)
 
-      validate_existence_of_at_least_one_project
-      validate_presence_of_items_in_each_project
+        validate_existence_of_at_least_one_project
+        validate_presence_of_items_in_each_project
+      else
+        raise missing_config_default
+      end
     end
 
     def to_yaml
@@ -23,13 +27,21 @@ module PGit
 
     private
 
+    def missing_config_default
+      "Under ~/.pgit.rc.yml,\n" + general_error_message
+    end
+
     def general_error_message
       "Please have the following layout:\n" +
-        "\n" +
-        "projects:\n" +
-        "  - path: ~/some/path/to/a/pivotal-git/project\n" +
-        "    id: 12345\n" +
-        "    api_token: somepivotalatoken124"
+      "\n" +
+      "projects:\n" +
+      "  - path: ~/some/path/to/a/pivotal-git/project\n" +
+      "    id: 12345\n" +
+      "    api_token: somepivotalatoken124\n" +
+      "\n" +
+      "  - path: ~/some/other/pivotal-git/project\n" +
+      "    id: 23429070\n" +
+      "    api_token: somepivotalatoken124"
     end
 
     def validate_presence_of_items_in_each_project

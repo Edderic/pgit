@@ -1,4 +1,4 @@
-require_relative '../lib/pivotal'
+require_relative '../lib/pgit'
 
 describe 'PGit::Configuration' do
   describe '#new(configuration_path)' do
@@ -11,15 +11,20 @@ describe 'PGit::Configuration' do
 
         allow(File).to receive(:expand_path).with(fake_path).and_return(fake_expanded_path)
         allow(File).to receive(:expand_path).with('.')
+        allow(File).to receive(:exists?).with(fake_expanded_path).and_return(true)
         allow(File).to receive(:open).with(fake_expanded_path, 'r').and_return(fake_file)
         allow(YAML).to receive(:load).with(fake_file).and_return(fake_yaml)
-        error_message =  "Error: #{fake_expanded_path} needs at least one project.\n" +
-                         "Please have the following layout:\n" +
-                         "\n" +
-                         "projects:\n" +
-                         "  - path: ~/some/path/to/a/pivotal-git/project\n" +
-                         "    id: 12345\n" +
-                         "    api_token: somepivotalatoken124"
+        error_message = "Error: #{fake_expanded_path} needs at least one project.\n" +
+                          "Please have the following layout:\n" +
+                          "\n" +
+                          "projects:\n" +
+                          "  - path: ~/some/path/to/a/pivotal-git/project\n" +
+                          "    id: 12345\n" +
+                          "    api_token: somepivotalatoken124\n" +
+                          "\n" +
+                          "  - path: ~/some/other/pivotal-git/project\n" +
+                          "    id: 23429070\n" +
+                          "    api_token: somepivotalatoken124"
 
         expect{ PGit::Configuration.new(fake_path) }.to raise_error(error_message)
       end
@@ -37,15 +42,20 @@ describe 'PGit::Configuration' do
 
         allow(File).to receive(:expand_path).with(fake_path).and_return(fake_expanded_path)
         allow(File).to receive(:expand_path).with('.')
+        allow(File).to receive(:exists?).with(fake_expanded_path).and_return(true)
         allow(File).to receive(:open).with(fake_expanded_path, 'r').and_return(fake_file)
         allow(YAML).to receive(:load).with(fake_file).and_return(fake_yaml)
         error_message =  "Error: Must have a path, id, and api_token for each project.\n" +
-                         "Please have the following layout:\n" +
-                         "\n" +
-                         "projects:\n" +
-                         "  - path: ~/some/path/to/a/pivotal-git/project\n" +
-                         "    id: 12345\n" +
-                         "    api_token: somepivotalatoken124"
+                          "Please have the following layout:\n" +
+                          "\n" +
+                          "projects:\n" +
+                          "  - path: ~/some/path/to/a/pivotal-git/project\n" +
+                          "    id: 12345\n" +
+                          "    api_token: somepivotalatoken124\n" +
+                          "\n" +
+                          "  - path: ~/some/other/pivotal-git/project\n" +
+                          "    id: 23429070\n" +
+                          "    api_token: somepivotalatoken124"
 
         expect{ PGit::Configuration.new(fake_path) }.to raise_error(error_message)
       end
@@ -66,6 +76,7 @@ describe 'PGit::Configuration' do
         fake_yaml = { 'projects' => fake_projects }
 
         allow(File).to receive(:expand_path).with(fake_path).and_return(fake_expanded_path)
+        allow(File).to receive(:exists?).with(fake_expanded_path).and_return(true)
         allow(File).to receive(:open).with(fake_expanded_path, 'r').and_return(fake_file)
         allow(YAML).to receive(:load).with(fake_file).and_return(fake_yaml)
 
@@ -90,8 +101,8 @@ describe 'PGit::Configuration' do
   describe '#new (without any arguments)' do
     describe 'default configuration_path does exist' do
       it 'should load the default configuration file' do
-        default_path = "~/.edderic-dotfiles/config/pivotal.yml"
-        default_expanded_path = "/Users/edderic/.edderic-dotfiles/config/pivotal.yml"
+        default_path = "~/.pgit.rc.yml"
+        default_expanded_path = "/Users/edderic/.pgit.rc.yml"
         fake_file = double('file')
 
         fake_projects = [ { "path" => 'fake_path',
@@ -101,6 +112,7 @@ describe 'PGit::Configuration' do
 
         fake_yaml = { 'projects' => fake_projects }
 
+        allow(File).to receive(:exists?).with(default_expanded_path).and_return(true)
         allow(File).to receive(:expand_path).with(default_path).and_return(default_expanded_path)
         allow(File).to receive(:open).with(default_expanded_path, 'r').and_return(fake_file)
         allow(YAML).to receive(:load).with(fake_file).and_return(fake_yaml)
@@ -108,6 +120,25 @@ describe 'PGit::Configuration' do
         configuration = PGit::Configuration.new
 
         expect(File).to have_received(:expand_path).with(default_path)
+      end
+    end
+
+    describe 'default configuration file does not exist' do
+      it 'should throw an error' do
+        allow(File).to receive(:exists?).and_return(false)
+
+        error_message =  "Under ~/.pgit.rc.yml,\n" +
+                         "Please have the following layout:\n" +
+                         "\n" +
+                         "projects:\n" +
+                         "  - path: ~/some/path/to/a/pivotal-git/project\n" +
+                         "    id: 12345\n" +
+                         "    api_token: somepivotalatoken124\n" +
+                         "\n" +
+                         "  - path: ~/some/other/pivotal-git/project\n" +
+                         "    id: 23429070\n" +
+                         "    api_token: somepivotalatoken124"
+        expect{ PGit::Configuration.new }.to raise_error(error_message)
       end
     end
   end
