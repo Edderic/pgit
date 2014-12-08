@@ -91,4 +91,32 @@ describe 'PGit::StoryBranch' do
       expect(pg_branch).to have_received(:`).with(checkout_branch_command)
     end
   end
+
+  describe '#new without any arguments' do
+    describe 'on a branch without a story id' do
+      describe '#id' do
+        it 'should throw an error' do
+          fake_current_branch_name = "master"
+          error_message = "Error: #{fake_current_branch_name} does not have a story id at the end"
+          allow(PGit::CurrentBranch).to receive(:name).and_return(fake_current_branch_name)
+
+          expect{PGit::StoryBranch.new}.to raise_error error_message
+        end
+      end
+    end
+
+    describe 'on a branch with a story id' do
+      describe '#id' do
+        it 'should return the id' do
+          fake_current_branch_name = "some-feature-branch-12345678"
+          allow(PGit::CurrentBranch).to receive(:name).and_return(fake_current_branch_name)
+          error_message = "Error: #{fake_current_branch_name} does not have a story id at the end"
+          story_branch = PGit::StoryBranch.new
+          story_branch_id = story_branch.id
+
+          expect(story_branch_id).to eq('12345678')
+        end
+      end
+    end
+  end
 end
