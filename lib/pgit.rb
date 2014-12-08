@@ -1,5 +1,6 @@
 require 'pgit/version.rb'
 require 'pgit/story'
+require 'pgit/current_branch'
 require 'pgit/current_project'
 require 'pgit/configuration'
 require 'pgit/story_branch'
