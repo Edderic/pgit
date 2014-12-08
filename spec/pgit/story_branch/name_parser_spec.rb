@@ -13,5 +13,8 @@ describe 'PGit::StoryBranch::NameParser' do
       parsed = name_parser.parse
       expect(parsed).to eq "deemphasize-clue-stimulus-screen-multi-screen-exercises-12345"
     end
+
+    xit 'should strip non-alpha-numerics like apostrophes' do
+    end
   end
 end
