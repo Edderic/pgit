@@ -30,7 +30,15 @@ describe 'PGit::StoryBranch' do
 
       expect(PGit::Story).to have_received(:new).with(fake_story_id, fake_project_id, fake_api_token)
     end
+
+    describe '#id' do
+      it 'should return the story_id' do
+
+        expect(id).to
+      end
+    end
   end
+
 
   describe '#start' do
     it 'should call the backticks on the Kernel with the proper branch name' do
