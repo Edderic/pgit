@@ -1,7 +1,9 @@
 describe 'pgit' do
   describe 'story_branch' do
     it 'should output the help info for story_branch command' do
-      result = `pgit story_branch`
+      pgit_expanded_path = File.expand_path('bin/pgit')
+
+      result = `bundle exec #{pgit_expanded_path} story_branch`
       story_branch_matches = result.match(/story_branch/)
       name_match = result.match(/NAME/)
 
