@@ -6,7 +6,7 @@ require 'pgit'
 #     api_token: asoeuhot
 #
 def successful_setup
-  fake_project_1 =  { "path" => "~/Therapy-Exercises-Online/some_other_project",
+  fake_project_1 =  { "path" => "/Therapy-Exercises-Online/some_other_project",
                       "id" => 12345,
                       "api_token" => "astoeuh" }
   fake_project_2 =  { "path" => "~/Therapy-Exercises-Online",
@@ -14,7 +14,7 @@ def successful_setup
                       "api_token" => "astoeuh" }
   fake_project_list = [ fake_project_1, fake_project_2 ]
   fake_yaml = { "projects" => fake_project_list }
-  fake_pwd = "/home/edderic/Therapy-Exercises-Online/some_other_project/some_subdirectory"
+  fake_pwd = "/Therapy-Exercises-Online/some_other_project/some_subdirectory"
   allow(Dir).to receive(:pwd).and_return(fake_pwd)
 
   fake_configuration = double('configuration', to_yaml: fake_yaml)
@@ -33,7 +33,7 @@ describe 'PGit::CurrentProject' do
                             "api_token" => "astoeuh" }
         fake_project_list = [ fake_project_1, fake_project_2 ]
         fake_yaml = { "projects" => fake_project_list }
-        fake_pwd = "/home/edderic/Therapy-Exercises-Online/some_other_project/some_subdirectory"
+        fake_pwd = "/Therapy-Exercises-Online/some_other_project/some_subdirectory"
         fake_configuration = double('configuration', to_yaml: fake_yaml)
         allow(Dir).to receive(:pwd).and_return(fake_pwd)
 
@@ -51,7 +51,7 @@ describe 'PGit::CurrentProject' do
         current_project = PGit::CurrentProject.new(fake_configuration.to_yaml)
         working_directory = current_project.pwd
 
-        expect(working_directory).to eq "/home/edderic/Therapy-Exercises-Online/some_other_project"
+        expect(working_directory).to eq "/Therapy-Exercises-Online/some_other_project"
       end
     end
   end
