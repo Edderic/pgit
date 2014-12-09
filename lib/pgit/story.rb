@@ -7,10 +7,10 @@
 
 module PGit
   class Story
-    def initialize(id, project_id, api_token)
+    def initialize(id, current_project)
       @id = id
-      @project_id = project_id
-      @api_token = api_token
+      @project_id = current_project.id
+      @api_token = current_project.api_token
     end
 
     def api_version

@@ -4,9 +4,8 @@ describe 'PGit::Story' do
   describe '#get!' do
     it 'should execute the proper cURL string' do
       story_id = '123'
-      project_id = '321'
-      api_token = 'abc10xyz'
-      pivotal_story = PGit::Story.new(story_id, project_id, api_token)
+      current_project = double('current_project', id: '321', api_token: 'abc10xyz')
+      pivotal_story = PGit::Story.new(story_id, current_project)
       get_request = "curl -X GET -H 'X-TrackerToken: abc10xyz' 'https://www.pivotaltracker.com/services/v5/projects/321/stories/123'"
       fake_good_json = <<-GOOD_JSON
       {
@@ -37,9 +36,8 @@ describe 'PGit::Story' do
     describe 'if there is an error' do
       it 'should raise an error' do
         story_id = '123'
-        project_id = '321'
-        api_token = 'abc10xyz'
-        pivotal_story = PGit::Story.new(story_id, project_id, api_token)
+        current_project = double('current_project', id: '321', api_token: 'abc10xyz')
+        pivotal_story = PGit::Story.new(story_id, current_project)
         get_request = "curl -X GET -H 'X-TrackerToken: abc10xyz' 'https://www.pivotaltracker.com/services/v5/projects/321/stories/123'"
         fake_json_str_with_error = <<-ERROR_JSON
           {
