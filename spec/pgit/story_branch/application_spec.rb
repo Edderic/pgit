@@ -8,11 +8,15 @@ describe 'PGit::StoryBranch::Application' do
         global_opts = {}
         opts = { start: 1234 }
         args = {}
-        fake_story_branch = double('story_branch')
+        fake_story_branch = instance_double('PGit::StoryBranch')
         fake_config_yaml = double('config_yaml')
-        fake_configuration = double('config', to_yaml: fake_config_yaml)
+        fake_configuration = instance_double('PGit::Configuration', to_yaml: fake_config_yaml)
         allow(fake_story_branch).to receive(:start)
-        allow(PGit::StoryBranch).to receive(:new).with(1234, fake_config_yaml).and_return(fake_story_branch)
+        fake_story = instance_double('PGit::Story')
+        fake_current_project = double('current_project')
+        allow(PGit::CurrentProject).to receive(:new).with(fake_config_yaml).and_return(fake_current_project)
+        allow(PGit::Story).to receive(:new).with(1234, fake_current_project).and_return(fake_story)
+        allow(PGit::StoryBranch).to receive(:new).with(fake_story).and_return(fake_story_branch)
         allow(PGit::Configuration).to receive(:new).and_return(fake_configuration)
 
         PGit::StoryBranch::Application.new(global_opts, opts, args)
