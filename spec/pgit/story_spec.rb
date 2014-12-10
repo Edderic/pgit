@@ -1,11 +1,10 @@
 require 'pgit'
 
 describe 'PGit::Story' do
-  describe '#get!' do
-    it 'should execute the proper cURL string' do
+  describe '#get' do
+    it 'should generate the story' do
       story_id = '123'
       current_project = double('current_project', id: '321', api_token: 'abc10xyz')
-      pivotal_story = PGit::Story.new(story_id, current_project)
       get_request = "curl -X GET -H 'X-TrackerToken: abc10xyz' 'https://www.pivotaltracker.com/services/v5/projects/321/stories/123'"
       fake_good_json = <<-GOOD_JSON
       {
@@ -25,19 +24,18 @@ describe 'PGit::Story' do
          "url": "http://localhost/story/show/555"
       }
       GOOD_JSON
-      allow(pivotal_story).to receive(:`).with(get_request).and_return(fake_good_json)
+      allow(PGit::Story).to receive(:`).with(get_request).and_return(fake_good_json)
 
-      get_result = pivotal_story.get!
+      story = PGit::Story.get(story_id, current_project)
 
-      expect(pivotal_story).to have_received(:`).with get_request
-      expect(get_result).not_to be_nil
+      expect(story.name).to eq "Bring me the passengers"
+      expect(story.description).to eq "ignore the droids"
     end
 
     describe 'if there is an error' do
       it 'should raise an error' do
         story_id = '123'
         current_project = double('current_project', id: '321', api_token: 'abc10xyz')
-        pivotal_story = PGit::Story.new(story_id, current_project)
         get_request = "curl -X GET -H 'X-TrackerToken: abc10xyz' 'https://www.pivotaltracker.com/services/v5/projects/321/stories/123'"
         fake_json_str_with_error = <<-ERROR_JSON
           {
@@ -47,9 +45,9 @@ describe 'PGit::Story' do
           }
         ERROR_JSON
 
-        allow(pivotal_story).to receive(:`).with(get_request).and_return fake_json_str_with_error
+        allow(PGit::Story).to receive(:`).with(get_request).and_return(fake_json_str_with_error)
 
-        expect{ pivotal_story.get! }.to raise_error(fake_json_str_with_error)
+        expect{ PGit::Story.get(story_id, current_project) }.to raise_error(fake_json_str_with_error)
       end
     end
   end

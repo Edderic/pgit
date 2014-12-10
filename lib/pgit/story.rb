@@ -10,17 +10,23 @@
 require 'pry'
 module PGit
   class Story
-    # try defining method for each json key
-    attr_reader :id, :name
-
     class << self
       def get(id, current_project)
         @id = id
         @project_id = current_project.id
         @api_token = current_project.api_token
 
-        binding.pry
-        self.new(self.get!)
+        define_methods(get!)
+
+        new
+      end
+
+      def define_methods(json)
+        JSON.parse(json).each do |key, value|
+          define_method key do
+            value
+          end
+        end
       end
 
       def api_version
