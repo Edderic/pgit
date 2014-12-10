@@ -19,25 +19,19 @@ module PGit
 
       def name
         remove_fluff_words
-        words = @story_name.split(' ')
-        split_words = words.map { |word| word.gsub!(/\W/, ''); word }
-        stuff = split_words.select do |word|
-          !word.empty?
-        end
-        words = stuff.join('-')
-        @story_name = words
+        remove_non_alphanumeric_characters
         downcase
         add_story_id
       end
 
       private
 
-      def remove_periods
-        @story_name.gsub!('.', '')
-      end
-
-      def remove_apostrophes
-        @story_name.gsub!("'", '')
+      def remove_non_alphanumeric_characters
+        words = @story_name.split(' ')
+        split_words = words.each { |word| word.gsub!(/\W/, '') }
+        @story_name = split_words.select do |word|
+          !word.empty?
+        end.join('-')
       end
 
       def remove_fluff_words
@@ -49,10 +43,6 @@ module PGit
       def remove_extraneous_white_spaces
         @story_name.strip!
         @story_name.gsub!(/\s+/, ' ')
-      end
-
-      def replace_whitespace_with_dashes
-        @story_name.gsub!(' ', '-')
       end
 
       def downcase
