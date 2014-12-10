@@ -12,11 +12,11 @@ describe 'PGit::StoryBranch::NameParser' do
       name_parser = PGit::StoryBranch::NameParser.new(fake_story)
       parsed = name_parser.name
 
-      expect(parsed).to eq "deemphasize-clue-stimulus-screen-multi-screen-exercises-12345"
+      expect(parsed).to eq "deemphasize-clue-stimulus-screen-multiscreen-exercises-12345"
     end
 
     it 'should strip non-alpha-numerics like apostrophes' do
-      unparsed_name = "Some doesn't like putin's dictatorship"
+      unparsed_name = "Some don't like putin's dictatorship"
       story_id = '29292'
 
       fake_story = double('PGit::Story', id: story_id, name: unparsed_name)
@@ -24,7 +24,19 @@ describe 'PGit::StoryBranch::NameParser' do
       name_parser = PGit::StoryBranch::NameParser.new(fake_story)
       parsed = name_parser.name
 
-      expect(parsed).to eq "some-doesnt-like-putins-dictatorship-29292"
+      expect(parsed).to eq "some-dont-like-putins-dictatorship-29292"
+    end
+
+    it 'should remove all non-word characters' do
+      unparsed_name = "Some *@#   don't like ,putin's dictator-ship"
+      story_id = '29292'
+
+      fake_story = double('PGit::Story', id: story_id, name: unparsed_name)
+
+      name_parser = PGit::StoryBranch::NameParser.new(fake_story)
+      parsed = name_parser.name
+
+      expect(parsed).to eq "some-dont-like-putins-dictatorship-29292"
     end
   end
 end

@@ -19,10 +19,13 @@ module PGit
 
       def name
         remove_fluff_words
-        remove_extraneous_white_spaces
-        remove_periods
-        remove_apostrophes
-        replace_whitespace_with_dashes
+        words = @story_name.split(' ')
+        split_words = words.map { |word| word.gsub!(/\W/, ''); word }
+        stuff = split_words.select do |word|
+          !word.empty?
+        end
+        words = stuff.join('-')
+        @story_name = words
         downcase
         add_story_id
       end
