@@ -5,8 +5,9 @@ module PGit
         if story_id = options[:start]
           config_yaml = PGit::Configuration.new.to_yaml
           current_project = PGit::CurrentProject.new(config_yaml)
-          story = PGit::Story.new(story_id, current_project)
-          story_branch = PGit::StoryBranch.new(story)
+          story = PGit::Story.get(story_id, current_project)
+          name_parser = PGit::StoryBranch::NameParser.new(story)
+          story_branch = PGit::StoryBranch.new(name_parser)
 
           story_branch.start
         else

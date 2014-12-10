@@ -8,9 +8,9 @@
 module PGit
   class StoryBranch
     class NameParser
-      def initialize(unparsed_name, story_id)
-        @story_id = story_id
-        @unparsed_name = unparsed_name
+      def initialize(story)
+        @story_id = story.id
+        @unparsed_name = story.name
       end
 
       def parse

@@ -5,33 +5,44 @@
 # - project_id: found in the pivotal tracker settings page
 # - api_token: found in the PT settings page
 
+# TODO: add #title
+
+require 'pry'
 module PGit
   class Story
-    def initialize(id, current_project)
-      @id = id
-      @project_id = current_project.id
-      @api_token = current_project.api_token
-    end
+    # try defining method for each json key
+    attr_reader :id, :name
 
-    def api_version
-      "v5"
-    end
+    class << self
+      def get(id, current_project)
+        @id = id
+        @project_id = current_project.id
+        @api_token = current_project.api_token
 
-    def get!
-      request = `#{get_request}`
-      if request.match(/error/)
-        raise request
-      else
-        request
+        binding.pry
+        self.new(self.get!)
       end
-    end
 
-    def link
-      "'https://www.pivotaltracker.com/services/#{api_version}/projects/#{@project_id}/stories/#{@id}'"
-    end
+      def api_version
+        "v5"
+      end
 
-    def get_request
-      "curl -X GET -H 'X-TrackerToken: #{@api_token}' #{link}"
+      def get!
+        request = `#{get_request}`
+        if request.match(/error/)
+          raise request
+        else
+          request
+        end
+      end
+
+      def link
+        "'https://www.pivotaltracker.com/services/#{api_version}/projects/#{@project_id}/stories/#{@id}'"
+      end
+
+      def get_request
+        "curl -X GET -H 'X-TrackerToken: #{@api_token}' #{link}"
+      end
     end
   end
 end
