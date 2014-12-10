@@ -10,6 +10,7 @@ module PGit
     class NameParser
       def initialize(story)
         @story = story
+        @story_name = story.name
       end
 
       def story_id
@@ -20,6 +21,7 @@ module PGit
         remove_fluff_words
         remove_extraneous_white_spaces
         remove_periods
+        remove_apostrophes
         replace_whitespace_with_dashes
         downcase
         add_story_id
@@ -28,30 +30,34 @@ module PGit
       private
 
       def remove_periods
-        @story.name.gsub!('.', '')
+        @story_name.gsub!('.', '')
+      end
+
+      def remove_apostrophes
+        @story_name.gsub!("'", '')
       end
 
       def remove_fluff_words
         fluff_words = %w{the on of}
-        fluff_words.each { |fluff_word| @story.name.gsub!(/\b#{fluff_word}\b/i, '') }
+        fluff_words.each { |fluff_word| @story_name.gsub!(/\b#{fluff_word}\b/i, '') }
         remove_extraneous_white_spaces
       end
 
       def remove_extraneous_white_spaces
-        @story.name.strip!
-        @story.name.gsub!(/\s+/, ' ')
+        @story_name.strip!
+        @story_name.gsub!(/\s+/, ' ')
       end
 
       def replace_whitespace_with_dashes
-        @story.name.gsub!(' ', '-')
+        @story_name.gsub!(' ', '-')
       end
 
       def downcase
-        @story.name.downcase!
+        @story_name.downcase!
       end
 
       def add_story_id
-        "#{@story.name}-#{story_id}"
+        "#{@story_name}-#{story_id}"
       end
     end
   end
