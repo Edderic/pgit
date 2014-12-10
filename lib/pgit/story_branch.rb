@@ -11,40 +11,20 @@ module PGit
   class StoryBranch
     attr_reader :id
 
-    def initialize(story = nil, name_parser)
-      if story
-        @story = story
-        @name_parser = name_parser
-        @id = story.id
-      else
-        initialize_with_current_branch
-      end
+    def initialize(name_parser)
+      @name_parser = name_parser
     end
 
-    # a StoryBranch should not be started if the current branch name is the same?
-    # Should not be able to checkout to a branch without a story_id...
     def start
-      `git checkout -b #{branch_name}`
+      `git checkout -b #{name}`
     end
 
     def name
-      # story_json = JSON.parse(@story.get!)
-      # name = story_json["name"]
-      # story_id = story_json["id"]
-      # name_parser = NameParser.new(name, story_id)
-      @name_parser.parse
+      @name_parser.name
     end
 
-    private
-
-    # def validate_existence_id
-      # raise "Error: #{@name} does not have a story id at the end" unless @id
-    # end
-#
-    # def initialize_with_current_branch
-      # @name = PGit::CurrentBranch.name
-      # @id = @name.scan(/\d+$/).first
-      # validate_existence_id
-    # end
+    def id
+      @name_parser.story_id
+    end
   end
 end

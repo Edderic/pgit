@@ -1,4 +1,5 @@
 require 'pgit'
+require 'pry'
 
 describe 'PGit::StoryBranch::Application' do
   describe '#new' do
