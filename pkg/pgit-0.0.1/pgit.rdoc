@@ -1,5 +1,0 @@
-= pgit
-
-Generate this with
-    pgit rdoc
-After you have described your command line interface
