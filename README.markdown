@@ -16,17 +16,24 @@ will create a branch for you named `implement-really-cool-feature-10102004`
 
 ## Installation
 
-1. Install via RubyGems:
+* Install via RubyGems:
 
 ```
 $ gem install pgit
 ```
 
-2. Setup configuration file:
+* Setup configuration file:
 
 ```
 $ pgit install
 ```
 
-This will generate a YAML file under `~/.pgit.rc.yml`. Edit that file to add information about projects that you're working on.  Each project needs a project `id`, Pivotal Tracker `api_token`, and `path`
+This will generate a YAML file under `~/.pgit.rc.yml`. Edit that file to add
+information about projects that you're working on.  Each project needs a
+project `id`, Pivotal Tracker `api_token`, and `path`.
+
+The `api_token` can be found here: https://www.pivotaltracker.com/profile
+
+The project id is in the URL when visiting a project (i.e.
+https://pivotaltracker.com/projects/12345678)
 
