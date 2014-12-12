@@ -12,6 +12,17 @@ describe 'pgit' do
     end
   end
 
+  # describe 'install' do
+    # it 'should ask the user some questions' do
+      # pgit_expanded_path = File.expand_path('bin/pgit')
+      # message = "This will save the config file on ~/.pgit.rc.yml"
+      # allow(Kernel).to receive(:puts).with message
+#
+      # result = `bundle exec #{pgit_expanded_path} install`
+      # expect(Kernel).to have_received(:puts).with message
+    # end
+  # end
+
   # describe 'commit' do
     # describe 'on branch some-story-branch-1234' do
       # it 'should prepend the commit with [#1234]' do
