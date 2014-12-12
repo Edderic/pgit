@@ -4,7 +4,6 @@ describe 'PGit::Configuration' do
   describe '.default_options' do
     it 'should give us the default options' do
       default_options = PGit::Configuration.default_options
-      puts default_options
       example_projects = [
         {
           'api_token' => 'somepivotalatoken124',
