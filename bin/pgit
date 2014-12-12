@@ -29,7 +29,8 @@ command :install do |c|
   end
 end
 
-desc 'Start, finish, etc. Pivotal Tracker story branches'
+# desc 'Start, finish, etc. Pivotal Tracker story branches'
+desc 'Start Pivotal Tracker story branches'
 long_desc "Makes a cURL request to Pivotal Tracker to fetch the story, based
 on the given story id, parses the title, appends it with the story id. It then
 creates a branch name with that parsed title and does a `git checkout` to it.  "
