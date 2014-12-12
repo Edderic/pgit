@@ -8,6 +8,23 @@
 
 module PGit
   class Configuration
+    def self.default_options
+      {
+        'projects' => [
+          {
+            'api_token' => 'somepivotalatoken124',
+            'id' => '12345',
+            "path" => "~/some/path/to/a/pivotal-git/project"
+          },
+          {
+            'api_token' => 'somepivotalatoken124',
+            'id' => '23429070',
+            "path" => "~/some/other/pivotal-git/project"
+          }
+        ]
+      }
+    end
+
     def initialize(config_path = '~/.pgit.rc.yml')
       @expanded_path = File.expand_path(config_path)
       if File.exists? @expanded_path

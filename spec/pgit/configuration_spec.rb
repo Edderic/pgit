@@ -1,6 +1,26 @@
 require 'pgit'
 
 describe 'PGit::Configuration' do
+  describe '.default_options' do
+    it 'should give us the default options' do
+      default_options = PGit::Configuration.default_options
+      puts default_options
+      example_projects = [
+        {
+          'api_token' => 'somepivotalatoken124',
+          'id' => '12345',
+          "path" => "~/some/path/to/a/pivotal-git/project"
+        },
+        {
+          'api_token' => 'somepivotalatoken124',
+          'id' => '23429070',
+          "path" => "~/some/other/pivotal-git/project"
+        }
+      ]
+
+      expect(default_options['projects']).to match_array(example_projects)
+    end
+  end
   describe '#new(configuration_path)' do
     describe 'empty' do
       it 'should complain that there should be at least one project' do
