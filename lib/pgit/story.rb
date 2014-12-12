@@ -1,13 +1,7 @@
 #
 #   Wrapper for a Pivotal Tracker story
 #
-# - id: story id
-# - project_id: found in the pivotal tracker settings page
-# - api_token: found in the PT settings page
 
-# TODO: add #title
-
-require 'pry'
 module PGit
   class Story
     class << self
