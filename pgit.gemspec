@@ -12,12 +12,10 @@ spec = Gem::Specification.new do |s|
 ")
   s.require_paths << 'lib'
   s.has_rdoc = true
-  s.extra_rdoc_files = ['README.rdoc','pgit.rdoc']
-  s.rdoc_options << '--title' << 'pgit' << '--main' << 'README.rdoc' << '-ri'
+  s.extra_rdoc_files = ['README.markdown']
+  s.rdoc_options << '--title' << 'pgit' << '--main'
   s.bindir = 'bin'
   s.executables << 'pgit'
   s.add_development_dependency('rake')
-  s.add_development_dependency('rdoc')
-  s.add_development_dependency('aruba')
   s.add_runtime_dependency('gli','2.12.2')
 end
