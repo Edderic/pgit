@@ -22,14 +22,19 @@ arguments :strict
 # arg_name 'secr3tT0ken123'
 # flag [:'api-token']
 
+desc "Installs the pgit configuration file"
+command :install do |c|
+  c.action do |global_options,options,args|
+    PGit::Installer.new(global_options, options, args)
+  end
+end
 
 desc 'Start, finish, etc. Pivotal Tracker story branches'
-long_desc " Makes a cURL request to Pivotal Tracker to fetch the story, based
+long_desc "Makes a cURL request to Pivotal Tracker to fetch the story, based
 on the given story id, parses the title, appends it with the story id. It then
 creates a branch name with that parsed title and does a `git checkout` to it.  "
 
 command :story_branch do |c|
-arg_name 'Describe arguments to story_branch here'
   c.desc "Parses the title of the given Pivotal Tracker story,\n" +
     "  makes the branch name, and does a checkout"
   c.arg_name 'STORY_ID'
@@ -47,15 +52,14 @@ arg_name 'Describe arguments to story_branch here'
   end
 end
 
-desc 'Wraps `git commit -m` and prepends the message with story id of the branch'
+# desc 'Wraps `git commit -m` and prepends the message with story id of the branch'
 
-arg_name 'Describe arguments to commit here'
-
-command :commit do |c|
-  c.action do |global_options,options,args|
-    puts "commit command ran"
-  end
-end
+# command :commit do |c|
+  # arg_name 'Describe arguments to commit here'
+  # c.action do |global_options,options,args|
+    # puts "commit command ran"
+  # end
+# end
 
 
 desc 'Initializes configuration file'
