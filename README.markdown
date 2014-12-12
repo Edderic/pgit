@@ -37,3 +37,6 @@ The `api_token` can be found here: https://www.pivotaltracker.com/profile
 The project id is in the URL when visiting a project (i.e.
 https://pivotaltracker.com/projects/12345678)
 
+
+## Development
+See https://www.pivotaltracker.com/n/projects/1228944 for information.
