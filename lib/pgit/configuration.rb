@@ -45,20 +45,11 @@ module PGit
     private
 
     def missing_config_default
-      "Under ~/.pgit.rc.yml,\n" + general_error_message
+      "Default configuration file does not exist. Please run `pgit install`"
     end
 
     def general_error_message
-      "Please have the following layout:\n" +
-      "\n" +
-      "projects:\n" +
-      "  - path: ~/some/path/to/a/pivotal-git/project\n" +
-      "    id: 12345\n" +
-      "    api_token: somepivotalatoken124\n" +
-      "\n" +
-      "  - path: ~/some/other/pivotal-git/project\n" +
-      "    id: 23429070\n" +
-      "    api_token: somepivotalatoken124"
+      "Please have the following layout:\n" + YAML.dump(PGit::Configuration.default_options)
     end
 
     def validate_presence_of_items_in_each_project

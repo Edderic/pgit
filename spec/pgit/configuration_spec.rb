@@ -27,23 +27,25 @@ describe 'PGit::Configuration' do
         fake_expanded_path = "/Users/edderic/some/config/path.yml"
         fake_file = double('file')
         fake_yaml = {}
+        error_message = <<-ERROR
+          Error: /Users/edderic/some/config/path.yml needs at least one project.
+          Please have the following layout:
+          ---
+          projects:
+          - api_token: somepivotalatoken124
+            id: '12345'
+            path: "~/some/path/to/a/pivotal-git/project"
+          - api_token: somepivotalatoken124
+            id: '23429070'
+            path: "~/some/other/pivotal-git/project"
+        ERROR
 
         allow(File).to receive(:expand_path).with(fake_path).and_return(fake_expanded_path)
         allow(File).to receive(:expand_path).with('.')
         allow(File).to receive(:exists?).with(fake_expanded_path).and_return(true)
         allow(File).to receive(:open).with(fake_expanded_path, 'r').and_return(fake_file)
         allow(YAML).to receive(:load).with(fake_file).and_return(fake_yaml)
-        error_message = "Error: #{fake_expanded_path} needs at least one project.\n" +
-                          "Please have the following layout:\n" +
-                          "\n" +
-                          "projects:\n" +
-                          "  - path: ~/some/path/to/a/pivotal-git/project\n" +
-                          "    id: 12345\n" +
-                          "    api_token: somepivotalatoken124\n" +
-                          "\n" +
-                          "  - path: ~/some/other/pivotal-git/project\n" +
-                          "    id: 23429070\n" +
-                          "    api_token: somepivotalatoken124"
+        error_message.gsub!(/^\s{10}/,'')
 
         expect{ PGit::Configuration.new(fake_path) }.to raise_error(error_message)
       end
@@ -64,17 +66,19 @@ describe 'PGit::Configuration' do
         allow(File).to receive(:exists?).with(fake_expanded_path).and_return(true)
         allow(File).to receive(:open).with(fake_expanded_path, 'r').and_return(fake_file)
         allow(YAML).to receive(:load).with(fake_file).and_return(fake_yaml)
-        error_message =  "Error: Must have a path, id, and api_token for each project.\n" +
-                          "Please have the following layout:\n" +
-                          "\n" +
-                          "projects:\n" +
-                          "  - path: ~/some/path/to/a/pivotal-git/project\n" +
-                          "    id: 12345\n" +
-                          "    api_token: somepivotalatoken124\n" +
-                          "\n" +
-                          "  - path: ~/some/other/pivotal-git/project\n" +
-                          "    id: 23429070\n" +
-                          "    api_token: somepivotalatoken124"
+        error_message = <<-ERROR
+          Error: Must have a path, id, and api_token for each project.
+          Please have the following layout:
+          ---
+          projects:
+          - api_token: somepivotalatoken124
+            id: '12345'
+            path: "~/some/path/to/a/pivotal-git/project"
+          - api_token: somepivotalatoken124
+            id: '23429070'
+            path: "~/some/other/pivotal-git/project"
+        ERROR
+        error_message.gsub!(/^\s{10}/, '')
 
         expect{ PGit::Configuration.new(fake_path) }.to raise_error(error_message)
       end
@@ -146,17 +150,7 @@ describe 'PGit::Configuration' do
       it 'should throw an error' do
         allow(File).to receive(:exists?).and_return(false)
 
-        error_message =  "Under ~/.pgit.rc.yml,\n" +
-                         "Please have the following layout:\n" +
-                         "\n" +
-                         "projects:\n" +
-                         "  - path: ~/some/path/to/a/pivotal-git/project\n" +
-                         "    id: 12345\n" +
-                         "    api_token: somepivotalatoken124\n" +
-                         "\n" +
-                         "  - path: ~/some/other/pivotal-git/project\n" +
-                         "    id: 23429070\n" +
-                         "    api_token: somepivotalatoken124"
+        error_message =  "Default configuration file does not exist. Please run `pgit install`"
         expect{ PGit::Configuration.new }.to raise_error(error_message)
       end
     end
