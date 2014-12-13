@@ -19,6 +19,8 @@ spec = Gem::Specification.new do |s|
   s.add_development_dependency('rake')
   s.add_runtime_dependency('gli','2.12.2')
   s.license = 'MIT'
+  s.requirements << 'At least one project that uses Pivotal Tracker and Git'
+  s.requirements << 'cURL, at least 7.35.0'
   s.post_install_message = <<-MESSAGE
 
   If you are a first time user, please run `pgit install` to save the example
