@@ -11,7 +11,7 @@ describe 'PGit::CurrentBranch' do
         some-other-branch
       FAKE_BRANCHES
 
-      allow(PGit::CurrentBranch).to receive(:`).with(git_branch_command).and_return(fake_branches)
+      allow_any_instance_of(PGit::CurrentBranch).to receive(:`).with(git_branch_command).and_return(fake_branches)
       current_branch_name = PGit::CurrentBranch.new.name
 
       expect(current_branch_name).to eq fake_current_branch
