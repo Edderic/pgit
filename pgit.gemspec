@@ -21,6 +21,7 @@ spec = Gem::Specification.new do |s|
   s.license = 'MIT'
   s.requirements << 'At least one project that uses Pivotal Tracker and Git'
   s.requirements << 'cURL, at least 7.35.0'
+  s.required_ruby_version = '>= 1.9.3'
   s.post_install_message = <<-MESSAGE
 
   If you are a first time user, please run `pgit install` to save the example
