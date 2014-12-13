@@ -1,5 +1,7 @@
 # PGit
 
+![Travis CI Build](https://travis-ci.org/Edderic/pgit.svg?branch=master)
+
 ## Example Usage
 
 Assuming that:
