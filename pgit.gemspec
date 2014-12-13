@@ -19,4 +19,17 @@ spec = Gem::Specification.new do |s|
   s.add_development_dependency('rake')
   s.add_runtime_dependency('gli','2.12.2')
   s.license = 'MIT'
+  s.post_install_message = <<-MESSAGE
+
+  If you are a first time user, please run `pgit install` to save the example
+  configuration file under ~/.pgit.rc.yml and edit the file accordingly.
+
+  For more info:
+    `pgit --help`
+
+  For feature requests and bug reporting: https://github.com/Edderic/pgit
+
+  Thanks for installing!
+
+  MESSAGE
 end
