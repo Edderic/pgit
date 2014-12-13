@@ -15,10 +15,6 @@ Gem::PackageTask.new(spec) do |pkg|
 end
 
 desc 'Run specs'
-require 'rake/testtask'
-Rake::TestTask.new(:spec) do |s|
-  s.libs << "spec"
-  s.test_files = FileList['spec/**/*_test.rb']
-end
-
+require 'rspec/core/rake_task'
+RSpec::Core::RakeTask.new
 task :default => [:spec]
