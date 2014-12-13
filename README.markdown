@@ -1,7 +1,7 @@
 # PGit
 
 ![Travis CI Build](https://travis-ci.org/Edderic/pgit.svg?branch=master)
-
+[![Code Climate](https://codeclimate.com/github/Edderic/pgit/badges/gpa.svg)](https://codeclimate.com/github/Edderic/pgit)
 ## Example Usage
 
 Assuming that:
