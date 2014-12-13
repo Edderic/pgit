@@ -17,6 +17,7 @@ spec = Gem::Specification.new do |s|
   s.bindir = 'bin'
   s.executables << 'pgit'
   s.add_development_dependency('rake')
+  s.add_development_dependency('rpsec', '~> 3.0.0')
   s.add_runtime_dependency('gli','2.12.2')
   s.license = 'MIT'
   s.requirements << 'At least one project that uses Pivotal Tracker and Git'
