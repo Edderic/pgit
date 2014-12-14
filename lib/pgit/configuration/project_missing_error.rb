@@ -1,14 +1,14 @@
 module PGit
   class Configuration
     class LayoutError < PGit::Error
-      def general_message
-        "Please have the following layout:\n" + YAML.dump(PGit::Configuration.default_options)
+      def prepend_general_message(message)
+        "#{message}\nPlease have the following layout:\n" + YAML.dump(PGit::Configuration.default_options)
       end
     end
 
     class ProjectMissingError < LayoutError
       def initialize(path)
-        @message = "#{path} needs at least one project.\n#{general_message}"
+        @message = prepend_general_message "#{path} needs at least one project."
         super(@message)
       end
     end
