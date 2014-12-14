@@ -61,7 +61,7 @@ module PGit
       end
 
       unless all_present
-        raise "Error: Must have a path, id, and api_token for each project.\n" +
+        raise "Error: ~/.pgit.rc.yml must have a path, id, and api_token for each project.\n" +
           general_error_message
       end
     end

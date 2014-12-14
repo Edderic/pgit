@@ -67,7 +67,7 @@ describe 'PGit::Configuration' do
         allow(File).to receive(:open).with(fake_expanded_path, 'r').and_return(fake_file)
         allow(YAML).to receive(:load).with(fake_file).and_return(fake_yaml)
         error_message = <<-ERROR
-          Error: Must have a path, id, and api_token for each project.
+          Error: ~/.pgit.rc.yml must have a path, id, and api_token for each project.
           Please have the following layout:
           ---
           projects:
