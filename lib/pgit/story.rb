@@ -29,6 +29,7 @@ module PGit
 
       def get!
         request = `#{get_request}`
+        # TODO: namespace the errors thrown
         if request.match(/error/)
           raise request
         else

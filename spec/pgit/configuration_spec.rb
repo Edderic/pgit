@@ -21,7 +21,7 @@ describe 'PGit::Configuration' do
     end
   end
   describe '#new(configuration_path)' do
-    describe 'empty' do
+    describe 'empty file' do
       it 'should complain that there should be at least one project' do
         fake_path = "~/some/config/path.yml"
         fake_expanded_path = "/Users/edderic/some/config/path.yml"
