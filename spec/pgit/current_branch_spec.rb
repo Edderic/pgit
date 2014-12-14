@@ -1,4 +1,4 @@
-require 'pgit'
+require 'spec_helper'
 
 describe 'PGit::CurrentBranch' do
   describe '#name' do

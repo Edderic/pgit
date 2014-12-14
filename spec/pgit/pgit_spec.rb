@@ -1,3 +1,5 @@
+require 'spec_helper'
+
 describe 'pgit' do
   describe 'story_branch' do
     it 'should output the help info for story_branch command' do

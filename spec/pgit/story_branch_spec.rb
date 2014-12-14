@@ -1,4 +1,4 @@
-require 'pgit'
+require 'spec_helper'
 
 describe 'PGit::StoryBranch' do
   describe '#id' do

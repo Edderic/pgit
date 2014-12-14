@@ -1,4 +1,4 @@
-require 'pgit'
+require 'spec_helper'
 # .edderic-dotfiles/config.yml
 # projects
 #   - path:                  ~/Therapy-Exercises-Online

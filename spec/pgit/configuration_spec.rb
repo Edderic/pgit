@@ -1,4 +1,4 @@
-require 'pgit'
+require 'spec_helper'
 
 describe 'PGit::Configuration' do
   describe '.default_options' do

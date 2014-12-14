@@ -1,4 +1,4 @@
-require 'pgit'
+require 'spec_helper'
 
 describe 'PGit::Story' do
   describe '#get' do
