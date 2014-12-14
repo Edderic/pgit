@@ -91,10 +91,9 @@ describe 'PGit::Configuration' do
       it 'should throw an error' do
         file_path = '~/.edderic-dotfiles/config/project.yml'
         fake_expanded_path = "/home/edderic/.edderic-dotfiles/config/project.yml"
-        error_message = "No such file or directory. Please give a valid path to the project.yml"
         allow(File).to receive(:exists?).and_return(false)
 
-        expect{ PGit::Configuration.new(file_path) }.to raise_error
+        expect{ PGit::Configuration.new(file_path) }.to raise_error(PGit::Configuration::NotFoundError)
       end
     end
   end

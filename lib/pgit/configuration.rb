@@ -34,7 +34,7 @@ module PGit
         validate_existence_of_at_least_one_project
         validate_presence_of_items_in_each_project
       else
-        raise PGit::Configuration::NotFoundError
+        raise PGit::Configuration::NotFoundError.new(@expanded_path)
       end
     end
 

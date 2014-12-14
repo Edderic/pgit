@@ -1,9 +1,8 @@
 module PGit
   class Configuration
     class NotFoundError < PGit::Error
-      def initialize
-        @message = %w[Default configuration file does not exist. Please run `pgit
-              install`].join(' ')
+      def initialize(config_path)
+        @message = "#{config_path} configuration file does not exist. Please run `pgit install`"
         super(@message)
       end
     end
