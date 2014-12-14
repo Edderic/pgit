@@ -151,8 +151,5 @@ describe 'PGit::Installer::Configuration' do
         expect(installer).to have_received(:puts).with(message)
       end
     end
-
-    describe 'user answers with something els' do
-    end
   end
 end
