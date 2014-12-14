@@ -1,5 +1,6 @@
 require 'json'
 require 'pgit/error'
+require 'pgit/configuration/layout_error'
 require 'pgit/configuration'
 require 'pgit/configuration/not_found_error'
 require 'pgit/configuration/project_missing_error'
