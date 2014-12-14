@@ -1,6 +1,6 @@
 require 'pgit'
 
-describe 'PGit::Installer' do
+describe 'PGit::Installer::Configuration' do
   describe '~/pgit.rc.yml exists' do
     it 'should raise an error' do
       global_opts = {}
@@ -18,7 +18,7 @@ describe 'PGit::Installer' do
         with(file_expanded_path).and_return(true)
 
       expect do
-        PGit::Installer.new(global_opts, opts, args)
+        PGit::Installer::Configuration.new(global_opts, opts, args)
       end.to raise_error message
     end
   end
@@ -40,10 +40,10 @@ describe 'PGit::Installer' do
       allow(File).to receive(:exists?).with(expanded_path).and_return(false)
       allow(File).to receive(:open).with(expanded_path, 'w').and_return(fake_writable_file)
       allow(STDIN).to receive(:gets).and_return(answer)
-      allow_any_instance_of(PGit::Installer).to receive(:puts).with(message)
-      allow_any_instance_of(PGit::Installer).to receive(:puts).with(confirmation_message)
-      allow_any_instance_of(PGit::Installer).to receive(:puts).with(edit_message)
-      installer = PGit::Installer.new(global_opts, opts, args)
+      allow_any_instance_of(PGit::Installer::Configuration).to receive(:puts).with(message)
+      allow_any_instance_of(PGit::Installer::Configuration).to receive(:puts).with(confirmation_message)
+      allow_any_instance_of(PGit::Installer::Configuration).to receive(:puts).with(edit_message)
+      installer = PGit::Installer::Configuration.new(global_opts, opts, args)
 
       expect(installer).to have_received(:puts).with(message)
     end
@@ -63,14 +63,14 @@ describe 'PGit::Installer' do
         allow(File).to receive(:expand_path).with("~/.pgit.rc.yml").and_return(expanded_path)
         allow(File).to receive(:exists?).with(expanded_path).and_return(false)
         allow(File).to receive(:open).with(expanded_path, 'w').and_return(fake_writable_file)
-        allow_any_instance_of(PGit::Installer).to receive(:puts).with(edit_message)
-        allow_any_instance_of(PGit::Installer).to receive(:puts).with(first_message)
-        allow_any_instance_of(PGit::Installer).to receive(:puts).with(save_message)
+        allow_any_instance_of(PGit::Installer::Configuration).to receive(:puts).with(edit_message)
+        allow_any_instance_of(PGit::Installer::Configuration).to receive(:puts).with(first_message)
+        allow_any_instance_of(PGit::Installer::Configuration).to receive(:puts).with(save_message)
 
         answer = instance_double("String", chomp: 'Y')
         allow(STDIN).to receive(:gets).and_return(answer)
 
-        installer = PGit::Installer.new(global_opts, opts, args)
+        installer = PGit::Installer::Configuration.new(global_opts, opts, args)
 
         expect(installer).to have_received(:puts).with(save_message)
       end
@@ -89,14 +89,14 @@ describe 'PGit::Installer' do
         allow(File).to receive(:expand_path).with("~/.pgit.rc.yml").and_return(expanded_path)
         allow(File).to receive(:exists?).with(expanded_path).and_return(false)
         allow(File).to receive(:open).with(expanded_path, 'w').and_return(fake_writable_file)
-        allow_any_instance_of(PGit::Installer).to receive(:puts).with(first_message)
-        allow_any_instance_of(PGit::Installer).to receive(:puts).with(save_message)
-        allow_any_instance_of(PGit::Installer).to receive(:puts).with(edit_message)
+        allow_any_instance_of(PGit::Installer::Configuration).to receive(:puts).with(first_message)
+        allow_any_instance_of(PGit::Installer::Configuration).to receive(:puts).with(save_message)
+        allow_any_instance_of(PGit::Installer::Configuration).to receive(:puts).with(edit_message)
 
         answer = instance_double("String", chomp: 'Y')
         allow(STDIN).to receive(:gets).and_return(answer)
 
-        installer = PGit::Installer.new(global_opts, opts, args)
+        installer = PGit::Installer::Configuration.new(global_opts, opts, args)
 
         expect(File).to have_received(:open).with(expanded_path, 'w')
       end
@@ -115,14 +115,14 @@ describe 'PGit::Installer' do
         allow(File).to receive(:expand_path).with("~/.pgit.rc.yml").and_return(expanded_path)
         allow(File).to receive(:exists?).with(expanded_path).and_return(false)
         allow(File).to receive(:open).with(expanded_path, 'w').and_return(fake_writable_file)
-        allow_any_instance_of(PGit::Installer).to receive(:puts).with(first_message)
-        allow_any_instance_of(PGit::Installer).to receive(:puts).with(edit_message)
-        allow_any_instance_of(PGit::Installer).to receive(:puts).with(save_message)
+        allow_any_instance_of(PGit::Installer::Configuration).to receive(:puts).with(first_message)
+        allow_any_instance_of(PGit::Installer::Configuration).to receive(:puts).with(edit_message)
+        allow_any_instance_of(PGit::Installer::Configuration).to receive(:puts).with(save_message)
 
         answer = instance_double("String", chomp: 'Y')
         allow(STDIN).to receive(:gets).and_return(answer)
 
-        installer = PGit::Installer.new(global_opts, opts, args)
+        installer = PGit::Installer::Configuration.new(global_opts, opts, args)
 
         expect(installer).to have_received(:puts).with(edit_message)
       end
@@ -140,13 +140,13 @@ describe 'PGit::Installer' do
         expanded_path = "/home/edderic/.pgit.rc.yml"
         allow(File).to receive(:expand_path).with("~/.pgit.rc.yml").and_return(expanded_path)
         allow(File).to receive(:exists?).with(expanded_path).and_return(false)
-        allow_any_instance_of(PGit::Installer).to receive(:puts).with(first_message)
-        allow_any_instance_of(PGit::Installer).to receive(:puts).with(message)
+        allow_any_instance_of(PGit::Installer::Configuration).to receive(:puts).with(first_message)
+        allow_any_instance_of(PGit::Installer::Configuration).to receive(:puts).with(message)
 
         answer = instance_double("String", chomp: 'n')
         allow(STDIN).to receive(:gets).and_return(answer)
 
-        installer = PGit::Installer.new(global_opts, opts, args)
+        installer = PGit::Installer::Configuration.new(global_opts, opts, args)
 
         expect(installer).to have_received(:puts).with(message)
       end
