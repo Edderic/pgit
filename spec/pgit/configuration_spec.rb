@@ -55,21 +55,10 @@ describe 'PGit::Configuration' do
         allow(File).to receive(:exists?).with(fake_expanded_path).and_return(true)
         allow(File).to receive(:open).with(fake_expanded_path, 'r').and_return(fake_file)
         allow(YAML).to receive(:load).with(fake_file).and_return(fake_yaml)
-        error_message = <<-ERROR
-          Error: ~/.pgit.rc.yml must have a path, id, and api_token for each project.
-          Please have the following layout:
-          ---
-          projects:
-          - api_token: somepivotalatoken124
-            id: '12345'
-            path: "~/some/path/to/a/pivotal-git/project"
-          - api_token: somepivotalatoken124
-            id: '23429070'
-            path: "~/some/other/pivotal-git/project"
-        ERROR
-        error_message.gsub!(/^\s{10}/, '')
 
-        expect{ PGit::Configuration.new(fake_path) }.to raise_error(error_message)
+        expect do
+          PGit::Configuration.new(fake_path)
+        end.to raise_error(PGit::Configuration::MissingAttributesError)
       end
     end
   end

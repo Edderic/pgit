@@ -44,10 +44,6 @@ module PGit
 
     private
 
-    def general_error_message
-      "Please have the following layout:\n" + YAML.dump(PGit::Configuration.default_options)
-    end
-
     def validate_presence_of_items_in_each_project
       projects = @yaml["projects"]
       all_present = projects.all? do |project|
@@ -57,8 +53,7 @@ module PGit
       end
 
       unless all_present
-        raise "Error: ~/.pgit.rc.yml must have a path, id, and api_token for each project.\n" +
-          general_error_message
+        raise PGit::Configuration::MissingAttributesError.new(@expanded_path)
       end
     end
 
