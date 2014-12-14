@@ -26,42 +26,11 @@ module PGit
     end
 
     def initialize(config_path = '~/.pgit.rc.yml')
-      @expanded_path = File.expand_path(config_path)
-      if File.exists? @expanded_path
-        config_file = File.open(@expanded_path, 'r')
-        @yaml = YAML.load(config_file)
-
-        validate_existence_of_at_least_one_project
-        validate_presence_of_items_in_each_project
-      else
-        raise PGit::Configuration::NotFoundError.new(@expanded_path)
-      end
+      @validator = PGit::Configuration::Validator.new(config_path)
     end
 
     def to_yaml
-      @yaml
-    end
-
-    private
-
-    def validate_presence_of_items_in_each_project
-      projects = @yaml["projects"]
-      all_present = projects.all? do |project|
-        project["api_token"] &&
-          project["path"] &&
-          project["id"]
-      end
-
-      unless all_present
-        raise PGit::Configuration::MissingAttributesError.new(@expanded_path)
-      end
-    end
-
-    def validate_existence_of_at_least_one_project
-      unless @yaml["projects"]
-        raise PGit::Configuration::ProjectMissingError.new(@expanded_path)
-
-      end
+      @validator.yaml
     end
   end
 end
