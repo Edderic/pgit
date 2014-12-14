@@ -64,8 +64,7 @@ module PGit
 
     def validate_existence_of_at_least_one_project
       unless @yaml["projects"]
-        raise "Error: #{@expanded_path} needs at least one project.\n" +
-          general_error_message
+        raise PGit::Configuration::ProjectMissingError.new(@expanded_path)
 
       end
     end
