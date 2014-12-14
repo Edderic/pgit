@@ -29,7 +29,7 @@ module PGit
 
     def validate_pwd_match_at_least_one(matching_projects)
       if matching_projects.length == 0
-        raise "None of the project paths matches the working directory"
+        raise PGit::CurrentProject::NoPathsMatchWorkingDirError.new
       end
     end
 

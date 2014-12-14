@@ -24,7 +24,6 @@ describe 'PGit::CurrentProject' do
   describe '#new(config_yaml)' do
     describe 'none of the projects listed matches the working directory' do
       it 'should throw an error' do
-        error_message = "None of the project paths matches the working directory"
         fake_project_1 =  { "path" => "~/some-non-matching-path",
                             "id" => 12345,
                             "api_token" => "astoeuh" }
@@ -37,7 +36,9 @@ describe 'PGit::CurrentProject' do
         fake_configuration = double('configuration', to_yaml: fake_yaml)
         allow(Dir).to receive(:pwd).and_return(fake_pwd)
 
-        expect{ PGit::CurrentProject.new(fake_configuration.to_yaml) }.to raise_error(error_message)
+        expect do
+          PGit::CurrentProject.new(fake_configuration.to_yaml)
+        end.to raise_error(PGit::CurrentProject::NoPathsMatchWorkingDirError)
       end
     end
 
