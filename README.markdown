@@ -3,6 +3,8 @@
 ![Travis CI Build](https://travis-ci.org/Edderic/pgit.svg?branch=master)
 [![Gem Version](https://badge.fury.io/rb/pgit.svg)](http://badge.fury.io/rb/pgit)
 [![Code Climate](https://codeclimate.com/github/Edderic/pgit/badges/gpa.svg)](https://codeclimate.com/github/Edderic/pgit)
+[![Coverage Status](https://coveralls.io/repos/Edderic/pgit/badge.png?branch=master)](https://coveralls.io/r/Edderic/pgit?branch=master)
+
 ## Example Usage
 
 Assuming that:
