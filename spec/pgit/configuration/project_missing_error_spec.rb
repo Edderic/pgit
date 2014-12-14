@@ -7,10 +7,6 @@ describe 'PGit::Configuration::ProjectMissingError' do
     expect(ancestors).to include (PGit::Error)
   end
 
-  # it 'test' do
-    # raise PGit::Configuration::ProjectMissingError
-  # end
-
   it 'should complain saying that a project must exist' do
     error_message = <<-ERROR
       /Users/edderic/some/config/path.yml needs at least one project.
