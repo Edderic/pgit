@@ -22,26 +22,24 @@ end
 
 describe 'PGit::CurrentProject' do
   describe '#new(config_yaml)' do
-    describe 'none of the projects listed matches the working directory' do
-      it 'should throw an error' do
-        fake_project_1 =  { "path" => "~/some-non-matching-path",
-                            "id" => 12345,
-                            "api_token" => "astoeuh" }
-        fake_project_2 =  { "path" => "~/some-other-non-matching-path",
-                            "id" => 19191,
-                            "api_token" => "astoeuh" }
-        fake_project_list = [ fake_project_1, fake_project_2 ]
-        fake_yaml = { "projects" => fake_project_list }
-        fake_pwd = "/Therapy-Exercises-Online/some_other_project/some_subdirectory"
-        fake_configuration = double('configuration', to_yaml: fake_yaml)
-        allow(Dir).to receive(:pwd).and_return(fake_pwd)
+    it 'should delegate to PGit::CurrentProject::Validator' do
+      fake_project_1 =  { "path" => "~/some-non-matching-path",
+                          "id" => 12345,
+                          "api_token" => "astoeuh" }
+      fake_project_2 =  { "path" => "~/some-other-non-matching-path",
+                          "id" => 19191,
+                          "api_token" => "astoeuh" }
+      fake_project_list = [ fake_project_1, fake_project_2 ]
+      fake_yaml = { "projects" => fake_project_list }
+      fake_pwd = "/Therapy-Exercises-Online/some_other_project/some_subdirectory"
+      fake_configuration = double('configuration', to_yaml: fake_yaml)
+      allow(Dir).to receive(:pwd).and_return(fake_pwd)
+      allow(PGit::CurrentProject::Validator).to receive(:new).with []
 
-        expect do
-          PGit::CurrentProject.new(fake_configuration.to_yaml)
-        end.to raise_error(PGit::CurrentProject::NoPathsMatchWorkingDirError)
-      end
+      PGit::CurrentProject.new(fake_configuration.to_yaml)
+
+      expect(PGit::CurrentProject::Validator).to have_received(:new).with []
     end
-
   end
 
   describe '#pwd' do

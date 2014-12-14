@@ -27,12 +27,6 @@ module PGit
 
     private
 
-    def validate_pwd_match_at_least_one(matching_projects)
-      if matching_projects.length == 0
-        raise PGit::CurrentProject::NoPathsMatchWorkingDirError.new
-      end
-    end
-
     def escape_slashes(project_path)
       project_path.gsub('/','\/')
     end
@@ -50,7 +44,7 @@ module PGit
       projects = config_yaml["projects"]
       matching_projects = find_matching_projects(projects)
 
-      validate_pwd_match_at_least_one(matching_projects)
+      PGit::CurrentProject::Validator.new(matching_projects)
       find_best_match(matching_projects)
     end
 
