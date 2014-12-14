@@ -34,7 +34,7 @@ module PGit
         validate_existence_of_at_least_one_project
         validate_presence_of_items_in_each_project
       else
-        raise missing_config_default
+        raise PGit::Configuration::NotFoundError
       end
     end
 
@@ -43,10 +43,6 @@ module PGit
     end
 
     private
-
-    def missing_config_default
-      "Default configuration file does not exist. Please run `pgit install`"
-    end
 
     def general_error_message
       "Please have the following layout:\n" + YAML.dump(PGit::Configuration.default_options)

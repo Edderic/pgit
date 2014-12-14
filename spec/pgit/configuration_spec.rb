@@ -147,11 +147,10 @@ describe 'PGit::Configuration' do
     end
 
     describe 'default configuration file does not exist' do
-      it 'should throw an error' do
+      it 'should throw PGit::Configuration::NotFoundError' do
         allow(File).to receive(:exists?).and_return(false)
 
-        error_message =  "Default configuration file does not exist. Please run `pgit install`"
-        expect{ PGit::Configuration.new }.to raise_error(error_message)
+        expect{ PGit::Configuration.new }.to raise_error(PGit::Configuration::NotFoundError)
       end
     end
   end
