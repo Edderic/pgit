@@ -7,10 +7,8 @@ module PGit
     end
 
     class ProjectMissingError < LayoutError
-      def initialize
-        @message =
-          "/Users/edderic/some/config/path.yml needs at least one project.\n" +
-          general_message
+      def initialize(path)
+        @message = "#{path} needs at least one project.\n#{general_message}"
         super(@message)
       end
     end

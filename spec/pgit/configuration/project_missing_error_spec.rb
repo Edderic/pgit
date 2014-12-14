@@ -25,8 +25,8 @@ describe 'PGit::Configuration::ProjectMissingError' do
         path: "~/some/other/pivotal-git/project"
     ERROR
     error_message.gsub!(/^\s{6}/,'')
-
-    project_missing_error = PGit::Configuration::ProjectMissingError.new
+    fake_path = "/Users/edderic/some/config/path.yml"
+    project_missing_error = PGit::Configuration::ProjectMissingError.new(fake_path)
     message = project_missing_error.instance_eval{ @message }
 
     expect(message).to eq error_message
