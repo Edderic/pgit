@@ -31,7 +31,7 @@ module PGit
         request = `#{get_request}`
         # TODO: namespace the errors thrown
         if request.match(/error/)
-          raise request
+          raise PGit::ExternalError.new(request)
         else
           request
         end

@@ -47,7 +47,9 @@ describe 'PGit::Story' do
 
         allow(PGit::Story).to receive(:`).with(get_request).and_return(fake_json_str_with_error)
 
-        expect{ PGit::Story.get(story_id, current_project) }.to raise_error(fake_json_str_with_error)
+        expect do
+          PGit::Story.get(story_id, current_project)
+        end.to raise_error(PGit::ExternalError)
       end
     end
   end
