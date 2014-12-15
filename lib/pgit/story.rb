@@ -28,13 +28,8 @@ module PGit
       end
 
       def get!
-        request = `#{get_request}`
-        # TODO: namespace the errors thrown
-        if request.match(/error/)
-          raise PGit::ExternalError.new(request)
-        else
-          request
-        end
+        validator = PGit::PivotalRequestValidator.new `#{get_request}`
+        validator.request
       end
 
       def link

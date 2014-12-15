@@ -31,26 +31,5 @@ describe 'PGit::Story' do
       expect(story.name).to eq "Bring me the passengers"
       expect(story.description).to eq "ignore the droids"
     end
-
-    describe 'if there is an error' do
-      it 'should raise an error' do
-        story_id = '123'
-        current_project = double('current_project', id: '321', api_token: 'abc10xyz')
-        get_request = "curl -X GET -H 'X-TrackerToken: abc10xyz' 'https://www.pivotaltracker.com/services/v5/projects/321/stories/123'"
-        fake_json_str_with_error = <<-ERROR_JSON
-          {
-            "code": "unfound_resource",
-                    "kind": "error",
-                    "error": "The object you tried to access could not be found.  It may have been removed by another user, you may be using the ID of another object type, or you may be trying to access a sub-resource at the wrong point in a tree."
-          }
-        ERROR_JSON
-
-        allow(PGit::Story).to receive(:`).with(get_request).and_return(fake_json_str_with_error)
-
-        expect do
-          PGit::Story.get(story_id, current_project)
-        end.to raise_error(PGit::ExternalError)
-      end
-    end
   end
 end
