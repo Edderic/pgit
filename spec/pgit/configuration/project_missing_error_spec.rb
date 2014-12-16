@@ -15,10 +15,10 @@ describe 'PGit::Configuration::ProjectMissingError' do
       projects:
       - api_token: somepivotalatoken124
         id: '12345'
-        path: "~/some/path/to/a/pivotal-git/project"
+        path: ~/some/path/to/a/pivotal-git/project
       - api_token: somepivotalatoken124
         id: '23429070'
-        path: "~/some/other/pivotal-git/project"
+        path: ~/some/other/pivotal-git/project
     ERROR
     error_message.gsub!(/^\s{6}/,'')
     fake_path = "/Users/edderic/some/config/path.yml"
