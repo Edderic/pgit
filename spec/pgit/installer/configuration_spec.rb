@@ -22,10 +22,11 @@ describe 'PGit::Installer::Configuration' do
         with(default_file_path).and_return(file_expanded_path)
       allow(File).to receive(:exists?).
         with(file_expanded_path).and_return(true)
+      allow_any_instance_of(PGit::Installer::Configuration).to receive(:warn).with(message)
 
-      expect do
-        PGit::Installer::Configuration.new(global_opts, opts, args)
-      end.to raise_error message
+      installer = PGit::Installer::Configuration.new(global_opts, opts, args)
+
+      expect(installer).to have_received(:warn).with(message)
     end
   end
 

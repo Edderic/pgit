@@ -6,7 +6,7 @@ module PGit
         @expanded_path = File.expand_path(FILEPATH)
 
         if File.exists? @expanded_path
-          raise "#{FILEPATH} already exists"
+          warn "#{FILEPATH} already exists"
         else
           ask_continue
         end
