@@ -1,6 +1,8 @@
 module PGit
   module Installer
     class BashAutoCompletion
+      FILENAME = "~/.pgit_auto_completion"
+
       def self.script
         autocompletion = <<-AUTOCOMPLETION
           function get_pgit_commands
@@ -17,27 +19,28 @@ module PGit
         PGit::Heredoc.remove_front_spaces(autocompletion)
       end
 
-
       def initialize(global_opts, opts, args)
       end
 
       def write_completer_file
-        expanded_path = File.expand_path("~/.pgit_auto_completion")
+        expanded_path = File.expand_path(FILENAME)
         f = File.open(expanded_path, 'w')
         f.puts PGit::Installer::BashAutoCompletion.script
         f.close
 
-        puts "Wrote autocompletion script under ~/.pgit_auto_completion"
+        puts "Wrote autocompletion script under #{FILENAME}"
       end
 
       def source_completer_from_bashrc
         if already_sourced?
-          puts "Already sourcing ~/.pgit_auto_completion in ~/.bashrc"
+          puts "Already sourcing #{FILENAME} in ~/.bashrc"
         else
           bashrc_expanded_path = File.expand_path("~/.bashrc")
           b = File.open(bashrc_expanded_path, 'a')
-          b.puts "source ~/.pgit_auto_completion"
+          b.puts "source #{FILENAME}"
           b.close
+
+          puts "~/.bashrc will now source #{FILENAME}"
         end
       end
 
@@ -46,7 +49,7 @@ module PGit
       def already_sourced?
         expanded_bashrc = File.expand_path("~/.bashrc")
         lines = File.readlines(expanded_bashrc)
-        already_sourced = lines.any? {|line| line.match(/source ~\/.pgit_auto_completion/) }
+        already_sourced = lines.any? {|line| line.match(/source #{FILENAME}/) }
       end
     end
   end
