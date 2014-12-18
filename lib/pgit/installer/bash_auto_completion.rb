@@ -14,20 +14,9 @@ module PGit
           complete -F get_pgit_commands pgit
         AUTOCOMPLETION
 
-        self.remove_front_spaces(autocompletion)
+        PGit::Heredoc.remove_front_spaces(autocompletion)
       end
 
-      def self.remove_front_spaces(string)
-        space_lengths = string.split("\n").select do |s|
-          s.match(/\S/)
-        end.map {|s| s.scan(/^\s*/).first.length }
-
-        min_length = space_lengths.inject(100) do |accum, value|
-          accum > value ?  value : accum
-        end
-
-        string.gsub!(/^\s{#{min_length}}/, '')
-      end
 
       def initialize(global_opts, opts, args)
       end
