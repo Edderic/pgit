@@ -1,13 +1,19 @@
 require 'pgit'
 
 describe 'PGit::Installer::Configuration' do
-  describe '~/pgit.rc.yml exists' do
-    it 'should raise an error' do
+  describe '::FILEPATH' do
+    it 'should eq ~/.pgit.rc.yml' do
+      expect(PGit::Installer::Configuration::FILEPATH).to eq '~/.pgit.rc.yml'
+    end
+  end
+
+  describe "#{PGit::Installer::Configuration::FILEPATH} exists" do
+    it 'should say that the file already exists' do
       global_opts = {}
       opts = { }
       args = {}
-      message = "Error: ~/.pgit.rc.yml already exists"
-      default_file_path = "~/.pgit.rc.yml"
+      message = "#{PGit::Installer::Configuration::FILEPATH} already exists"
+      default_file_path = "#{PGit::Installer::Configuration::FILEPATH}"
       file_expanded_path = "/home/edderic/.pgit.rc.yml"
 
       allow(File).to receive(:expand_path).
@@ -29,14 +35,14 @@ describe 'PGit::Installer::Configuration' do
       opts = { }
       args = {}
 
-      message = "*** Installing example pgit configuration file under ~/.pgit.rc.yml. " +
+      message = "*** Installing example pgit configuration file under #{PGit::Installer::Configuration::FILEPATH}. " +
         "Continue? [Y/n]"
-      confirmation_message = "Saving example pgit config in ~/.pgit.rc.yml..."
-      edit_message = "Saved! Please edit ~/.pgit.rc.yml and add the proper Pivotal Tracker API tokens, id, and file paths for each project"
+      confirmation_message = "Saving example pgit config in #{PGit::Installer::Configuration::FILEPATH}..."
+      edit_message = "Saved! Please edit #{PGit::Installer::Configuration::FILEPATH} and add the proper Pivotal Tracker API tokens, id, and file paths for each project"
       answer = instance_double("String", chomp: 'y')
       expanded_path = "/home/edderic/.pgit.rc.yml"
       fake_writable_file = double('File')
-      allow(File).to receive(:expand_path).with("~/.pgit.rc.yml").and_return(expanded_path)
+      allow(File).to receive(:expand_path).with("#{PGit::Installer::Configuration::FILEPATH}").and_return(expanded_path)
       allow(File).to receive(:exists?).with(expanded_path).and_return(false)
       allow(File).to receive(:open).with(expanded_path, 'w').and_return(fake_writable_file)
       allow(STDIN).to receive(:gets).and_return(answer)
@@ -54,13 +60,13 @@ describe 'PGit::Installer::Configuration' do
         opts = { }
         args = {}
 
-        first_message = "*** Installing example pgit configuration file under ~/.pgit.rc.yml. " +
+        first_message = "*** Installing example pgit configuration file under #{PGit::Installer::Configuration::FILEPATH}. " +
           "Continue? [Y/n]"
-        save_message = "Saving example pgit config in ~/.pgit.rc.yml..."
+        save_message = "Saving example pgit config in #{PGit::Installer::Configuration::FILEPATH}..."
         expanded_path = "/home/edderic/.pgit.rc.yml"
-        edit_message = "Saved! Please edit ~/.pgit.rc.yml and add the proper Pivotal Tracker API tokens, id, and file paths for each project"
+        edit_message = "Saved! Please edit #{PGit::Installer::Configuration::FILEPATH} and add the proper Pivotal Tracker API tokens, id, and file paths for each project"
         fake_writable_file = double('File')
-        allow(File).to receive(:expand_path).with("~/.pgit.rc.yml").and_return(expanded_path)
+        allow(File).to receive(:expand_path).with("#{PGit::Installer::Configuration::FILEPATH}").and_return(expanded_path)
         allow(File).to receive(:exists?).with(expanded_path).and_return(false)
         allow(File).to receive(:open).with(expanded_path, 'w').and_return(fake_writable_file)
         allow_any_instance_of(PGit::Installer::Configuration).to receive(:puts).with(edit_message)
@@ -75,18 +81,18 @@ describe 'PGit::Installer::Configuration' do
         expect(installer).to have_received(:puts).with(save_message)
       end
 
-      it 'should save the file under ~/.pgit.rc.yml' do
+      it "should save the file under #{PGit::Installer::Configuration::FILEPATH}" do
         global_opts = {}
         opts = { }
         args = {}
 
-        first_message = "*** Installing example pgit configuration file under ~/.pgit.rc.yml. " +
+        first_message = "*** Installing example pgit configuration file under #{PGit::Installer::Configuration::FILEPATH}. " +
           "Continue? [Y/n]"
-        save_message = "Saving example pgit config in ~/.pgit.rc.yml..."
+        save_message = "Saving example pgit config in #{PGit::Installer::Configuration::FILEPATH}..."
         expanded_path = "/home/edderic/.pgit.rc.yml"
         fake_writable_file = double('File')
-        edit_message = "Saved! Please edit ~/.pgit.rc.yml and add the proper Pivotal Tracker API tokens, id, and file paths for each project"
-        allow(File).to receive(:expand_path).with("~/.pgit.rc.yml").and_return(expanded_path)
+        edit_message = "Saved! Please edit #{PGit::Installer::Configuration::FILEPATH} and add the proper Pivotal Tracker API tokens, id, and file paths for each project"
+        allow(File).to receive(:expand_path).with(PGit::Installer::Configuration::FILEPATH).and_return(expanded_path)
         allow(File).to receive(:exists?).with(expanded_path).and_return(false)
         allow(File).to receive(:open).with(expanded_path, 'w').and_return(fake_writable_file)
         allow_any_instance_of(PGit::Installer::Configuration).to receive(:puts).with(first_message)
@@ -106,13 +112,13 @@ describe 'PGit::Installer::Configuration' do
         opts = { }
         args = {}
 
-        first_message = "*** Installing example pgit configuration file under ~/.pgit.rc.yml. " +
+        first_message = "*** Installing example pgit configuration file under #{PGit::Installer::Configuration::FILEPATH}. " +
           "Continue? [Y/n]"
-        save_message = "Saving example pgit config in ~/.pgit.rc.yml..."
-        edit_message = "Saved! Please edit ~/.pgit.rc.yml and add the proper Pivotal Tracker API tokens, id, and file paths for each project"
+        save_message = "Saving example pgit config in #{PGit::Installer::Configuration::FILEPATH}..."
+        edit_message = "Saved! Please edit #{PGit::Installer::Configuration::FILEPATH} and add the proper Pivotal Tracker API tokens, id, and file paths for each project"
         expanded_path = "/home/edderic/.pgit.rc.yml"
         fake_writable_file = double('File')
-        allow(File).to receive(:expand_path).with("~/.pgit.rc.yml").and_return(expanded_path)
+        allow(File).to receive(:expand_path).with(PGit::Installer::Configuration::FILEPATH).and_return(expanded_path)
         allow(File).to receive(:exists?).with(expanded_path).and_return(false)
         allow(File).to receive(:open).with(expanded_path, 'w').and_return(fake_writable_file)
         allow_any_instance_of(PGit::Installer::Configuration).to receive(:puts).with(first_message)
@@ -135,10 +141,10 @@ describe 'PGit::Installer::Configuration' do
         opts = { }
         args = {}
 
-        first_message = "*** Installing example pgit configuration file under ~/.pgit.rc.yml. " +
+        first_message = "*** Installing example pgit configuration file under #{PGit::Installer::Configuration::FILEPATH}. " +
           "Continue? [Y/n]"
         expanded_path = "/home/edderic/.pgit.rc.yml"
-        allow(File).to receive(:expand_path).with("~/.pgit.rc.yml").and_return(expanded_path)
+        allow(File).to receive(:expand_path).with("#{PGit::Installer::Configuration::FILEPATH}").and_return(expanded_path)
         allow(File).to receive(:exists?).with(expanded_path).and_return(false)
         allow_any_instance_of(PGit::Installer::Configuration).to receive(:puts).with(first_message)
         allow_any_instance_of(PGit::Installer::Configuration).to receive(:puts).with(message)
