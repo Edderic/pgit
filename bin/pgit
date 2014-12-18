@@ -25,6 +25,12 @@ arguments :strict
 desc "Installs the pgit configuration file"
 command :install do |c|
   c.action do |global_options,options,args|
+    completer = PGit::Installer::BashAutoCompletion.new(global_options,
+                                                        options,
+                                                        args)
+    completer.write_completer_file
+    completer.source_completer_from_bashrc
+
     PGit::Installer::Configuration.new(global_options, options, args)
   end
 end
