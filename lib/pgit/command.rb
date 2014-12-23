@@ -8,10 +8,43 @@ module PGit
     end
 
     def execute
+      branch_name = PGit::CurrentBranch.new.name
+
       @steps.each do |step|
-        step.gsub!(/STORY_BRANCH/, PGit::CurrentBranch.new.name)
-        puts `#{step}`
+        step.gsub!(/STORY_BRANCH/, branch_name)
+
+        begin
+          puts "About to execute '#{step}'. Proceed? [Y/s/q]"
+          response = STDIN.gets.chomp
+
+          if response.match(/^s$/i)
+            puts "Skipping..."
+          elsif response.match(/^q$/i)
+            puts "Quitting..."
+            break
+          elsif response.match(/^y$/i)
+            puts "Executing '#{step}'..."
+            puts `#{step}`
+          else
+            show_options
+            raise PGit::InvalidOptionError
+          end
+        rescue PGit::InvalidOptionError
+          retry
+        end
       end
+    end
+
+    private
+
+    def show_options
+      message = <<-LEGAL_OPTIONS
+        y  - yes
+        s  - skip
+        q  - quit
+      LEGAL_OPTIONS
+
+      puts PGit::Heredoc.remove_front_spaces(message)
     end
   end
 end
