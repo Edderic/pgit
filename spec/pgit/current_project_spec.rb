@@ -76,4 +76,39 @@ describe 'PGit::CurrentProject' do
       expect(api_token).to eq 'astoeuh'
     end
   end
+
+  describe '#commands' do
+    it 'should return a list of commands if there are any' do
+      fake_project_1 =  { "path" => "/Therapy-Exercises-Online/some_other_project",
+                          "id" => 12345,
+                          "api_token" => "astoeuh",
+                          "commands" => {
+                            "finish"=>["git push origin master",
+                                       "hello"],
+                             "start"=>["lol"]
+                          }
+                        }
+      fake_project_2 =  { "path" => "~/Therapy-Exercises-Online",
+                          "id" => 19191,
+                          "api_token" => "astoeuh" }
+      fake_project_list = [ fake_project_1, fake_project_2 ]
+      fake_yaml = { "projects" => fake_project_list }
+      fake_pwd = "/Therapy-Exercises-Online/some_other_project/some_subdirectory"
+      allow(Dir).to receive(:pwd).and_return(fake_pwd)
+
+      current_project = PGit::CurrentProject.new(fake_yaml)
+
+      commands = current_project.commands
+
+      expect(commands).to eq fake_project_1["commands"]
+    end
+
+    it 'should return an empty hash if there are no commands' do
+      fake_configuration = successful_setup
+
+      current_project = PGit::CurrentProject.new(fake_configuration.to_yaml)
+
+      expect(current_project.commands).to eq Hash.new
+    end
+  end
 end

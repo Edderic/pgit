@@ -25,6 +25,10 @@ module PGit
       @current_project["api_token"]
     end
 
+    def commands
+      @current_project["commands"] || {}
+    end
+
     private
 
     def escape_slashes(project_path)
