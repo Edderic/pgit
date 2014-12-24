@@ -1,4 +1,5 @@
 require 'json'
+require 'pgit/string_extensions'
 require 'pgit/error'
 require 'pgit/heredoc'
 require 'pgit/configuration/layout_error'

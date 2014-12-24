@@ -17,12 +17,12 @@ module PGit
           puts "About to execute '#{step}'. Proceed? [Y/s/q]"
           response = STDIN.gets.chomp
 
-          if response.match(/^s$/i)
+          if response.letter?('s')
             puts "Skipping..."
-          elsif response.match(/^q$/i)
+          elsif response.letter?('q')
             puts "Quitting..."
             break
-          elsif response.match(/^y$/i)
+          elsif response.letter?('y')
             puts "Executing '#{step}'..."
             puts `#{step}`
           else
