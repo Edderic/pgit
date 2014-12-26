@@ -35,6 +35,10 @@ module PGit
       end
     end
 
+    def to_s
+      steps.inject("#{name}:\n") {|accum, step| accum + "  #{step}\n" }
+    end
+
     private
 
     def show_options

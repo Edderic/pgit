@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'Command' do
+describe 'PGit::Command' do
   describe '#name' do
     it 'should return the name' do
       chompable = double('String')
@@ -30,6 +30,29 @@ describe 'Command' do
       steps = command.steps
 
       expect(steps).to eq steps
+    end
+  end
+
+  describe '#to_s' do
+    it 'should return the string version' do
+      stringified = <<-TO_S
+        finish:
+          echo hi
+          echo hello
+      TO_S
+
+      stringified = PGit::Heredoc.remove_front_spaces(stringified)
+      chompable = double('String')
+      allow(chompable).to receive(:chomp).and_return('Y')
+      allow(STDIN).to receive(:gets).and_return(chompable)
+      fake_first_step = "echo hi"
+      fake_second_step = "echo hello"
+      steps = [fake_first_step, fake_second_step]
+      name = "finish"
+      command = PGit::Command.new(name, steps)
+      string = command.to_s
+
+      expect(string).to eq stringified
     end
   end
 
