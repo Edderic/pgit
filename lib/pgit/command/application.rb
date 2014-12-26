@@ -25,11 +25,17 @@ module PGit
       end
 
       def execute
-        s = commands.find{|c| c.name == opts[:execute] }
-        s.execute
+        command = find_command
+        raise PGit::Command::NotFoundError.new(opts[:execute]) unless command
+
+        command.execute
       end
 
       private
+
+      def find_command
+        commands.find{|c| c.name == opts[:execute] }
+      end
 
       def setup_commands
         current_project.commands.each do |c|
