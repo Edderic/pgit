@@ -1,10 +1,5 @@
 require 'spec_helper'
-# .edderic-dotfiles/config.yml
-# projects
-#   - path:                  ~/Therapy-Exercises-Online
-#     id:                    12345
-#     api_token: asoeuhot
-#
+
 def successful_setup
   fake_project_1 =  { "path" => "/Therapy-Exercises-Online/some_other_project",
                       "id" => 12345,
