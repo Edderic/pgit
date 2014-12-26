@@ -70,7 +70,32 @@ describe 'PGit::Command::Application' do
   end
 
   describe '#list' do
-    it 'should list the commands' do
+    it 'raises an error if there are no commands' do
+      global_opts = {}
+      opts = { list: true }
+      args = {}
+
+      expected_message = "Listing custom commands of the current project..."
+
+      fake_commands = []
+      fake_yaml = double('fake_yaml')
+      fake_configuration = instance_double('PGit::Configuration', to_yaml: fake_yaml)
+      fake_current_project = instance_double('PGit::CurrentProject',
+                                             commands: fake_commands)
+
+      allow(PGit::Configuration).to receive(:new).
+        and_return(fake_configuration)
+      allow(PGit::CurrentProject).to receive(:new).
+        with(fake_yaml).and_return(fake_current_project)
+      allow_any_instance_of(PGit::Command::Application).
+        to receive(:puts)
+
+      expect do
+        PGit::Command::Application.new(global_opts, opts, args)
+      end.to raise_error PGit::Command::EmptyError
+    end
+
+    it 'lists the commands if there are commands' do
       global_opts = {}
       opts = { list: true }
       args = {}

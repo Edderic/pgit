@@ -17,6 +17,7 @@ module PGit
       end
 
       def list
+        raise PGit::Command::EmptyError if commands.empty?
         puts "Listing custom commands of the current project..."
         puts
         commands.each do |c|
