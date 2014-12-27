@@ -37,6 +37,100 @@ describe 'PGit::CurrentProject' do
     end
   end
 
+  describe '#to_hash' do
+    it 'returns the hash version' do
+      fake_config_hash =
+        {
+          "projects" =>
+          [
+            { "api_token" => "hello1234",
+              "path" => "~/some/path",
+              "id" => "12345678",
+              "commands" =>
+              [
+                {
+                  "start" =>
+                  [
+                    "step1",
+                    "step2"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      expected_hash =
+        { "api_token" => "hello1234",
+          "path" => "~/some/path",
+          "id" => "12345678",
+          "commands" =>
+          [
+            {
+              "start" =>
+              [
+                "step1",
+                "step2"
+              ]
+            }
+          ]
+        }
+
+      allow(File).to receive(:expand_path).and_return("/Users/Edderic/some/path")
+      allow(File).to receive(:expand_path).with("~/some/path").and_return("/Users/Edderic/some/path")
+      allow(Dir).to receive(:pwd).and_return("/Users/Edderic/some/path")
+      current_project = PGit::CurrentProject.new(fake_config_hash)
+
+      expect(current_project.to_hash).to eq(expected_hash)
+    end
+  end
+
+  describe '#to_h' do
+    it 'returns the hash version' do
+      fake_config_hash =
+        {
+          "projects" =>
+          [
+            { "api_token" => "hello1234",
+              "path" => "~/some/path",
+              "id" => "12345678",
+              "commands" =>
+              [
+                {
+                  "start" =>
+                  [
+                    "step1",
+                    "step2"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      expected_hash =
+        { "api_token" => "hello1234",
+          "path" => "~/some/path",
+          "id" => "12345678",
+          "commands" =>
+          [
+            {
+              "start" =>
+              [
+                "step1",
+                "step2"
+              ]
+            }
+          ]
+        }
+
+      allow(File).to receive(:expand_path).and_return("/Users/Edderic/some/path")
+      allow(File).to receive(:expand_path).with("~/some/path").and_return("/Users/Edderic/some/path")
+      allow(Dir).to receive(:pwd).and_return("/Users/Edderic/some/path")
+      current_project = PGit::CurrentProject.new(fake_config_hash)
+
+      expect(current_project.to_h).to eq(expected_hash)
+    end
+  end
+
   describe '#pwd' do
     describe 'more than one of the projects listed matches the working directory' do
       it "should return the more specific directory" do

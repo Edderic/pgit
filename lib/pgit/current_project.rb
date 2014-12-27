@@ -29,6 +29,19 @@ module PGit
       @current_project["commands"] || {}
     end
 
+    def to_hash
+      {
+        "id" => id,
+        "api_token" => api_token,
+        "path" => @current_project["path"],
+        "commands" => commands
+      }
+    end
+
+    def to_h
+      to_hash
+    end
+
     private
 
     def escape_slashes(project_path)
