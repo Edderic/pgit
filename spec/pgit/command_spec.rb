@@ -1,6 +1,45 @@
 require 'spec_helper'
 
 describe 'PGit::Command' do
+  describe '#to_h' do
+    it 'explicitly returns a hash' do
+      chompable = double('String')
+      allow(chompable).to receive(:chomp).and_return('Y')
+      allow(STDIN).to receive(:gets).and_return(chompable)
+      fake_first_step = "echo hi"
+      fake_second_step = "echo hello"
+      name = "finish"
+      steps = [fake_first_step, fake_second_step]
+      command = PGit::Command.new(name, steps)
+      expected_hash = {
+        "finish" => ["echo hi", "echo hello"],
+        "start" => ["git checkout bla-123"]
+      }
+
+      expect(command.to_h.merge({ "start" => ["git checkout bla-123"]})).to eq expected_hash
+    end
+  end
+
+  describe '#to_hash' do
+    it 'implicitly converts the object into a hash' do
+      chompable = double('String')
+      allow(chompable).to receive(:chomp).and_return('Y')
+      allow(STDIN).to receive(:gets).and_return(chompable)
+      fake_first_step = "echo hi"
+      fake_second_step = "echo hello"
+      name = "finish"
+      steps = [fake_first_step, fake_second_step]
+      command = PGit::Command.new(name, steps)
+      expected_hash = {
+        "finish" => ["echo hi", "echo hello"],
+        "start" => ["git checkout bla-123"]
+      }
+
+      merged = { "start" => [ "git checkout bla-123"] }.merge(command)
+      expect(merged).to eq expected_hash
+    end
+  end
+
   describe '#name' do
     it 'should return the name' do
       chompable = double('String')

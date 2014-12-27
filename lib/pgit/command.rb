@@ -35,6 +35,14 @@ module PGit
       end
     end
 
+    def to_h
+      to_hash
+    end
+
+    def to_hash
+      { name => steps }
+    end
+
     def to_s
       steps.inject("#{name}:\n") {|accum, step| accum + "  #{step}\n" }
     end
