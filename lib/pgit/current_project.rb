@@ -8,8 +8,11 @@
 
 module PGit
   class CurrentProject
+    attr_accessor :commands
+
     def initialize(config_yaml)
       @current_project = find_current_project(config_yaml)
+      @commands = @current_project["commands"] || {}
     end
 
     def path
@@ -22,10 +25,6 @@ module PGit
 
     def api_token
       @current_project["api_token"]
-    end
-
-    def commands
-      @current_project["commands"] || {}
     end
 
     def to_hash

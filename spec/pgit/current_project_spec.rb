@@ -29,11 +29,20 @@ describe 'PGit::CurrentProject' do
       fake_path = "/Therapy-Exercises-Online/some_other_project/some_subdirectory"
       fake_configuration = double('configuration', to_yaml: fake_yaml)
       allow(Dir).to receive(:pwd).and_return(fake_path)
-      allow(PGit::CurrentProject::Validator).to receive(:new).with []
+      allow(PGit::CurrentProject::Validator).to receive(:new).with([]).and_raise 'some_error'
 
-      PGit::CurrentProject.new(fake_configuration.to_yaml)
+      expect{ PGit::CurrentProject.new(fake_configuration.to_yaml) }.to raise_error 'some_error'
+    end
+  end
 
-      expect(PGit::CurrentProject::Validator).to have_received(:new).with []
+  describe '#commands=()' do
+    it 'should set the commands' do
+      yaml = successful_setup.to_yaml
+      current_project = PGit::CurrentProject.new(yaml)
+      new_command_hash = {'some_command' => ['step1', 'step2']}
+      current_project.commands = new_command_hash
+
+      expect(current_project.commands).to eq new_command_hash
     end
   end
 
