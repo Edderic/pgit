@@ -25,7 +25,7 @@ module PGit
       }
     end
 
-    attr_accessor :yaml
+    attr_accessor :yaml, :projects
     attr_reader :config_path
 
     def initialize(config_path = '~/.pgit.rc.yml')
@@ -37,7 +37,9 @@ module PGit
     def save
       expanded_path = File.expand_path(config_path)
       f = File.open(expanded_path, 'w')
-      YAML.dump(yaml, f)
+
+      _projects = { 'projects' => projects }
+      YAML.dump(_projects, f)
     end
 
     def to_yaml

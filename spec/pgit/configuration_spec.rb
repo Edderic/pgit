@@ -72,6 +72,29 @@ describe 'PGit::Configuration' do
     end
   end
 
+  describe '#projects=(some projects)' do
+    it 'should set the projects' do
+      fake_validator = instance_double('PGit::Configuration::Validator')
+      fake_yaml = { "some" => "hash" }
+      allow(fake_validator).to receive(:yaml).and_return(fake_yaml)
+      allow(PGit::Configuration::Validator).to receive(:new).with("~/.pgit.rc.yml").and_return fake_validator
+      configuration = PGit::Configuration.new
+      fake_projects = [
+        { "path" => "/Therapy-Exercises-Online/some_other_project",
+          "id" => 12345,
+          "api_token" => "astoeuh" },
+          { "path" => "/Therapy-Exercises-Online",
+            "id" => 19191,
+            "api_token" => "astoeuh" }
+      ]
+
+      configuration.projects = fake_projects
+      config_projects = configuration.projects
+
+      expect(config_projects).to eq fake_projects
+    end
+  end
+
   describe '#to_yaml' do
     it 'should delegate #yaml to validator' do
       fake_validator = instance_double('PGit::Configuration::Validator')
@@ -88,7 +111,16 @@ describe 'PGit::Configuration' do
   describe '#save' do
     it 'should save the configuration to the config path' do
       fake_validator = instance_double('PGit::Configuration::Validator')
-      some_other_hash = { 'another' => 'hash' }
+      original_hash = {
+        'projects' => [
+          {'key' => 'value'}
+        ]
+      }
+
+      projects = [
+        { 'another' => 'hash' }
+      ]
+      projects_hash = { "projects" => projects }
       config_file = instance_double('File')
       short_path = "~/.pgit.rc.yml"
       long_path = "/Users/Edderic/.pgit.rc.yml"
@@ -96,14 +128,15 @@ describe 'PGit::Configuration' do
       allow(File).to receive(:open).with(long_path, 'w').and_return(config_file)
       allow(config_file).to receive(:write).with("---\nanother: hash\n")
       allow(config_file).to receive(:close)
-      allow(fake_validator).to receive(:yaml).and_return(some_other_hash)
+      allow(fake_validator).to receive(:yaml).and_return(original_hash)
       allow(PGit::Configuration::Validator).to receive(:new).with("~/.pgit.rc.yml").and_return fake_validator
-      allow(YAML).to receive(:dump).with(some_other_hash, config_file)
+      allow(YAML).to receive(:dump).with(projects_hash, config_file)
       configuration = PGit::Configuration.new
+      configuration.projects = projects
 
       configuration.save
 
-      expect(YAML).to have_received(:dump).with(some_other_hash, config_file)
+      expect(YAML).to have_received(:dump).with(projects_hash, config_file)
     end
   end
 end
