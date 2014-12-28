@@ -31,7 +31,7 @@ module PGit
       {
         "id" => id,
         "api_token" => api_token,
-        "path" => @current_project["path"],
+        "path" => path,
         "commands" => commands
       }
     end
