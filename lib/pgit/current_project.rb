@@ -13,8 +13,7 @@ module PGit
     end
 
     def path
-      project_path = @current_project["path"]
-      File.expand_path(project_path, __FILE__)
+      @current_project["path"]
     end
 
     def id
