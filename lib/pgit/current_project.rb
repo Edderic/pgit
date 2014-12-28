@@ -12,7 +12,7 @@ module PGit
       @current_project = find_current_project(config_yaml)
     end
 
-    def pwd
+    def path
       project_path = @current_project["path"]
       File.expand_path(project_path, __FILE__)
     end

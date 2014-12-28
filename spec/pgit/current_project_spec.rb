@@ -9,8 +9,8 @@ def successful_setup
                       "api_token" => "astoeuh" }
   fake_project_list = [ fake_project_1, fake_project_2 ]
   fake_yaml = { "projects" => fake_project_list }
-  fake_pwd = "/Therapy-Exercises-Online/some_other_project/some_subdirectory"
-  allow(Dir).to receive(:pwd).and_return(fake_pwd)
+  fake_path = "/Therapy-Exercises-Online/some_other_project/some_subdirectory"
+  allow(Dir).to receive(:pwd).and_return(fake_path)
 
   fake_configuration = double('configuration', to_yaml: fake_yaml)
 end
@@ -26,9 +26,9 @@ describe 'PGit::CurrentProject' do
                           "api_token" => "astoeuh" }
       fake_project_list = [ fake_project_1, fake_project_2 ]
       fake_yaml = { "projects" => fake_project_list }
-      fake_pwd = "/Therapy-Exercises-Online/some_other_project/some_subdirectory"
+      fake_path = "/Therapy-Exercises-Online/some_other_project/some_subdirectory"
       fake_configuration = double('configuration', to_yaml: fake_yaml)
-      allow(Dir).to receive(:pwd).and_return(fake_pwd)
+      allow(Dir).to receive(:pwd).and_return(fake_path)
       allow(PGit::CurrentProject::Validator).to receive(:new).with []
 
       PGit::CurrentProject.new(fake_configuration.to_yaml)
@@ -131,13 +131,13 @@ describe 'PGit::CurrentProject' do
     end
   end
 
-  describe '#pwd' do
+  describe '#path' do
     describe 'more than one of the projects listed matches the working directory' do
       it "should return the more specific directory" do
         fake_configuration = successful_setup
 
         current_project = PGit::CurrentProject.new(fake_configuration.to_yaml)
-        working_directory = current_project.pwd
+        working_directory = current_project.path
 
         expect(working_directory).to eq "/Therapy-Exercises-Online/some_other_project"
       end
@@ -182,8 +182,8 @@ describe 'PGit::CurrentProject' do
                           "api_token" => "astoeuh" }
       fake_project_list = [ fake_project_1, fake_project_2 ]
       fake_yaml = { "projects" => fake_project_list }
-      fake_pwd = "/Therapy-Exercises-Online/some_other_project/some_subdirectory"
-      allow(Dir).to receive(:pwd).and_return(fake_pwd)
+      fake_path = "/Therapy-Exercises-Online/some_other_project/some_subdirectory"
+      allow(Dir).to receive(:pwd).and_return(fake_path)
 
       current_project = PGit::CurrentProject.new(fake_yaml)
 
