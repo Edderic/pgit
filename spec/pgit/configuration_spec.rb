@@ -23,7 +23,8 @@ describe 'PGit::Configuration' do
 
   describe '#new (without any arguments)' do
     it 'should delegate the default path to PGit::Configuration::Validator instance' do
-      fake_validator = instance_double('PGit::Configuration::Validator')
+      fake_yaml = {}
+      fake_validator = instance_double('PGit::Configuration::Validator', yaml: fake_yaml)
       allow(PGit::Configuration::Validator).to receive(:new).with("~/.pgit.rc.yml").and_return fake_validator
       PGit::Configuration.new
 
@@ -33,12 +34,41 @@ describe 'PGit::Configuration' do
 
   describe '#new ("~/some/path")' do
     it 'should delegate the path to PGit::Configuration::Validator instance' do
-      fake_validator = instance_double('PGit::Configuration::Validator')
+      fake_yaml = {}
+      fake_validator = instance_double('PGit::Configuration::Validator', yaml: fake_yaml)
       fake_path = "~/some/path"
       allow(PGit::Configuration::Validator).to receive(:new).with(fake_path).and_return fake_validator
       PGit::Configuration.new(fake_path)
 
       expect(PGit::Configuration::Validator).to have_received(:new).with(fake_path)
+    end
+  end
+
+  describe '#yaml' do
+    it 'returns the hash' do
+      fake_validator = instance_double('PGit::Configuration::Validator')
+      fake_yaml = { "some" => "hash" }
+      allow(fake_validator).to receive(:yaml).and_return(fake_yaml)
+      allow(PGit::Configuration::Validator).to receive(:new).with("~/.pgit.rc.yml").and_return fake_validator
+      configuration = PGit::Configuration.new
+      config_yaml = configuration.yaml
+
+      expect(config_yaml).to eq fake_yaml
+    end
+  end
+
+  describe '#yaml=(some_hash)' do
+    it 'sets the hash' do
+      fake_validator = instance_double('PGit::Configuration::Validator')
+      fake_yaml = { "some" => "hash" }
+      allow(fake_validator).to receive(:yaml).and_return(fake_yaml)
+      allow(PGit::Configuration::Validator).to receive(:new).with("~/.pgit.rc.yml").and_return fake_validator
+      configuration = PGit::Configuration.new
+      some_other_hash = { 'another' => 'hash' }
+      configuration.yaml = some_other_hash
+      config_yaml = configuration.yaml
+
+      expect(config_yaml).to eq some_other_hash
     end
   end
 
@@ -48,9 +78,32 @@ describe 'PGit::Configuration' do
       allow(fake_validator).to receive(:yaml)
       allow(PGit::Configuration::Validator).to receive(:new).with("~/.pgit.rc.yml").and_return fake_validator
       configuration = PGit::Configuration.new
+
       configuration.to_yaml
 
       expect(fake_validator).to have_received(:yaml)
+    end
+  end
+
+  describe '#save' do
+    it 'should save the configuration to the config path' do
+      fake_validator = instance_double('PGit::Configuration::Validator')
+      some_other_hash = { 'another' => 'hash' }
+      config_file = instance_double('File')
+      short_path = "~/.pgit.rc.yml"
+      long_path = "/Users/Edderic/.pgit.rc.yml"
+      allow(File).to receive(:expand_path).with(short_path).and_return(long_path)
+      allow(File).to receive(:open).with(long_path, 'w').and_return(config_file)
+      allow(config_file).to receive(:write).with("---\nanother: hash\n")
+      allow(config_file).to receive(:close)
+      allow(fake_validator).to receive(:yaml).and_return(some_other_hash)
+      allow(PGit::Configuration::Validator).to receive(:new).with("~/.pgit.rc.yml").and_return fake_validator
+      allow(YAML).to receive(:dump).with(some_other_hash, config_file)
+      configuration = PGit::Configuration.new
+
+      configuration.save
+
+      expect(YAML).to have_received(:dump).with(some_other_hash, config_file)
     end
   end
 end
