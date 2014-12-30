@@ -23,7 +23,7 @@ arguments :strict
 # flag [:'api-token']
 desc "Run custom commands defined in the current project"
 command :command do |c|
-  c.desc "executes the given custom command(s)"
+  c.desc "executes the given custom command"
   c.arg_name :some_command
   c.flag :x, :execute
 
