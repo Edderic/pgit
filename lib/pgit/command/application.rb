@@ -5,7 +5,6 @@ module PGit
       def initialize(global_opts, opts, args)
         config = PGit::Configuration.new
         @current_project = PGit::CurrentProject.new(config.to_yaml)
-        @commands = []
         @opts = opts
         setup_commands
 
@@ -39,10 +38,9 @@ module PGit
       end
 
       def setup_commands
-        current_project.commands.each do |c|
-          c.each do |name, steps|
-            @commands << PGit::Command.new(name, steps)
-          end
+        @commands = []
+        current_project.commands.each do |name, steps|
+          @commands << PGit::Command.new(name, steps)
         end
       end
     end

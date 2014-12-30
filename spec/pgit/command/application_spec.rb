@@ -12,7 +12,7 @@ describe 'PGit::Command::Application' do
       fake_name = 'finish'
       fake_steps = ["git fetch origin master",
                     "git push origin :STORY_BRANCH"]
-      fake_commands = [{ fake_name => fake_steps }]
+      fake_commands = { fake_name => fake_steps }
       fake_command_string = double('fake_command_string')
       fake_command = instance_double('PGit::Command', to_s: fake_command_string, name: 'finish')
       fake_yaml = double('fake_yaml')
@@ -45,7 +45,7 @@ describe 'PGit::Command::Application' do
       fake_name = 'finish'
       fake_steps = ["git fetch origin master",
                     "git push origin :STORY_BRANCH"]
-      fake_commands = [{ fake_name => fake_steps }]
+      fake_commands = { fake_name => fake_steps }
       fake_command_string = double('fake_command_string')
       fake_command = instance_double('PGit::Command', to_s: fake_command_string, name: 'finish')
       fake_yaml = double('fake_yaml')
@@ -105,7 +105,7 @@ describe 'PGit::Command::Application' do
       fake_name = 'finish'
       fake_steps = ["git fetch origin master",
                     "git push origin :STORY_BRANCH"]
-      fake_commands = [{ fake_name => fake_steps }]
+      fake_commands = { fake_name => fake_steps }
       fake_command_string = double('fake_command_string')
       fake_command = instance_double('PGit::Command', to_s: fake_command_string)
       fake_yaml = double('fake_yaml')

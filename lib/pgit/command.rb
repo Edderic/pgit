@@ -49,14 +49,10 @@ module PGit
 
     def save
       config = PGit::Configuration.new
-      old_config_yaml = config.yaml
-      current_project = PGit::CurrentProject.new(old_config_yaml)
+      current_project = PGit::CurrentProject.new(config.yaml)
 
-      commands = {}.merge(current_project.commands).merge(to_hash)
-      projects = old_config_yaml["projects"]
-      merged_project = projects[0].merge!({"commands" => commands})
-      config.yaml = { "projects" => [merged_project]}
-      config.save
+      current_project.commands.merge!(to_hash)
+      current_project.save
     end
 
     private

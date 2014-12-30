@@ -34,6 +34,26 @@ command :command do |c|
     PGit::Command::Application.new(global_options,
                               options,
                               args)
+
+  end
+
+
+  c.desc "add a command"
+  c.command :add do |a|
+    accept(Array) do |value|
+      value.split(',').map {|item| item.strip }
+    end
+    a.desc "name of the command"
+    a.flag :n, :name, required: true
+
+    a.desc "steps of the command, delimited by commas"
+    a.flag :s, :steps, required: true, type: Array
+
+    a.action do |global_options,options,args|
+      command = PGit::Command.new(options[:name], options[:steps])
+      command.save
+      puts "Successfully added '#{options[:name]}' to the current projects' commands!"
+    end
   end
 end
 

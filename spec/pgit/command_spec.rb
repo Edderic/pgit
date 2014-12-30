@@ -5,85 +5,28 @@ describe 'PGit::Command' do
     it 'saves the command if the key does not exist for the current project' do
       name = "finish"
       steps = ["git checkout master", "git fetch"]
-      fake_config_hash =
-        {
-          "projects" =>
-          [
-            { "api_token" => "hello1234",
-              "path" => "~/some/path",
-              "id" => "12345678",
-              "commands" =>
-              {
-                "start" =>
-                [
-                  "step1",
-                  "step2"
-                ]
-              }
-            }
-          ]
-        }
-
-        fake_project_hash =
-        { "api_token" => "hello1234",
-          "path" => "~/some/path",
-          "id" => "12345678",
-          "commands" =>
-          {
-            "start" =>
-            [
-              "step1",
-              "step2"
-            ]
-          }
-        }
-
-        updated_hash =
-          { "projects" =>
-            [
-              { "api_token" => "hello1234",
-                "path" => "~/some/path",
-                "id" => "12345678",
-                "commands" =>
-                  {
-                    "start" =>
-                    [
-                      "step1",
-                      "step2"
-                    ],
-
-                    "finish" =>
-                    [
-                      "git checkout master",
-                      "git fetch"
-                    ]
-                  }
-              }
-            ]
-          }
-          fake_commands =
-                {
-                  "start" =>
-                  [
-                    "step1",
-                    "step2"
-                  ]
-                }
-      fake_project = instance_double('PGit::CurrentProject',
-                                     to_hash: fake_project_hash,
-                                     commands: fake_commands)
-      allow(PGit::CurrentProject).to receive(:new).and_return(fake_project)
-      fake_configuration = instance_double('PGit::Configuration', yaml: fake_config_hash)
-      allow(fake_configuration).to receive(:yaml=).with(updated_hash)
-      allow(fake_configuration).to receive(:save)
+      command_hash = { name => steps }
+      old_commands_hash = {
+        "start" => ['echo hi', 'echo hello' ],
+      }
+      commands_hash = {
+        "start" => ['echo hi', 'echo hello' ],
+        "finish" => ["git checkout master", "git fetch"]
+      }
+      fake_commands = double('hash')
+      allow(fake_commands).to receive(:merge!).with(command_hash)
+      current_project = instance_double('PGit::CurrentProject', commands: fake_commands)
+      config_yaml = double('yaml')
+      fake_configuration = instance_double('PGit::Configuration', yaml: config_yaml)
       allow(PGit::Configuration).to receive(:new).and_return(fake_configuration)
-      allow(File).to receive(:open).with("---")
-      config_file = instance_double('File')
+      allow(PGit::CurrentProject).to receive(:new).with(config_yaml).and_return(current_project)
+      allow(current_project).to receive(:save)
 
       command = PGit::Command.new(name, steps)
       command.save
 
-      expect(fake_configuration).to have_received(:yaml=).with(updated_hash)
+      expect(fake_commands).to have_received(:merge!).with(command_hash)
+      expect(current_project).to have_received(:save)
     end
   end
 
