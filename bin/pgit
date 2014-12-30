@@ -94,18 +94,8 @@ command :story_branch do |c|
   end
 end
 
-# desc 'Wraps `git commit -m` and prepends the message with story id of the branch'
-
-# command :commit do |c|
-  # arg_name 'Describe arguments to commit here'
-  # c.action do |global_options,options,args|
-    # puts "commit command ran"
-  # end
-# end
-
 
 desc 'Initializes configuration file'
-
 arg_name 'path/to/config_file'
 
 pre do |global,command,options,args|
