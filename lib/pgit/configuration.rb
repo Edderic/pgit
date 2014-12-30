@@ -25,21 +25,25 @@ module PGit
       }
     end
 
-    attr_accessor :yaml, :projects
+    attr_accessor :projects
     attr_reader :config_path
 
     def initialize(config_path = '~/.pgit.rc.yml')
       @config_path = config_path
       @validator = PGit::Configuration::Validator.new(config_path)
       @yaml = @validator.yaml
+      @projects = @yaml["projects"]
+    end
+
+    def yaml
+      { 'projects' => projects }
     end
 
     def save
       expanded_path = File.expand_path(config_path)
       f = File.open(expanded_path, 'w')
 
-      _projects = { 'projects' => projects }
-      YAML.dump(_projects, f)
+      YAML.dump(yaml, f)
     end
 
     def to_yaml

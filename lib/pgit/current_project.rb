@@ -9,9 +9,14 @@
 module PGit
   class CurrentProject
     attr_accessor :commands
+    attr_reader :index
 
     def initialize(config_yaml)
       @current_project = find_current_project(config_yaml)
+      config_yaml["projects"].each_with_index do |project, index|
+        @index = index if project["path"].match(path)
+      end
+
       @commands = @current_project["commands"] || {}
     end
 
@@ -34,6 +39,14 @@ module PGit
         "path" => path,
         "commands" => commands
       }
+    end
+
+    def save
+      configuration = Configuration.new
+      projects = configuration.projects
+      projects[index] = @current_project.merge({'commands' => commands})
+      configuration.projects = projects
+      configuration.save
     end
 
     def to_h

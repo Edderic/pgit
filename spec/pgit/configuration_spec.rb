@@ -47,7 +47,7 @@ describe 'PGit::Configuration' do
   describe '#yaml' do
     it 'returns the hash' do
       fake_validator = instance_double('PGit::Configuration::Validator')
-      fake_yaml = { "some" => "hash" }
+      fake_yaml = { "projects" => "hash" }
       allow(fake_validator).to receive(:yaml).and_return(fake_yaml)
       allow(PGit::Configuration::Validator).to receive(:new).with("~/.pgit.rc.yml").and_return fake_validator
       configuration = PGit::Configuration.new
@@ -57,18 +57,38 @@ describe 'PGit::Configuration' do
     end
   end
 
-  describe '#yaml=(some_hash)' do
-    it 'sets the hash' do
+  # describe '#yaml=(some_hash)' do
+    # it 'sets the hash' do
+      # fake_validator = instance_double('PGit::Configuration::Validator')
+      # fake_yaml = { "some" => "hash" }
+      # allow(fake_validator).to receive(:yaml).and_return(fake_yaml)
+      # allow(PGit::Configuration::Validator).to receive(:new).with("~/.pgit.rc.yml").and_return fake_validator
+      # configuration = PGit::Configuration.new
+      # some_other_hash = { 'another' => 'hash' }
+      # configuration.yaml = some_other_hash
+      # config_yaml = configuration.yaml
+#
+      # expect(config_yaml).to eq some_other_hash
+    # end
+  # end
+
+  describe '#projects' do
+    it 'should return the projects' do
       fake_validator = instance_double('PGit::Configuration::Validator')
-      fake_yaml = { "some" => "hash" }
+      fake_projects = [
+        { "path" => "/Therapy-Exercises-Online/some_other_project",
+          "id" => 12345,
+          "api_token" => "astoeuh" },
+          { "path" => "/Therapy-Exercises-Online",
+            "id" => 19191,
+            "api_token" => "astoeuh" }
+      ]
+      fake_yaml = { 'projects' => fake_projects }
       allow(fake_validator).to receive(:yaml).and_return(fake_yaml)
       allow(PGit::Configuration::Validator).to receive(:new).with("~/.pgit.rc.yml").and_return fake_validator
       configuration = PGit::Configuration.new
-      some_other_hash = { 'another' => 'hash' }
-      configuration.yaml = some_other_hash
-      config_yaml = configuration.yaml
 
-      expect(config_yaml).to eq some_other_hash
+      expect(configuration.projects).to eq fake_projects
     end
   end
 
@@ -98,7 +118,19 @@ describe 'PGit::Configuration' do
   describe '#to_yaml' do
     it 'should delegate #yaml to validator' do
       fake_validator = instance_double('PGit::Configuration::Validator')
-      allow(fake_validator).to receive(:yaml)
+      fake_projects = {
+        'projects' =>
+        [
+          { "path" => "/Therapy-Exercises-Online/some_other_project",
+            "id" => 12345,
+            "api_token" => "astoeuh" },
+            { "path" => "/Therapy-Exercises-Online",
+              "id" => 19191,
+              "api_token" => "astoeuh" }
+        ]
+      }
+
+      allow(fake_validator).to receive(:yaml).and_return(fake_projects)
       allow(PGit::Configuration::Validator).to receive(:new).with("~/.pgit.rc.yml").and_return fake_validator
       configuration = PGit::Configuration.new
 

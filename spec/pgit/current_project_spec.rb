@@ -35,6 +35,51 @@ describe 'PGit::CurrentProject' do
     end
   end
 
+  describe '#save' do
+    it 'should save the current project' do
+      fake_configuration = instance_double('PGit::Configuration')
+
+      fake_projects = [
+        { "path" => "/Therapy-Exercises-Online/some_other_project",
+          "id" => 12345,
+          "api_token" => "astoeuh",
+        },
+        { "path" => "/Therapy-Exercises-Online",
+          "id" => 19191,
+          "api_token" => "astoeuh" }
+      ]
+
+      fake_modified_projects = [
+        { "path" => "/Therapy-Exercises-Online/some_other_project",
+          "id" => 12345,
+          "api_token" => "astoeuh",
+          "commands" =>
+          {
+            "first_command" => ['echo hi', 'echo hello']
+          }
+        },
+        { "path" => "/Therapy-Exercises-Online",
+          "id" => 19191,
+          "api_token" => "astoeuh" }
+      ]
+
+      allow(Dir).to receive(:pwd).and_return("/Therapy-Exercises-Online/some_other_project")
+
+      fake_yaml = successful_setup.to_yaml
+      allow(fake_configuration).to receive(:projects=).with(fake_modified_projects)
+      allow(fake_configuration).to receive(:projects).and_return(fake_projects)
+      allow(fake_configuration).to receive(:save)
+      allow(PGit::Configuration).to receive(:new).and_return(fake_configuration)
+
+      current_project = PGit::CurrentProject.new(fake_yaml)
+      current_project.commands = { "first_command" => ['echo hi', 'echo hello'] }
+      current_project.save
+
+      expect(fake_configuration).to have_received(:projects=).with(fake_modified_projects)
+      expect(fake_configuration).to have_received(:save)
+    end
+  end
+
   describe '#commands=()' do
     it 'should set the commands' do
       yaml = successful_setup.to_yaml
@@ -50,46 +95,46 @@ describe 'PGit::CurrentProject' do
     it 'returns the hash version' do
       fake_config_hash =
         {
-          "projects" =>
-          [
-            { "api_token" => "hello1234",
-              "path" => "~/some/path",
-              "id" => "12345678",
-              "commands" =>
-              [
-                {
-                  "start" =>
-                  [
-                    "step1",
-                    "step2"
-                  ]
-                }
-              ]
-            }
-          ]
+        "projects" =>
+        [
+          { "api_token" => "hello1234",
+            "path" => "~/some/path",
+            "id" => "12345678",
+            "commands" =>
+            [
+              {
+                "start" =>
+                [
+                  "step1",
+                  "step2"
+                ]
+              }
+            ]
         }
-      expected_hash =
-        { "api_token" => "hello1234",
-          "path" => "~/some/path",
-          "id" => "12345678",
-          "commands" =>
-          [
-            {
-              "start" =>
-              [
-                "step1",
-                "step2"
-              ]
-            }
-          ]
+        ]
+      }
+        expected_hash =
+          { "api_token" => "hello1234",
+            "path" => "~/some/path",
+            "id" => "12345678",
+            "commands" =>
+        [
+          {
+            "start" =>
+            [
+              "step1",
+              "step2"
+            ]
+          }
+        ]
         }
 
-      allow(File).to receive(:expand_path).and_return("/Users/Edderic/some/path")
-      allow(File).to receive(:expand_path).with("~/some/path").and_return("/Users/Edderic/some/path")
-      allow(Dir).to receive(:pwd).and_return("/Users/Edderic/some/path")
-      current_project = PGit::CurrentProject.new(fake_config_hash)
+          allow(File).to receive(:expand_path).and_return("/Users/Edderic/some/path")
+          allow(File).to receive(:expand_path).with("~/some/path").and_return("/Users/Edderic/some/path")
+          allow(Dir).to receive(:pwd).and_return("/Users/Edderic/some/path")
+          current_project = PGit::CurrentProject.new(fake_config_hash)
 
-      expect(current_project.to_hash).to eq(expected_hash)
+          expect(current_project.to_hash).to eq(expected_hash)
     end
   end
 
@@ -97,46 +142,46 @@ describe 'PGit::CurrentProject' do
     it 'returns the hash version' do
       fake_config_hash =
         {
-          "projects" =>
-          [
-            { "api_token" => "hello1234",
-              "path" => "~/some/path",
-              "id" => "12345678",
-              "commands" =>
-              [
-                {
-                  "start" =>
-                  [
-                    "step1",
-                    "step2"
-                  ]
-                }
-              ]
-            }
-          ]
+        "projects" =>
+        [
+          { "api_token" => "hello1234",
+            "path" => "~/some/path",
+            "id" => "12345678",
+            "commands" =>
+            [
+              {
+                "start" =>
+                [
+                  "step1",
+                  "step2"
+                ]
+              }
+            ]
         }
-      expected_hash =
-        { "api_token" => "hello1234",
-          "path" => "~/some/path",
-          "id" => "12345678",
-          "commands" =>
-          [
-            {
-              "start" =>
-              [
-                "step1",
-                "step2"
-              ]
-            }
-          ]
+        ]
+      }
+        expected_hash =
+          { "api_token" => "hello1234",
+            "path" => "~/some/path",
+            "id" => "12345678",
+            "commands" =>
+        [
+          {
+            "start" =>
+            [
+              "step1",
+              "step2"
+            ]
+          }
+        ]
         }
 
-      allow(File).to receive(:expand_path).and_return("/Users/Edderic/some/path")
-      allow(File).to receive(:expand_path).with("~/some/path").and_return("/Users/Edderic/some/path")
-      allow(Dir).to receive(:pwd).and_return("/Users/Edderic/some/path")
-      current_project = PGit::CurrentProject.new(fake_config_hash)
+          allow(File).to receive(:expand_path).and_return("/Users/Edderic/some/path")
+          allow(File).to receive(:expand_path).with("~/some/path").and_return("/Users/Edderic/some/path")
+          allow(Dir).to receive(:pwd).and_return("/Users/Edderic/some/path")
+          current_project = PGit::CurrentProject.new(fake_config_hash)
 
-      expect(current_project.to_h).to eq(expected_hash)
+          expect(current_project.to_h).to eq(expected_hash)
     end
   end
 
@@ -183,9 +228,9 @@ describe 'PGit::CurrentProject' do
                           "commands" => {
                             "finish"=>["git push origin master",
                                        "hello"],
-                             "start"=>["lol"]
+                                       "start"=>["lol"]
                           }
-                        }
+      }
       fake_project_2 =  { "path" => "~/Therapy-Exercises-Online",
                           "id" => 19191,
                           "api_token" => "astoeuh" }
