@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'PGit::Command' do
-  describe '#save!' do
+  describe '#save' do
     it 'saves the command if the key does not exist for the current project' do
       name = "finish"
       steps = ["git checkout master", "git fetch"]
