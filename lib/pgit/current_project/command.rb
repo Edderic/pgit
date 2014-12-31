@@ -27,12 +27,16 @@ module PGit
         if exists?
           warn "Command '#{name}' already exists in the current project. If you want to update the command, see `pgit command update --help`"
         else
+          command.save
           puts "Successfully added '#{name}' to the current projects' commands!"
         end
       end
-      #
-      # def update
-      # end
+
+      def update
+        unless exists?
+          warn "Cannot update a command that does not exist in the current project. See `pgit command add --help` if you want to add a new command"
+        end
+      end
       #
       # def destroy
       # end
