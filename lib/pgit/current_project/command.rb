@@ -33,7 +33,10 @@ module PGit
       end
 
       def update
-        unless exists?
+        if exists?
+          command.save
+          puts "Successfully updated command '#{name}' of the current project!"
+        else
           warn "Cannot update a command that does not exist in the current project. See `pgit command add --help` if you want to add a new command"
         end
       end
