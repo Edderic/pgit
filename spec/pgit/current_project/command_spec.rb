@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'PGit::CurrentProject::Command' do
   describe 'when there the command already exist' do
-    it 'should warn the user that it already exists' do
+    it 'should raise an error since it already exists' do
       name = 'existent_command'
       steps = ['existent_step']
       opts = { name: name, steps: steps }
@@ -19,9 +19,8 @@ describe 'PGit::CurrentProject::Command' do
       allow_any_instance_of(PGit::CurrentProject::Command).to receive(:warn)
 
       current_project_command = PGit::CurrentProject::Command.new(name, steps)
-      current_project_command.add
 
-      expect(current_project_command).to have_received(:warn).with(expected_message)
+      expect{ current_project_command.add }.to raise_error expected_message
     end
   end
 
@@ -75,9 +74,8 @@ describe 'PGit::CurrentProject::Command' do
       allow_any_instance_of(PGit::CurrentProject::Command).to receive(:warn)
 
       current_project_command = PGit::CurrentProject::Command.new(name, steps)
-      current_project_command.update
 
-      expect(current_project_command).to have_received(:warn).with(expected_message)
+      expect{current_project_command.update}.to raise_error expected_message
     end
 
     it 'should write to the configuration if the command does exist' do
