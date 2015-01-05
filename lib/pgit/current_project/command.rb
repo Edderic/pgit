@@ -14,9 +14,7 @@ module PGit
       end
 
       def exists?
-        commands.find do |c|
-          c.name == name
-        end
+        commands.find { |c| c.name == name }
       end
 
       def name
