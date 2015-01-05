@@ -22,14 +22,14 @@ module PGit
       end
 
       def add
-        raise "Command '#{name}' already exists in the current project. If you want to update the command, see `pgit command update --help`" if exists?
+        raise PGit::Command::UserError.new "Command '#{name}' already exists in the current project. If you want to update the command, see `pgit command update --help`" if exists?
 
         command.save
         puts "Successfully added '#{name}' to the current projects' commands!"
       end
 
       def update
-        raise "Cannot update a command that does not exist in the current project. See `pgit command add --help` if you want to add a new command" if !exists?
+        raise PGit::Command::UserError.new "Cannot update a command that does not exist in the current project. See `pgit command add --help` if you want to add a new command" if !exists?
 
         command.save
         puts "Successfully updated command '#{name}' of the current project!"
