@@ -32,8 +32,8 @@ command :command do |c|
 
   c.action do |global_options,options,args|
     PGit::Command::Application.new(global_options,
-                              options,
-                              args)
+                                   options,
+                                   args)
 
   end
 
@@ -48,12 +48,31 @@ command :command do |c|
     a.flag :n, :name, required: true
 
     a.desc "steps of the command, delimited by commas"
-    a.arg_name "steps_in_quotes"
+    a.arg_name "steps"
     a.flag :s, :steps, required: true, type: Array
 
     a.action do |global_options,options,args|
       command = PGit::CurrentProject::Command::new(options[:name], options[:steps])
       command.add
+    end
+  end
+
+  c.desc "update a command"
+  c.command :update do |a|
+    accept(Array) do |value|
+      value.split(',').map {|item| item.strip }
+    end
+    a.desc "name of the command"
+    a.arg_name "new_command_name"
+    a.flag :n, :name, required: true
+
+    a.desc "steps of the command, delimited by commas"
+    a.arg_name "steps"
+    a.flag :s, :steps, required: true, type: Array
+
+    a.action do |global_options,options,args|
+      command = PGit::CurrentProject::Command::new(options[:name], options[:steps])
+      command.update
     end
   end
 end
