@@ -26,24 +26,28 @@ module PGit
 
         @current_project.commands.reject! { |k,v| k == name }
         @current_project.save
-        puts "Successfully removed command '#{name}' from the current project!"
+        display_success_msg(:removed, :from)
       end
 
       def add
         check_command_exists_for_add
 
         command.save
-        puts "Successfully added command '#{name}' to the current project!"
+        display_success_msg(:added, :to)
       end
 
       def update
         check_command_exists_for_update
 
         command.save
-        puts "Successfully updated command '#{name}' of the current project!"
+        display_success_msg(:updated, :of)
       end
 
       private
+
+      def display_success_msg(event, preposition)
+        puts "Successfully #{event} command '#{name}' #{preposition} the current project!"
+      end
 
       def check_command_exists_for_update
         raise PGit::Command::UserError.new "Cannot update a command that does not exist in the current project. See `pgit command add --help` if you want to add a new command" unless exists?
