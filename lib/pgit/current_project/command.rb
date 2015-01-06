@@ -22,7 +22,7 @@ module PGit
       end
 
       def remove
-        raise PGit::Command::UserError.new "Command '#{name}' does not exist in the current project" unless exists?
+        check_command_exists_for_remove
 
         @current_project.commands.reject! { |k,v| k == name }
         @current_project.save
@@ -30,17 +30,31 @@ module PGit
       end
 
       def add
-        raise PGit::Command::UserError.new "Command '#{name}' already exists in the current project. If you want to update the command, see `pgit command update --help`" if exists?
+        check_command_exists_for_add
 
         command.save
         puts "Successfully added command '#{name}' to the current project!"
       end
 
       def update
-        raise PGit::Command::UserError.new "Cannot update a command that does not exist in the current project. See `pgit command add --help` if you want to add a new command" if !exists?
+        check_command_exists_for_update
 
         command.save
         puts "Successfully updated command '#{name}' of the current project!"
+      end
+
+      private
+
+      def check_command_exists_for_update
+        raise PGit::Command::UserError.new "Cannot update a command that does not exist in the current project. See `pgit command add --help` if you want to add a new command" unless exists?
+      end
+
+      def check_command_exists_for_add
+        raise PGit::Command::UserError.new "Command '#{name}' already exists in the current project. If you want to update the command, see `pgit command update --help`" if exists?
+      end
+
+      def check_command_exists_for_remove
+        raise PGit::Command::UserError.new "Command '#{name}' does not exist in the current project" unless exists?
       end
     end
   end
