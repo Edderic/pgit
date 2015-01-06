@@ -117,9 +117,6 @@ command :story_branch do |c|
   c.arg_name 'STORY_ID'
   c.flag :s, :start
 
-  # c.desc "Merge back to staging, remove local and remote (origin?) branches"
-  # c.switch :f, :finish
-
   # c.desc "Attempts to join the story-branch that, presumably, already exists"
   # c.arg_name 'STORY_ID'
   # c.flag :j, :join
