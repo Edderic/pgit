@@ -3,7 +3,7 @@ module PGit
     class Command
       attr_reader :current_project, :command, :commands
 
-      def initialize(name, steps)
+      def initialize(name, steps=[])
         @command = PGit::Command.new(name, steps)
         config_yaml = PGit::Configuration.new.yaml
         @current_project = PGit::CurrentProject.new(config_yaml)
@@ -19,6 +19,15 @@ module PGit
 
       def name
         command.name
+      end
+
+      def remove
+        raise PGit::Command::UserError.new "Command '#{name}' does not exist in the current project" unless exists?
+
+        @current_project.commands.reject! { |k,v| k == name }
+        @current_project.save
+
+        puts "Successfully removed '#{name}' from the current project"
       end
 
       def add
