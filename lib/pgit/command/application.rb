@@ -12,6 +12,8 @@ module PGit
           list
         elsif opts[:execute]
           execute
+        else
+          puts `pgit command --help`
         end
       end
 
