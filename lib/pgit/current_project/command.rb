@@ -26,15 +26,14 @@ module PGit
 
         @current_project.commands.reject! { |k,v| k == name }
         @current_project.save
-
-        puts "Successfully removed '#{name}' from the current project"
+        puts "Successfully removed command '#{name}' from the current project!"
       end
 
       def add
         raise PGit::Command::UserError.new "Command '#{name}' already exists in the current project. If you want to update the command, see `pgit command update --help`" if exists?
 
         command.save
-        puts "Successfully added '#{name}' to the current projects' commands!"
+        puts "Successfully added command '#{name}' to the current project!"
       end
 
       def update

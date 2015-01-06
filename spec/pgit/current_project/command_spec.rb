@@ -26,7 +26,7 @@ describe 'PGit::CurrentProject::Command' do
     it 'should show the success message' do
       name = 'non_existent_command'
       steps = ['some_step']
-      expected_message = "Successfully added 'non_existent_command' to the current projects' commands!"
+      expected_message = "Successfully added command 'non_existent_command' to the current project!"
       existent_command_name = 'existent_command'
       existent_command_steps = ['existent_step_1', 'existent_step_2']
       fake_existent_commands = { existent_command_name => existent_command_steps }
@@ -107,7 +107,7 @@ describe 'PGit::CurrentProject::Command' do
       steps = ['existent_step']
       empty_steps = []
       opts = { name: name, steps: steps }
-      expected_message = "Successfully removed 'existent_command' from the current project"
+      expected_message = "Successfully removed command 'existent_command' from the current project!"
       fake_commands = { name => steps }
       fake_current_project = instance_double('PGit::CurrentProject', commands: fake_commands)
       fake_yaml = double('fake_yaml')
