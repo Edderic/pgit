@@ -7,10 +7,8 @@ module PGit
         @command = PGit::Command.new(name, steps)
         config_yaml = PGit::Configuration.new.yaml
         @current_project = PGit::CurrentProject.new(config_yaml)
-        @commands = []
-        @current_project.commands.each do |name, steps|
-          @commands << PGit::Command.new(name, steps)
-        end
+
+        initialize_commands
       end
 
       def exists?
@@ -44,6 +42,13 @@ module PGit
       end
 
       private
+
+      def initialize_commands
+        @commands = []
+        @current_project.commands.each do |name, steps|
+          @commands << PGit::Command.new(name, steps)
+        end
+      end
 
       def display_success_msg(event, preposition)
         puts "Successfully #{event} command '#{name}' #{preposition} the current project!"
