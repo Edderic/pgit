@@ -75,6 +75,21 @@ command :command do |c|
       command.update
     end
   end
+
+  c.desc "remove a command"
+  c.command :remove do |a|
+    accept(Array) do |value|
+      value.split(',').map {|item| item.strip }
+    end
+    a.desc "name of the command"
+    a.arg_name "new_command_name"
+    a.flag :n, :name, required: true
+
+    a.action do |global_options,options,args|
+      command = PGit::CurrentProject::Command::new(options[:name])
+      command.remove
+    end
+  end
 end
 
 desc "Installs the pgit configuration file"
