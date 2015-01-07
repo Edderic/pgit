@@ -13,26 +13,24 @@ module PGit
       @steps.each do |step|
         step.gsub!(/STORY_BRANCH/, branch_name)
 
-        begin
-          puts "About to execute '#{formatted_step(step)}'. Proceed? #{exec_options}"
-          response = STDIN.gets.chomp
+        puts "About to execute '#{formatted_step(step)}'. Proceed? #{exec_options}"
+        response = STDIN.gets.chomp
 
-          if response.letter?('s')
-            puts formatted_action('Skipping...')
-          elsif response.letter?('q')
-            puts formatted_action("Quitting...")
-            break
-          elsif response.letter?('y')
-            puts "#{formatted_action('Executing')} '#{formatted_step(step)}'..."
-            puts `#{step}`
-          else
-            show_options
-            raise PGit::InvalidOptionError
-          end
-        rescue PGit::InvalidOptionError
-          retry
+        if response.letter?('s')
+          puts formatted_action('Skipping...')
+        elsif response.letter?('q')
+          puts formatted_action("Quitting...")
+          break
+        elsif response.letter?('y')
+          puts "#{formatted_action('Executing')} '#{formatted_step(step)}'..."
+          puts `#{step}`
+        else
+          show_options
+          raise PGit::InvalidOptionError
         end
       end
+    rescue PGit::InvalidOptionError
+      retry
     end
 
     def to_h
