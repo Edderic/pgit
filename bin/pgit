@@ -117,10 +117,6 @@ command :story_branch do |c|
   c.arg_name 'STORY_ID'
   c.flag :s, :start
 
-  # c.desc "Attempts to join the story-branch that, presumably, already exists"
-  # c.arg_name 'STORY_ID'
-  # c.flag :j, :join
-
   c.action do |global_options,options,args|
     PGit::StoryBranch::Application.new(global_options, options, args)
   end
