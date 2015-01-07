@@ -1,15 +1,14 @@
 module PGit
   class Command
-    attr_reader :name, :steps
+    attr_reader :name, :steps, :branch_name
 
     def initialize(name, steps)
       @name = name
       @steps = steps
+      @branch_name = PGit::CurrentBranch.new.name
     end
 
     def execute
-      branch_name = PGit::CurrentBranch.new.name
-
       @steps.each do |step|
         step.gsub!(/STORY_BRANCH/, branch_name)
 
