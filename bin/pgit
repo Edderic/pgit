@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 require 'gli'
+require 'rainbow'
 require 'pgit'
 include GLI::App
 
@@ -144,7 +145,9 @@ end
 on_error do |exception|
   # Error logic here
   # return false to skip default error handling
-  true
+  # true
+  puts Rainbow("error: #{exception}").color(:red)
+  exit 1
 end
 
 exit run(ARGV)
