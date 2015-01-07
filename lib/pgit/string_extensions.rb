@@ -7,5 +7,5 @@ module PGit
 end
 
 String.class_eval do
-  prepend PGit::StringExtensions
+  include PGit::StringExtensions
 end
