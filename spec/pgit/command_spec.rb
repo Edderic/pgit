@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe 'PGit::Command' do
+  before { Rainbow.enabled = false }
   describe '#save' do
     it 'saves the command if the key does not exist for the current project' do
       name = "finish"

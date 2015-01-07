@@ -14,16 +14,16 @@ module PGit
         step.gsub!(/STORY_BRANCH/, branch_name)
 
         begin
-          puts "About to execute '#{step}'. Proceed? [Y/s/q]"
+          puts "About to execute '#{formatted_step(step)}'. Proceed? #{exec_options}"
           response = STDIN.gets.chomp
 
           if response.letter?('s')
-            puts "Skipping..."
+            puts formatted_action('Skipping...')
           elsif response.letter?('q')
-            puts "Quitting..."
+            puts formatted_action("Quitting...")
             break
           elsif response.letter?('y')
-            puts "Executing '#{step}'..."
+            puts "#{formatted_action('Executing')} '#{formatted_step(step)}'..."
             puts `#{step}`
           else
             show_options
@@ -57,6 +57,17 @@ module PGit
 
     private
 
+    def formatted_action(action)
+      Rainbow(action).color(:yellow)
+    end
+
+    def formatted_step(step)
+      Rainbow(step).bright
+    end
+    def exec_options
+      Rainbow("[Y/s/q]").color("#FF6FEA")
+    end
+
     def show_options
       message = <<-LEGAL_OPTIONS
         y  - yes
@@ -64,7 +75,7 @@ module PGit
         q  - quit
       LEGAL_OPTIONS
 
-      puts PGit::Heredoc.remove_front_spaces(message)
+      puts Rainbow(PGit::Heredoc.remove_front_spaces(message)).red
     end
   end
 end
