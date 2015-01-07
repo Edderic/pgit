@@ -11,6 +11,9 @@ version Pgit::VERSION
 subcommand_option_handling :normal
 arguments :strict
 
+desc "Color output"
+default_value :true
+switch :color
 # desc 'Path to the config file'
 # default_value "#{ENV['HOME']}/.pgit.rc.yml"
 # arg_name '/path/to/.pivotal.yml'
