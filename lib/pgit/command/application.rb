@@ -8,21 +8,10 @@ module PGit
         @opts = opts
         setup_commands
 
-        if opts[:list]
-          list
-        elsif opts[:execute]
+        if opts[:execute]
           execute
         else
           puts `pgit command --help`
-        end
-      end
-
-      def list
-        raise PGit::Command::EmptyError if commands.empty?
-        puts "Listing custom commands of the current project..."
-        puts
-        commands.each do |c|
-          puts c.to_s
         end
       end
 

@@ -31,8 +31,14 @@ command :command do |c|
   c.arg_name :some_command
   c.flag :x, :execute
 
-  c.desc "lists the custom commands of the current project"
-  c.switch :l, :list
+  c.desc "show the custom command(s)"
+  c.command :show do |s|
+    s.action do |global_options,options,args|
+      PGit::CurrentProject::Command::Show.new(global_options,
+                                     options,
+                                     args)
+    end
+  end
 
   c.action do |global_options,options,args|
     PGit::Command::Application.new(global_options,
