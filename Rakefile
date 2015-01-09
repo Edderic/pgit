@@ -18,3 +18,15 @@ desc 'Run specs'
 require 'rspec/core/rake_task'
 RSpec::Core::RakeTask.new
 task :default => [:spec]
+
+namespace :spec do
+  RSpec::Core::RakeTask.new(:unit) do |t|
+    puts 'Running unit specs'
+    t.pattern = Dir['spec/pgit/**/*_spec.rb']
+  end
+
+  RSpec::Core::RakeTask.new(:integration) do |t|
+    puts 'Running integration specs'
+    t.pattern = Dir['spec/integration/**/*_spec.rb']
+  end
+end
