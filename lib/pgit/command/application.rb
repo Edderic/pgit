@@ -12,8 +12,6 @@ module PGit
       end
 
       def command
-        puts "commands"
-        puts commands
         commands.find{|c| c.name == search }
       end
 

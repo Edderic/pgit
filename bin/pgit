@@ -41,7 +41,7 @@ command :command do |c|
   c.arg_name 'command_name'
   c.command :run do |r|
     r.action do |global_options,options,args|
-      app = PGit::Command::Execute.new(global_options,
+      app = PGit::Command::Run.new(global_options,
                                  options,
                                  args)
       app.execute!
