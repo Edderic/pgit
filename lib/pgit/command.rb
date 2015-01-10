@@ -41,7 +41,7 @@ module PGit
     end
 
     def to_s
-      steps.inject("#{name}:\n") {|accum, step| accum + "  #{step}\n" }
+      steps.inject(Rainbow("#{name}:\n").bright) {|accum, step| accum + "  #{step}\n" }
     end
 
     def save

@@ -31,7 +31,7 @@ module PGit
           raise PGit::Command::UserError,
             "Command '#{search}' not found for this project" unless command
 
-          puts "Listing custom command '#{command.name}' of the current project..."
+          puts "Listing custom command '#{Rainbow(command.name).bright}' of the current project..."
           puts
           puts command.to_s
           puts
