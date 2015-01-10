@@ -1,32 +1,23 @@
 module PGit
   class Command
     class Application
-      attr_reader :commands, :opts, :current_project
+      attr_reader :commands, :global_opts, :opts, :args, :current_project
       def initialize(global_opts, opts, args)
         config = PGit::Configuration.new
         @current_project = PGit::CurrentProject.new(config.to_yaml)
+        @global_opts = global_opts
+        @args = args
         @opts = opts
         setup_commands
-
-        if opts[:execute]
-          execute
-        else
-          puts `pgit command --help`
-        end
       end
 
-      def execute
-        command = find_command
-        raise PGit::Command::NotFoundError.new(opts[:execute]) unless command
-
-        command.execute
+      def command
+        puts "commands"
+        puts commands
+        commands.find{|c| c.name == search }
       end
 
       private
-
-      def find_command
-        commands.find{|c| c.name == opts[:execute] }
-      end
 
       def setup_commands
         @commands = []

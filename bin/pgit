@@ -25,28 +25,28 @@ switch :color
 # desc 'PivotalTracker API Token'
 # arg_name 'secr3tT0ken123'
 # flag [:'api-token']
-desc "Run custom commands defined in the current project"
+desc "Work with custom commands defined in the current project"
 command :command do |c|
-  c.desc "executes the given custom command"
-  c.arg_name :some_command
-  c.flag :x, :execute
-
   c.desc "show the custom command(s)"
   c.command :show do |s|
     s.action do |global_options,options,args|
-      PGit::CurrentProject::Command::Show.new(global_options,
+      app = PGit::CurrentProject::Command::Show.new(global_options,
                                      options,
                                      args)
+      app.execute!
     end
   end
 
-  c.action do |global_options,options,args|
-    PGit::Command::Application.new(global_options,
-                                   options,
-                                   args)
-
+  c.desc "run a command"
+  c.arg_name 'command_name'
+  c.command :run do |r|
+    r.action do |global_options,options,args|
+      app = PGit::Command::Execute.new(global_options,
+                                 options,
+                                 args)
+      app.execute!
+    end
   end
-
 
   c.desc "add a command"
   c.command :add do |a|
