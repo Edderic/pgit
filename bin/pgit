@@ -28,6 +28,7 @@ switch :color
 desc "Work with custom commands defined in the current project"
 command :command do |c|
   c.desc "show the custom command(s)"
+  c.arg_name 'command_name'
   c.command :show do |s|
     s.action do |global_options,options,args|
       app = PGit::CurrentProject::Command::Show.new(global_options,
