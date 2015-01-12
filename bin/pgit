@@ -14,6 +14,9 @@ desc "Color output"
 default_value :true
 switch :color
 
+desc "Print backtrace if there is an exception"
+switch :trace
+
 # desc 'Path to the config file'
 # default_value "#{ENV['HOME']}/.pgit.rc.yml"
 # arg_name '/path/to/.pivotal.yml'
@@ -157,11 +160,17 @@ post do |global,command,options,args|
 end
 
 on_error do |exception|
+  TRACE = ARGV.include?('--trace')
+
   # Error logic here
   # return false to skip default error handling
-  # true
-  warn Rainbow("error: #{exception}").color(:red)
-  exit 1
+  if exception.class.ancestors.include?(PGit::Error)
+    warn Rainbow("error: #{exception}").color(:red)
+    exception.backtrace.each { |e| warn Rainbow(e).color(:red) } if TRACE
+    exit 1
+  else
+    true
+  end
 end
 
 exit run(ARGV)
