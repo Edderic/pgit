@@ -11,10 +11,6 @@ module PGit
         setup_commands
       end
 
-      def command
-        commands.find{|c| c.name == search }
-      end
-
       private
 
       def setup_commands

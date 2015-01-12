@@ -32,12 +32,6 @@ describe 'PGit::Command::Application' do
     @app = SomeCommandApp.new(@global_opts, @opts, @args)
   end
 
-  describe '#command' do
-    it 'finds the command based on #search' do
-      expect(@app.command).to eq @fake_command
-    end
-  end
-
   describe '#commands' do
     it 'returns the commands' do
       expect(@app.commands).to eq [@fake_command]

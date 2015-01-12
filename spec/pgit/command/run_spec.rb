@@ -7,26 +7,40 @@ describe 'PGit::Command::Run' do
       opts = []
       args = ['non_existent_command']
 
-      allow_any_instance_of(PGit::Command::Application).
-        to receive(:command).and_return(nil)
-      app = PGit::Command::Run.new(global_opts, opts, args)
+      fake_app = instance_double('PGit::Command::Application',
+                                 commands: [],
+                                 args: args,
+                                 opts: opts,
+                                 global_opts: global_opts)
+      allow(PGit::Command::Application).to receive(:new).with(global_opts, opts, args).and_return(fake_app)
+
+      app = PGit::Command::Application.new(global_opts, opts, args)
+      # binding.pry
+      run = PGit::Command::Run.new(app)
 
       expect do
-        app.execute!
+        run.execute!
       end.to raise_error PGit::Command::NotFoundError
     end
 
     it 'calls execute on the command if it exists' do
+      existent_name = 'existent_command'
       global_opts = {}
       opts = []
-      args = ['existent_command']
+      args = [existent_name]
 
-      fake_command = instance_double('PGit::Command')
+      fake_command = instance_double('PGit::Command', name: existent_name)
       allow(fake_command).to receive(:execute)
-      allow_any_instance_of(PGit::Command::Application).
-        to receive(:command).and_return(fake_command)
-      app = PGit::Command::Run.new(global_opts, opts, args)
-      app.execute!
+      fake_app = instance_double('PGit::Command::Application',
+                                 commands: [fake_command],
+                                 args: args,
+                                 opts: opts,
+                                 global_opts: global_opts)
+      allow(PGit::Command::Application).to receive(:new).with(global_opts, opts, args).and_return(fake_app)
+
+      app = PGit::Command::Application.new(global_opts, opts, args)
+      run = PGit::Command::Run.new(app)
+      run.execute!
 
       expect(fake_command).to have_received(:execute)
     end

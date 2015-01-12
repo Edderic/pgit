@@ -31,10 +31,12 @@ command :command do |c|
   c.arg_name 'command_name'
   c.command :show do |s|
     s.action do |global_options,options,args|
-      app = PGit::CurrentProject::Command::Show.new(global_options,
+      app = PGit::Command::Application.new(global_options,
                                      options,
                                      args)
-      app.execute!
+
+      show = PGit::CurrentProject::Command::Show.new(app)
+      show.execute!
     end
   end
 
@@ -42,10 +44,11 @@ command :command do |c|
   c.arg_name 'command_name'
   c.command :run do |r|
     r.action do |global_options,options,args|
-      app = PGit::Command::Run.new(global_options,
+      app = PGit::Command::Application.new(global_options,
                                  options,
                                  args)
-      app.execute!
+      run = PGit::Command::Run.new(app)
+      run.execute!
     end
   end
 

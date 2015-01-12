@@ -1,15 +1,20 @@
 require 'spec_helper'
+require 'pry'
 
 describe 'PGit::CurrentProject::Command::Show' do
+  before { Rainbow.enabled = false }
   describe 'without any options' do
     it 'raises an error if there are no commands' do
       global_opts = []
       opts = []
       args = []
 
-      allow_any_instance_of(PGit::Command::Application).
-        to receive(:commands).and_return([])
-      app = PGit::CurrentProject::Command::Show.new(global_opts, opts, args)
+      fake_app = instance_double('PGit::Command::Application',
+                                 commands: [],
+                                 args: args,
+                                 opts: opts,
+                                 global_opts: global_opts)
+      app = PGit::CurrentProject::Command::Show.new(fake_app)
 
       expect { app.execute! }.to raise_error PGit::Command::EmptyError
     end
@@ -23,15 +28,18 @@ describe 'PGit::CurrentProject::Command::Show' do
       fake_formatted_command = instance_double('String')
       fake_command = instance_double('PGit::Command', to_s: fake_formatted_command)
 
-      allow_any_instance_of(PGit::Command::Application).
-        to receive(:commands).and_return([fake_command])
-      allow_any_instance_of(PGit::Command::Application).to receive(:puts)
-      app = PGit::CurrentProject::Command::Show.new(global_opts, opts, args)
+      fake_app = instance_double('PGit::Command::Application',
+                                 commands: [fake_command],
+                                 args: args,
+                                 opts: opts,
+                                 global_opts: global_opts)
+      show = PGit::CurrentProject::Command::Show.new(fake_app)
+      allow(show).to receive(:puts)
 
-      app.execute!
+      show.execute!
 
-      expect(app).to have_received(:puts).with(expected_message)
-      expect(app).to have_received(:puts).with(fake_formatted_command)
+      expect(show).to have_received(:puts).with(expected_message)
+      expect(show).to have_received(:puts).with(fake_formatted_command)
     end
   end
 
@@ -48,15 +56,18 @@ describe 'PGit::CurrentProject::Command::Show' do
                                      to_s: fake_formatted_command,
                                      name: existent_command_name)
 
-      allow_any_instance_of(PGit::Command::Application).
-        to receive(:commands).and_return([fake_command])
-      allow_any_instance_of(PGit::Command::Application).to receive(:puts)
-      app = PGit::CurrentProject::Command::Show.new(global_opts, opts, args)
+      fake_app = instance_double('PGit::Command::Application',
+                                 commands: [fake_command],
+                                 args: args,
+                                 opts: opts,
+                                 global_opts: global_opts)
+      show = PGit::CurrentProject::Command::Show.new(fake_app)
+      allow(show).to receive(:puts)
 
-      app.execute!
+      show.execute!
 
-      expect(app).to have_received(:puts).with(expected_message)
-      expect(app).to have_received(:puts).with(fake_formatted_command)
+      expect(show).to have_received(:puts).with(expected_message)
+      expect(show).to have_received(:puts).with(fake_formatted_command)
     end
 
     it 'should raise an error if the command does not exist' do
@@ -72,12 +83,14 @@ describe 'PGit::CurrentProject::Command::Show' do
                                      to_s: fake_formatted_command,
                                      name: existent_command_name)
 
-      allow_any_instance_of(PGit::Command::Application).
-        to receive(:commands).and_return([fake_command])
-      allow_any_instance_of(PGit::Command::Application).to receive(:puts)
-      app = PGit::CurrentProject::Command::Show.new(global_opts, opts, args)
+      fake_app = instance_double('PGit::Command::Application',
+                                 commands: [fake_command],
+                                 args: args,
+                                 opts: opts,
+                                 global_opts: global_opts)
+      show = PGit::CurrentProject::Command::Show.new(fake_app)
 
-      expect{ app.execute! }.to raise_error PGit::Command::UserError, expected_message
+      expect{ show.execute! }.to raise_error PGit::Command::UserError, expected_message
     end
   end
 end
