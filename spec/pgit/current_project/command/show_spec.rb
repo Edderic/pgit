@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'pry'
 
 describe 'PGit::CurrentProject::Command::Show' do
   before { Rainbow.enabled = false }

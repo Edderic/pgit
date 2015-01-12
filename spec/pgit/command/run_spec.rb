@@ -15,7 +15,6 @@ describe 'PGit::Command::Run' do
       allow(PGit::Command::Application).to receive(:new).with(global_opts, opts, args).and_return(fake_app)
 
       app = PGit::Command::Application.new(global_opts, opts, args)
-      # binding.pry
       run = PGit::Command::Run.new(app)
 
       expect do
