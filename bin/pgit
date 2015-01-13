@@ -94,7 +94,7 @@ command :cmd do |c|
   end
 
   c.desc "remove a command"
-  c.command :remove do |a|
+  c.command :rm do |a|
     accept(Array) do |value|
       value.split(',').map {|item| item.strip }
     end
