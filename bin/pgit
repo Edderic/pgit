@@ -74,8 +74,8 @@ command :cmd do |c|
     end
   end
 
-  c.desc "update a command"
-  c.command :update do |a|
+  c.desc "edit a command"
+  c.command :edit do |a|
     accept(Array) do |value|
       value.split(',').map {|item| item.strip }
     end
