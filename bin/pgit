@@ -28,6 +28,30 @@ switch :trace
 # desc 'PivotalTracker API Token'
 # arg_name 'secr3tT0ken123'
 # flag [:'api-token']
+desc "Work with projects"
+command :proj do |p|
+
+  p.desc "add a project"
+  p.command :add do |a|
+
+    a.desc "the id associated to the Pivotal Tracker project"
+    a.arg_name '12030405'
+    a.flag :d, :id, required: true
+    a.action do |global_options,options,args|
+
+    a.desc "the filepath that is going to be associated to the Pivotal Tracker and Git project"
+    a.arg_name '"/some/file/path"'
+    a.default_value '"/the/working/directory"'
+    a.flag :p, :path
+
+    a.desc "your Pivotal Tracker API token"
+    a.arg_name "token"
+    a.flag :t, :api_token, required: true
+
+    end
+  end
+end
+
 desc "Work with custom commands defined in the current project"
 command :cmd do |c|
   c.desc "show the custom command(s)"
