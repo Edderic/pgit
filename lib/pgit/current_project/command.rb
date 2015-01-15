@@ -55,15 +55,15 @@ module PGit
       end
 
       def check_command_exists_for_update
-        raise PGit::Command::UserError.new "Cannot update a command that does not exist in the current project. See `pgit command add --help` if you want to add a new command" unless exists?
+        raise PGit::UserError.new "Cannot update a command that does not exist in the current project. See `pgit command add --help` if you want to add a new command" unless exists?
       end
 
       def check_command_exists_for_add
-        raise PGit::Command::UserError.new "Command '#{name}' already exists in the current project. If you want to update the command, see `pgit command update --help`" if exists?
+        raise PGit::UserError.new "Command '#{name}' already exists in the current project. If you want to update the command, see `pgit command update --help`" if exists?
       end
 
       def check_command_exists_for_remove
-        raise PGit::Command::UserError.new "Command '#{name}' does not exist in the current project" unless exists?
+        raise PGit::UserError.new "Command '#{name}' does not exist in the current project" unless exists?
       end
     end
   end

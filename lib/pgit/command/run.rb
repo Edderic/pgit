@@ -19,7 +19,7 @@ module PGit
       private
 
       def search
-        raise PGit::Command::UserError, "Run expects a command_name argument." if args.empty?
+        raise PGit::UserError, "Run expects a command_name argument." if args.empty?
         args.first
       end
 

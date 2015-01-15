@@ -41,7 +41,7 @@ module PGit
         end
 
         def show_one
-          raise PGit::Command::UserError, "Command '#{search}' not found for this project" unless command
+          raise PGit::UserError, "Command '#{search}' not found for this project" unless command
 
           puts "Listing custom command '#{Rainbow(command.name).bright}' of the current project..."
           puts

@@ -89,7 +89,7 @@ describe 'PGit::CurrentProject::Command::Show' do
                                  global_opts: global_opts)
       show = PGit::CurrentProject::Command::Show.new(fake_app)
 
-      expect{ show.execute! }.to raise_error PGit::Command::UserError, expected_message
+      expect{ show.execute! }.to raise_error PGit::UserError, expected_message
     end
   end
 end
