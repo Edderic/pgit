@@ -36,10 +36,13 @@ describe 'PGit::Configuration::Validator' do
         allow(File).to receive(:exists?).with(fake_expanded_path).and_return(true)
         allow(File).to receive(:open).with(fake_expanded_path, 'r').and_return(fake_file)
         allow(YAML).to receive(:load).with(fake_file).and_return(fake_yaml)
+        allow(YAML).to receive(:dump).and_return("FAKE_YAML_CONFIGURATION")
+
+        error_message = "#{fake_expanded_path} must have a path, id, and api_token for each project.\nPlease have the following layout:\nFAKE_YAML_CONFIGURATION"
 
         expect do
           PGit::Configuration::Validator.new(fake_path)
-        end.to raise_error(PGit::Configuration::MissingAttributesError)
+        end.to raise_error(PGit::UserError, error_message)
       end
     end
 

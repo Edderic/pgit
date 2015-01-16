@@ -27,7 +27,11 @@ module PGit
         end
 
         unless all_present
-          raise PGit::Configuration::MissingAttributesError.new(@expanded_path)
+          message = "#{@expanded_path} must have a path, id, and api_token for " +
+                    "each project.\nPlease have the following layout:\n" +
+                    YAML.dump(PGit::Configuration.default_options)
+
+          raise PGit::UserError, message
         end
       end
 
