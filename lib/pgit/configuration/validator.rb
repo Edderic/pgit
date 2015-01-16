@@ -4,18 +4,21 @@ module PGit
       attr_reader :yaml
 
       def initialize(config_path)
+        validate_existence_of_configuration(config_path)
+        validate_existence_of_at_least_one_project
+        validate_presence_of_items_in_each_project
+      end
+
+      private
+
+      def validate_existence_of_configuration(config_path)
         @expanded_path = File.expand_path(config_path)
         error_message = "#{@expanded_path} configuration file does not exist. Please run `pgit install`"
         raise PGit::UserError, error_message unless File.exists? @expanded_path
 
         config_file = File.open(@expanded_path, 'r')
         @yaml = YAML.load(config_file)
-
-        validate_existence_of_at_least_one_project
-        validate_presence_of_items_in_each_project
       end
-
-      private
 
       def validate_presence_of_items_in_each_project
         projects = @yaml["projects"]
