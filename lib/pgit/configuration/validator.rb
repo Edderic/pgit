@@ -5,15 +5,13 @@ module PGit
 
       def initialize(config_path)
         @expanded_path = File.expand_path(config_path)
-        if File.exists? @expanded_path
-          config_file = File.open(@expanded_path, 'r')
-          @yaml = YAML.load(config_file)
+        raise PGit::Configuration::NotFoundError.new(@expanded_path) unless File.exists? @expanded_path
 
-          validate_existence_of_at_least_one_project
-          validate_presence_of_items_in_each_project
-        else
-          raise PGit::Configuration::NotFoundError.new(@expanded_path)
-        end
+        config_file = File.open(@expanded_path, 'r')
+        @yaml = YAML.load(config_file)
+
+        validate_existence_of_at_least_one_project
+        validate_presence_of_items_in_each_project
       end
 
       private
