@@ -78,7 +78,8 @@ describe 'PGit::Configuration::Validator' do
         fake_expanded_path = "/home/edderic/.edderic-dotfiles/config/project.yml"
         allow(File).to receive(:exists?).and_return(false)
 
-        expect{ PGit::Configuration::Validator.new(file_path) }.to raise_error(PGit::Configuration::NotFoundError)
+        error_message = "#{fake_expanded_path} configuration file does not exist. Please run `pgit install`"
+        expect{ PGit::Configuration::Validator.new(file_path) }.to raise_error(PGit::UserError)
       end
     end
   end

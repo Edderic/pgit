@@ -5,7 +5,8 @@ module PGit
 
       def initialize(config_path)
         @expanded_path = File.expand_path(config_path)
-        raise PGit::Configuration::NotFoundError.new(@expanded_path) unless File.exists? @expanded_path
+        error_message = "#{@expanded_path} configuration file does not exist. Please run `pgit install`"
+        raise PGit::UserError, error_message unless File.exists? @expanded_path
 
         config_file = File.open(@expanded_path, 'r')
         @yaml = YAML.load(config_file)
