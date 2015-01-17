@@ -16,10 +16,11 @@ describe 'PGit::Command::Run' do
 
       app = PGit::Command::Application.new(global_opts, opts, args)
       run = PGit::Command::Run.new(app)
+      error_message = "Command '#{args[0]}' does not exist. Run 'pgit command show' to see the available custom commands."
 
       expect do
         run.execute!
-      end.to raise_error PGit::Command::NotFoundError
+      end.to raise_error(PGit::UserError, error_message)
     end
 
     it 'calls execute on the command if it exists' do

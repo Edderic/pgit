@@ -11,7 +11,8 @@ module PGit
       end
 
       def execute!
-        raise PGit::Command::NotFoundError.new(search) unless command
+        error_message = "Command '#{search}' does not exist. Run 'pgit command show' to see the available custom commands."
+        raise PGit::UserError, error_message unless command
 
         command.execute
       end
