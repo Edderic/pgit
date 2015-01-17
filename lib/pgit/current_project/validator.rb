@@ -3,7 +3,8 @@ module PGit
     class Validator
       def initialize(matching_projects)
         if matching_projects.length == 0
-          raise PGit::CurrentProject::NoPathsMatchWorkingDirError.new
+          message = "None of the project paths matches the working directory"
+          raise PGit::UserError, message
         end
       end
     end
