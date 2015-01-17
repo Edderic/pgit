@@ -25,10 +25,10 @@ module PGit
           puts `#{step}`
         else
           show_options
-          raise PGit::InvalidOptionError
+          raise PGit::Error::User
         end
       end
-    rescue PGit::InvalidOptionError
+    rescue PGit::Error::User
       retry
     end
 
