@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'PGit::Heredoc' do
+describe 'PGit::Helpers::Heredoc' do
   describe '.remove_front_spaces' do
     it 'should return the script, formatted nicely' do
       unprocessed = <<-HEREDOC
@@ -25,7 +25,7 @@ describe 'PGit::Heredoc' do
         "  fi\n" +
         "}\n" +
         "complete -F get_pgit_commands pgit\n"
-      script = PGit::Heredoc.remove_front_spaces(unprocessed)
+      script = PGit::Helpers::Heredoc.remove_front_spaces(unprocessed)
 
       expect(script).to eq expected_script
     end

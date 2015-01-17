@@ -21,7 +21,7 @@ describe 'PGit::Installer::BashAutoCompletion' do
         complete -F get_pgit_commands pgit
       UNPROCESSED
 
-      expected_script = PGit::Heredoc.remove_front_spaces(unprocessed)
+      expected_script = PGit::Helpers::Heredoc.remove_front_spaces(unprocessed)
       script = PGit::Installer::BashAutoCompletion.script
 
       expect(script).to eq expected_script

@@ -16,7 +16,7 @@ module PGit
           complete -F get_pgit_commands pgit
         AUTOCOMPLETION
 
-        PGit::Heredoc.remove_front_spaces(autocompletion)
+        PGit::Helpers::Heredoc.remove_front_spaces(autocompletion)
       end
 
       def initialize(global_opts, opts, args)

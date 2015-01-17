@@ -110,7 +110,7 @@ describe 'PGit::Command' do
           echo hello
       TO_S
 
-      stringified = PGit::Heredoc.remove_front_spaces(stringified)
+      stringified = PGit::Helpers::Heredoc.remove_front_spaces(stringified)
       chompable = double('String')
       allow(chompable).to receive(:chomp).and_return('Y')
       allow(STDIN).to receive(:gets).and_return(chompable)
@@ -264,7 +264,7 @@ describe 'PGit::Command' do
           q  - quit
         LEGAL_OPTIONS
 
-        message = PGit::Heredoc.remove_front_spaces(message)
+        message = PGit::Helpers::Heredoc.remove_front_spaces(message)
         steps = [fake_command_step]
         command = PGit::Command.new(name, steps)
 

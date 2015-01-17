@@ -72,7 +72,7 @@ module PGit
         q  - quit
       LEGAL_OPTIONS
 
-      puts Rainbow(PGit::Heredoc.remove_front_spaces(message)).red
+      puts Rainbow(PGit::Helpers::Heredoc.remove_front_spaces(message)).red
     end
   end
 end
