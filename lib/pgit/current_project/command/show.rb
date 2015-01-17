@@ -14,7 +14,8 @@ module PGit
         end
 
         def execute!
-          raise PGit::Command::EmptyError if commands.empty?
+          error_message = "No commands are listed for this project. Run `pgit command add --help` for more info."
+          raise PGit::UserError, error_message if commands.empty?
 
           if search.empty?
             show_all_of_current_project
