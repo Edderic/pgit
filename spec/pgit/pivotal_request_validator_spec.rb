@@ -40,19 +40,19 @@ describe 'PGit::PivotalRequestValidator' do
 
       expect do
         PGit::PivotalRequestValidator.new(request)
-      end.to raise_error(PGit::ExternalError)
+      end.to raise_error(PGit::Error::External)
     end
   end
 
   describe 'when the request has no "kind"' do
-    it 'should raise a PGit::ExternalError' do
+    it 'should raise a PGit::Error::External' do
       request = <<-REQUEST
         some unrecognizable request
       REQUEST
 
       expect do
         PGit::PivotalRequestValidator.new(request)
-      end.to raise_error(PGit::ExternalError)
+      end.to raise_error(PGit::Error::External)
     end
   end
 

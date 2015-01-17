@@ -12,7 +12,7 @@ module PGit
 
     def validate
       if kind_error? || no_kind?
-        raise PGit::ExternalError.new(@request)
+        raise PGit::Error::External.new(@request)
       end
     end
 
