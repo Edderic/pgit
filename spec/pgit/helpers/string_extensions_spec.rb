@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'PGit::StringExtensions' do
+describe 'PGit::Helpers::StringExtensions' do
   describe '#letter?' do
     it 'should be case insensitive' do
       expect('h').to be_letter('h')

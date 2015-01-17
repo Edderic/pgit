@@ -1,6 +1,6 @@
 require 'json'
 require 'rainbow'
-require 'pgit/string_extensions'
+require 'pgit/helpers/string_extensions'
 require 'pgit/error'
 require 'pgit/error/user'
 require 'pgit/error/external'
