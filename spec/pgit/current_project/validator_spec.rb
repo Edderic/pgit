@@ -7,6 +7,6 @@ describe 'PGit::CurrentProject::Validator' do
 
     expect do
       PGit::CurrentProject::Validator.new(matching_projects)
-    end.to raise_error(PGit::UserError, message)
+    end.to raise_error(PGit::Error::User, message)
   end
 end

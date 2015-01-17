@@ -15,7 +15,7 @@ describe 'PGit::CurrentProject::Command::Show' do
                                  global_opts: global_opts)
       app = PGit::CurrentProject::Command::Show.new(fake_app)
       message = "No commands are listed for this project. Run `pgit command add --help` for more info."
-      expect { app.execute! }.to raise_error(PGit::UserError, message)
+      expect { app.execute! }.to raise_error(PGit::Error::User, message)
     end
 
     it 'lists the commands if there are commands' do
@@ -89,7 +89,7 @@ describe 'PGit::CurrentProject::Command::Show' do
                                  global_opts: global_opts)
       show = PGit::CurrentProject::Command::Show.new(fake_app)
 
-      expect{ show.execute! }.to raise_error PGit::UserError, expected_message
+      expect{ show.execute! }.to raise_error PGit::Error::User, expected_message
     end
   end
 end

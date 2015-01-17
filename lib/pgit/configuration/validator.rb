@@ -14,7 +14,7 @@ module PGit
       def validate_existence_of_configuration(config_path)
         @expanded_path = File.expand_path(config_path)
         error_message = "#{@expanded_path} configuration file does not exist. Please run `pgit install`"
-        raise PGit::UserError, error_message unless File.exists? @expanded_path
+        raise PGit::Error::User, error_message unless File.exists? @expanded_path
 
         config_file = File.open(@expanded_path, 'r')
         @yaml = YAML.load(config_file)
@@ -33,7 +33,7 @@ module PGit
                     "each project.\nPlease have the following layout:\n" +
                     YAML.dump(PGit::Configuration.default_options)
 
-          raise PGit::UserError, message
+          raise PGit::Error::User, message
         end
       end
 
@@ -43,7 +43,7 @@ module PGit
                     "Please have the following layout:\n" +
                     YAML.dump(PGit::Configuration.default_options)
 
-          raise PGit::UserError, message
+          raise PGit::Error::User, message
         end
       end
     end

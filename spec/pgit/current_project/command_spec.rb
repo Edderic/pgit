@@ -18,7 +18,7 @@ describe 'PGit::CurrentProject::Command' do
       allow(PGit::CurrentProject).to receive(:new).with(fake_yaml).and_return(fake_current_project)
       current_project_command = PGit::CurrentProject::Command.new(name, steps)
 
-      expect{ current_project_command.add }.to raise_error PGit::UserError, expected_message
+      expect{ current_project_command.add }.to raise_error PGit::Error::User, expected_message
     end
   end
 
@@ -73,7 +73,7 @@ describe 'PGit::CurrentProject::Command' do
 
       current_project_command = PGit::CurrentProject::Command.new(name, steps)
 
-      expect{current_project_command.update}.to raise_error PGit::UserError, expected_message
+      expect{current_project_command.update}.to raise_error PGit::Error::User, expected_message
     end
 
     it 'should write to the configuration if the command does exist' do
@@ -152,7 +152,7 @@ describe 'PGit::CurrentProject::Command' do
 
       current_project_command = PGit::CurrentProject::Command.new(nonexistent_name)
 
-      expect{current_project_command.remove}.to raise_error PGit::UserError, expected_message
+      expect{current_project_command.remove}.to raise_error PGit::Error::User, expected_message
     end
   end
 end

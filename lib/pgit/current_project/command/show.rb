@@ -15,7 +15,7 @@ module PGit
 
         def execute!
           error_message = "No commands are listed for this project. Run `pgit command add --help` for more info."
-          raise PGit::UserError, error_message if commands.empty?
+          raise PGit::Error::User, error_message if commands.empty?
 
           if search.empty?
             show_all_of_current_project
@@ -42,7 +42,7 @@ module PGit
         end
 
         def show_one
-          raise PGit::UserError, "Command '#{search}' not found for this project" unless command
+          raise PGit::Error::User, "Command '#{search}' not found for this project" unless command
 
           puts "Listing custom command '#{Rainbow(command.name).bright}' of the current project..."
           puts

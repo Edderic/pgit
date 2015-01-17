@@ -20,7 +20,7 @@ describe 'PGit::Configuration::Validator' do
                   "Please have the following layout:\nFAKE_YAML_CONFIGURATION"
         expect do
           PGit::Configuration::Validator.new(fake_path)
-        end.to raise_error(PGit::UserError, error_message)
+        end.to raise_error(PGit::Error::User, error_message)
       end
     end
 
@@ -45,7 +45,7 @@ describe 'PGit::Configuration::Validator' do
 
         expect do
           PGit::Configuration::Validator.new(fake_path)
-        end.to raise_error(PGit::UserError, error_message)
+        end.to raise_error(PGit::Error::User, error_message)
       end
     end
 
@@ -79,7 +79,7 @@ describe 'PGit::Configuration::Validator' do
         allow(File).to receive(:exists?).and_return(false)
 
         error_message = "#{fake_expanded_path} configuration file does not exist. Please run `pgit install`"
-        expect{ PGit::Configuration::Validator.new(file_path) }.to raise_error(PGit::UserError)
+        expect{ PGit::Configuration::Validator.new(file_path) }.to raise_error(PGit::Error::User)
       end
     end
   end

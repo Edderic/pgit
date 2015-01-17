@@ -12,7 +12,7 @@ module PGit
 
       def execute!
         error_message = "Command '#{search}' does not exist. Run 'pgit command show' to see the available custom commands."
-        raise PGit::UserError, error_message unless command
+        raise PGit::Error::User, error_message unless command
 
         command.execute
       end
@@ -20,7 +20,7 @@ module PGit
       private
 
       def search
-        raise PGit::UserError, "Run expects a command_name argument." if args.empty?
+        raise PGit::Error::User, "Run expects a command_name argument." if args.empty?
         args.first
       end
 
