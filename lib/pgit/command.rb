@@ -1,11 +1,13 @@
 module PGit
   class Command
-    attr_reader :name, :steps, :branch_name
+    attr_reader :name, :steps, :branch_name, :config, :current_project
 
     def initialize(name, steps)
       @name = name
       @steps = steps
       @branch_name = PGit::CurrentBranch.new.name
+      @config = PGit::Configuration.new
+      @current_project = PGit::CurrentProject.new(config.yaml)
     end
 
     def execute
@@ -45,10 +47,12 @@ module PGit
     end
 
     def save
-      config = PGit::Configuration.new
-      current_project = PGit::CurrentProject.new(config.yaml)
-
       current_project.commands.merge!(to_hash)
+      current_project.save
+    end
+
+    def remove!
+      current_project.commands.reject! { |k,v| k == name }
       current_project.save
     end
 
