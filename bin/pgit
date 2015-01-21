@@ -93,8 +93,11 @@ command :cmd do |c|
     a.flag :s, :steps, required: true, type: Array
 
     a.action do |global_options,options,args|
-      command = PGit::CurrentProject::Command::new(options[:name], options[:steps])
-      command.add
+      app = PGit::Command::Application.new(global_options,
+                                 options,
+                                 args)
+      add = PGit::Command::Add.new(app)
+      add.execute!
     end
   end
 
@@ -112,8 +115,11 @@ command :cmd do |c|
     a.flag :s, :steps, required: true, type: Array
 
     a.action do |global_options,options,args|
-      command = PGit::CurrentProject::Command::new(options[:name], options[:steps])
-      command.update
+      app = PGit::Command::Application.new(global_options,
+                                 options,
+                                 args)
+      edit = PGit::Command::Edit.new(app)
+      edit.execute!
     end
   end
 

@@ -64,7 +64,7 @@ module PGit
         project_path = project["path"]
         extended_path = File.expand_path(project_path, __FILE__)
         escaped_project = escape_slashes(extended_path)
-        Dir.pwd.match(/#{escaped_project}/)
+        Dir.pwd.match(/#{escaped_project}/i)
       end
     end
 
