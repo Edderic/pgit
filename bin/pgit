@@ -133,8 +133,11 @@ command :cmd do |c|
     a.flag :n, :name, required: true
 
     a.action do |global_options,options,args|
-      command = PGit::CurrentProject::Command::new(options[:name])
-      command.remove
+      app = PGit::Command::Application.new(global_options,
+                                 options,
+                                 args)
+      remove = PGit::Command::Remove.new(app)
+      remove.execute!
     end
   end
 end
