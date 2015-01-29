@@ -35,8 +35,8 @@ describe 'PGit::CurrentProject' do
     end
   end
 
-  describe '#save' do
-    it 'should save the current project' do
+  describe '#save(saveable)' do
+    it 'merges the passed-in command hash in place' do
       fake_configuration = instance_double('PGit::Configuration')
 
       fake_projects = [
@@ -63,20 +63,18 @@ describe 'PGit::CurrentProject' do
           "api_token" => "astoeuh" }
       ]
 
-      allow(Dir).to receive(:pwd).and_return("/Therapy-Exercises-Online/some_other_project")
-
+      fake_command_hash = fake_modified_projects.first["commands"]
+      fake_save = { 'commands' => fake_command_hash }
+      fake_command = instance_double('PGit::Command', to_save: fake_save)
       fake_yaml = successful_setup.to_yaml
+      allow(fake_configuration).to receive(:save)
       allow(fake_configuration).to receive(:projects=).with(fake_modified_projects)
       allow(fake_configuration).to receive(:projects).and_return(fake_projects)
-      allow(fake_configuration).to receive(:save)
       allow(PGit::Configuration).to receive(:new).and_return(fake_configuration)
-
       current_project = PGit::CurrentProject.new(fake_yaml)
-      current_project.commands = { "first_command" => ['echo hi', 'echo hello'] }
-      current_project.save
+      current_project.save(fake_command)
 
       expect(fake_configuration).to have_received(:projects=).with(fake_modified_projects)
-      expect(fake_configuration).to have_received(:save)
     end
   end
 

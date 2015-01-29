@@ -41,10 +41,10 @@ module PGit
       }
     end
 
-    def save
+    def save(saveable)
       configuration = Configuration.new
       projects = configuration.projects
-      projects[index] = @current_project.merge({'commands' => commands})
+      projects[index] = @current_project.merge(saveable.to_save)
       configuration.projects = projects
       configuration.save
     end
