@@ -9,9 +9,10 @@
 module PGit
   class CurrentProject
     attr_accessor :commands
-    attr_reader :index
+    attr_reader :index, :configuration
 
     def initialize(config_yaml)
+      @configuration = Configuration.new
       @current_project = find_current_project(config_yaml)
       config_yaml["projects"].each_with_index do |project, index|
         @index = index if project["path"].match(path)
@@ -42,9 +43,17 @@ module PGit
     end
 
     def save(saveable)
-      configuration = Configuration.new
       projects = configuration.projects
       projects[index] = @current_project.merge(saveable.to_save)
+      configuration.projects = projects
+      configuration.save
+    end
+
+    def remove!(removable)
+      project_key = removable.project_key
+      projects = configuration.projects
+      send(project_key).reject! { |k,v| k == removable.name }
+      projects[index] = @current_project
       configuration.projects = projects
       configuration.save
     end

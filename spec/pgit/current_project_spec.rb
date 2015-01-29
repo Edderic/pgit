@@ -35,6 +35,49 @@ describe 'PGit::CurrentProject' do
     end
   end
 
+  describe '#remove(optional)' do
+    it 'removes the optional key-value pair' do
+      fake_configuration = instance_double('PGit::Configuration')
+
+      fake_projects = [
+        { "path" => "/Therapy-Exercises-Online/some_other_project",
+          "id" => 12345,
+          "api_token" => "astoeuh",
+          "commands" =>
+          {
+            "first_command" => ['echo hi', 'echo hello']
+          }
+        },
+        { "path" => "/Therapy-Exercises-Online",
+          "id" => 19191,
+          "api_token" => "astoeuh" }
+      ]
+
+      fake_modified_projects = [
+        { "path" => "/Therapy-Exercises-Online/some_other_project",
+          "id" => 12345,
+          "api_token" => "astoeuh",
+        },
+        { "path" => "/Therapy-Exercises-Online",
+          "id" => 19191,
+          "api_token" => "astoeuh" }
+      ]
+
+      fake_command_hash = fake_modified_projects.first["commands"]
+      fake_save = { 'commands' => fake_command_hash }
+      fake_command = instance_double('PGit::Command', to_save: fake_save, project_key: 'commands')
+      fake_yaml = successful_setup.to_yaml
+      allow(fake_configuration).to receive(:save)
+      allow(fake_configuration).to receive(:projects=).with(fake_modified_projects)
+      allow(fake_configuration).to receive(:projects).and_return(fake_projects)
+      allow(PGit::Configuration).to receive(:new).and_return(fake_configuration)
+      current_project = PGit::CurrentProject.new(fake_yaml)
+      current_project.remove!(fake_command)
+
+      expect(fake_configuration).to have_received(:projects=).with(fake_modified_projects)
+    end
+  end
+
   describe '#save(saveable)' do
     it 'merges the passed-in command hash in place' do
       fake_configuration = instance_double('PGit::Configuration')
@@ -75,6 +118,7 @@ describe 'PGit::CurrentProject' do
       current_project.save(fake_command)
 
       expect(fake_configuration).to have_received(:projects=).with(fake_modified_projects)
+      expect(fake_configuration).to have_received(:save)
     end
   end
 
