@@ -58,8 +58,7 @@ describe 'PGit::Command' do
       command = PGit::Command.new(name, steps)
       command.save
 
-      expect(fake_commands).to have_received(:merge!).with(command_hash)
-      expect(current_project).to have_received(:save)
+      expect(current_project).to have_received(:save).with(command)
     end
   end
 

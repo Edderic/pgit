@@ -38,6 +38,10 @@ module PGit
       to_hash
     end
 
+    def to_save
+      { 'commands' => to_hash }
+    end
+
     def to_hash
       { name => steps }
     end
@@ -47,8 +51,7 @@ module PGit
     end
 
     def save
-      current_project.commands.merge!(to_hash)
-      current_project.save
+      current_project.save(self)
     end
 
     def remove!
@@ -65,6 +68,7 @@ module PGit
     def formatted_step(step)
       Rainbow(step).bright
     end
+
     def exec_options
       Rainbow("[Y/s/q]").color("#FF6FEA")
     end
