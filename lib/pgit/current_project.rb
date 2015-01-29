@@ -10,9 +10,9 @@ module PGit
   class CurrentProject
     attr_accessor :commands
     attr_reader :index, :configuration
-
-    def initialize(config_yaml)
-      @configuration = Configuration.new
+    def initialize(configuration)
+      @configuration = configuration
+      config_yaml = configuration.to_yaml
       @current_project = find_current_project(config_yaml)
       config_yaml["projects"].each_with_index do |project, index|
         @index = index if project["path"].match(path)

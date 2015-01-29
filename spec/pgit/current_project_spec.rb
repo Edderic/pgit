@@ -1,9 +1,10 @@
 require 'spec_helper'
 
-def successful_setup
+def fake_config
   fake_project_1 =  { "path" => "/Therapy-Exercises-Online/some_other_project",
                       "id" => 12345,
-                      "api_token" => "astoeuh" }
+                      "api_token" => "astoeuh",
+                      "commands" => {} }
   fake_project_2 =  { "path" => "~/Therapy-Exercises-Online",
                       "id" => 19191,
                       "api_token" => "astoeuh" }
@@ -16,36 +17,18 @@ def successful_setup
 end
 
 describe 'PGit::CurrentProject' do
-  describe '#new(config_yaml)' do
-    it 'should delegate to PGit::CurrentProject::Validator' do
-      fake_project_1 =  { "path" => "~/some-non-matching-path",
-                          "id" => 12345,
-                          "api_token" => "astoeuh" }
-      fake_project_2 =  { "path" => "~/some-other-non-matching-path",
-                          "id" => 19191,
-                          "api_token" => "astoeuh" }
-      fake_project_list = [ fake_project_1, fake_project_2 ]
-      fake_yaml = { "projects" => fake_project_list }
-      fake_path = "/Therapy-Exercises-Online/some_other_project/some_subdirectory"
-      fake_configuration = double('configuration', to_yaml: fake_yaml)
-      allow(Dir).to receive(:pwd).and_return(fake_path)
-      allow(PGit::CurrentProject::Validator).to receive(:new).with([]).and_raise 'some_error'
-
-      expect{ PGit::CurrentProject.new(fake_configuration.to_yaml) }.to raise_error 'some_error'
-    end
-  end
-
   describe '#remove(optional)' do
     it 'removes the optional key-value pair' do
-      fake_configuration = instance_double('PGit::Configuration')
 
+      fake_path = "/Therapy-Exercises-Online/some_other_project"
+      command_name = 'first_command'
       fake_projects = [
-        { "path" => "/Therapy-Exercises-Online/some_other_project",
+        { "path" => fake_path,
           "id" => 12345,
           "api_token" => "astoeuh",
           "commands" =>
           {
-            "first_command" => ['echo hi', 'echo hello']
+            command_name => ['echo hi', 'echo hello']
           }
         },
         { "path" => "/Therapy-Exercises-Online",
@@ -57,21 +40,26 @@ describe 'PGit::CurrentProject' do
         { "path" => "/Therapy-Exercises-Online/some_other_project",
           "id" => 12345,
           "api_token" => "astoeuh",
+          "commands" => {}
         },
         { "path" => "/Therapy-Exercises-Online",
           "id" => 19191,
           "api_token" => "astoeuh" }
       ]
-
+      fake_yaml = { 'projects' => fake_projects }
       fake_command_hash = fake_modified_projects.first["commands"]
       fake_save = { 'commands' => fake_command_hash }
-      fake_command = instance_double('PGit::Command', to_save: fake_save, project_key: 'commands')
-      fake_yaml = successful_setup.to_yaml
-      allow(fake_configuration).to receive(:save)
-      allow(fake_configuration).to receive(:projects=).with(fake_modified_projects)
-      allow(fake_configuration).to receive(:projects).and_return(fake_projects)
-      allow(PGit::Configuration).to receive(:new).and_return(fake_configuration)
-      current_project = PGit::CurrentProject.new(fake_yaml)
+      fake_command = instance_double('PGit::Command',
+                                     to_save: fake_save,
+                                     project_key: 'commands',
+                                     name: command_name)
+      fake_configuration = instance_double('PGit::Configuration',
+                                           save: nil,
+                                           'projects='.to_sym => fake_modified_projects,
+                                           projects: fake_projects,
+                                           to_yaml: fake_yaml)
+      allow(Dir).to receive(:pwd).and_return(fake_path)
+      current_project = PGit::CurrentProject.new(fake_configuration)
       current_project.remove!(fake_command)
 
       expect(fake_configuration).to have_received(:projects=).with(fake_modified_projects)
@@ -80,8 +68,6 @@ describe 'PGit::CurrentProject' do
 
   describe '#save(saveable)' do
     it 'merges the passed-in command hash in place' do
-      fake_configuration = instance_double('PGit::Configuration')
-
       fake_projects = [
         { "path" => "/Therapy-Exercises-Online/some_other_project",
           "id" => 12345,
@@ -109,12 +95,14 @@ describe 'PGit::CurrentProject' do
       fake_command_hash = fake_modified_projects.first["commands"]
       fake_save = { 'commands' => fake_command_hash }
       fake_command = instance_double('PGit::Command', to_save: fake_save)
-      fake_yaml = successful_setup.to_yaml
-      allow(fake_configuration).to receive(:save)
-      allow(fake_configuration).to receive(:projects=).with(fake_modified_projects)
-      allow(fake_configuration).to receive(:projects).and_return(fake_projects)
-      allow(PGit::Configuration).to receive(:new).and_return(fake_configuration)
-      current_project = PGit::CurrentProject.new(fake_yaml)
+      fake_yaml = fake_config.to_yaml
+      fake_configuration = instance_double('PGit::Configuration',
+                                           save: nil,
+                                           'projects='.to_sym => fake_modified_projects,
+                                           projects: fake_projects,
+                                           to_yaml: fake_yaml)
+
+      current_project = PGit::CurrentProject.new(fake_configuration)
       current_project.save(fake_command)
 
       expect(fake_configuration).to have_received(:projects=).with(fake_modified_projects)
@@ -124,8 +112,7 @@ describe 'PGit::CurrentProject' do
 
   describe '#commands=()' do
     it 'should set the commands' do
-      yaml = successful_setup.to_yaml
-      current_project = PGit::CurrentProject.new(yaml)
+      current_project = PGit::CurrentProject.new(fake_config)
       new_command_hash = {'some_command' => ['step1', 'step2']}
       current_project.commands = new_command_hash
 
@@ -135,104 +122,29 @@ describe 'PGit::CurrentProject' do
 
   describe '#to_hash' do
     it 'returns the hash version' do
-      fake_config_hash =
-        {
-        "projects" =>
-        [
-          { "api_token" => "hello1234",
-            "path" => "~/some/path",
-            "id" => "12345678",
-            "commands" =>
-            [
-              {
-                "start" =>
-                [
-                  "step1",
-                  "step2"
-                ]
-              }
-            ]
-        }
-        ]
-      }
-        expected_hash =
-          { "api_token" => "hello1234",
-            "path" => "~/some/path",
-            "id" => "12345678",
-            "commands" =>
-        [
-          {
-            "start" =>
-            [
-              "step1",
-              "step2"
-            ]
-          }
-        ]
-        }
+      expected_hash = { "path" => "/Therapy-Exercises-Online/some_other_project",
+                      "id" => 12345,
+                      "api_token" => "astoeuh",
+                      "commands" => {} }
 
-          allow(File).to receive(:expand_path).and_return("/Users/Edderic/some/path")
-          allow(File).to receive(:expand_path).with("~/some/path").and_return("/Users/Edderic/some/path")
-          allow(Dir).to receive(:pwd).and_return("/Users/Edderic/some/path")
-          current_project = PGit::CurrentProject.new(fake_config_hash)
+      current_project = PGit::CurrentProject.new(fake_config)
 
-          expect(current_project.to_hash).to eq(expected_hash)
+      expect(current_project.to_hash).to eq(expected_hash)
     end
   end
 
   describe '#to_h' do
     it 'returns the hash version' do
-      fake_config_hash =
-        {
-        "projects" =>
-        [
-          { "api_token" => "hello1234",
-            "path" => "~/some/path",
-            "id" => "12345678",
-            "commands" =>
-            [
-              {
-                "start" =>
-                [
-                  "step1",
-                  "step2"
-                ]
-              }
-            ]
-        }
-        ]
-      }
-        expected_hash =
-          { "api_token" => "hello1234",
-            "path" => "~/some/path",
-            "id" => "12345678",
-            "commands" =>
-        [
-          {
-            "start" =>
-            [
-              "step1",
-              "step2"
-            ]
-          }
-        ]
-        }
+      current_project = PGit::CurrentProject.new(fake_config)
 
-          allow(File).to receive(:expand_path).and_return("/Users/Edderic/some/path")
-          allow(File).to receive(:expand_path).with("~/some/path").and_return("/Users/Edderic/some/path")
-          allow(Dir).to receive(:pwd).and_return("/Users/Edderic/some/path")
-          current_project = PGit::CurrentProject.new(fake_config_hash)
-
-          expect(current_project.to_h).to eq(expected_hash)
+      expect(current_project.to_h).to eq(fake_config.to_yaml.fetch("projects").first)
     end
   end
 
   describe '#path' do
     describe 'more than one of the projects listed matches the working directory' do
       it "should return the more specific directory" do
-        fake_configuration = successful_setup
-
-        current_project = PGit::CurrentProject.new(fake_configuration.to_yaml)
+        current_project = PGit::CurrentProject.new(fake_config)
         working_directory = current_project.path
 
         expect(working_directory).to eq "/Therapy-Exercises-Online/some_other_project"
@@ -242,9 +154,7 @@ describe 'PGit::CurrentProject' do
 
   describe '#id' do
     it 'should return the correct pivotal tracker project_id' do
-      fake_configuration = successful_setup
-
-      current_project = PGit::CurrentProject.new(fake_configuration.to_yaml)
+      current_project = PGit::CurrentProject.new(fake_config)
       project_id = current_project.id
 
       expect(project_id).to eq 12345
@@ -253,9 +163,7 @@ describe 'PGit::CurrentProject' do
 
   describe '#api_token' do
     it 'should return the api_token associated to the current project' do
-      fake_configuration = successful_setup
-
-      current_project = PGit::CurrentProject.new(fake_configuration.to_yaml)
+      current_project = PGit::CurrentProject.new(fake_config)
       api_token = current_project.api_token
 
       expect(api_token).to eq 'astoeuh'
@@ -280,8 +188,8 @@ describe 'PGit::CurrentProject' do
       fake_yaml = { "projects" => fake_project_list }
       fake_path = "/Therapy-Exercises-Online/some_other_project/some_subdirectory"
       allow(Dir).to receive(:pwd).and_return(fake_path)
-
-      current_project = PGit::CurrentProject.new(fake_yaml)
+      fake_configuration = instance_double('PGit::Configuration', to_yaml: fake_yaml)
+      current_project = PGit::CurrentProject.new(fake_configuration)
 
       commands = current_project.commands
 
@@ -289,9 +197,7 @@ describe 'PGit::CurrentProject' do
     end
 
     it 'should return an empty hash if there are no commands' do
-      fake_configuration = successful_setup
-
-      current_project = PGit::CurrentProject.new(fake_configuration.to_yaml)
+      current_project = PGit::CurrentProject.new(fake_config)
 
       expect(current_project.commands).to eq Hash.new
     end
