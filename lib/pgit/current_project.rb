@@ -43,19 +43,16 @@ module PGit
     end
 
     def save(saveable)
-      projects = configuration.projects
-      projects[index] = @current_project.merge(saveable.to_save)
-      configuration.projects = projects
-      configuration.save
+      save_or_remove do |projects|
+        projects[index] = @current_project.merge(saveable.to_save)
+      end
     end
 
     def remove!(removable)
-      project_key = removable.project_key
-      projects = configuration.projects
-      send(project_key).reject! { |k,v| k == removable.name }
-      projects[index] = @current_project
-      configuration.projects = projects
-      configuration.save
+      save_or_remove do |projects|
+        send(removable.project_key).reject! { |k,v| k == removable.name }
+        projects[index] = @current_project
+      end
     end
 
     def to_h
@@ -63,6 +60,15 @@ module PGit
     end
 
     private
+
+    def save_or_remove
+      projects = configuration.projects
+
+      yield projects
+
+      configuration.projects = projects
+      configuration.save
+    end
 
     def escape_slashes(project_path)
       project_path.gsub('/','\/')
