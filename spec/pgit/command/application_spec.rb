@@ -19,13 +19,13 @@ describe 'PGit::Command::Application' do
     @fake_command = instance_double('PGit::Command', to_s: fake_command_string, name: existent_name)
     fake_yaml = double('fake_yaml')
     fake_configuration = instance_double('PGit::Configuration', to_yaml: fake_yaml)
-    fake_current_project = instance_double('PGit::CurrentProject',
+    @fake_current_project = instance_double('PGit::CurrentProject',
                                            commands: fake_commands)
 
     allow(PGit::Configuration).to receive(:new).
       and_return(fake_configuration)
     allow(PGit::CurrentProject).to receive(:new).
-      with(fake_yaml).and_return(fake_current_project)
+      with(fake_configuration).and_return(@fake_current_project)
     allow(PGit::Command).to receive(:new).
       with(existent_name, fake_steps).and_return(@fake_command)
 
@@ -53,6 +53,12 @@ describe 'PGit::Command::Application' do
   describe '#args' do
     it 'returns the args' do
       expect(@app.args).to eq @args
+    end
+  end
+
+  describe '#current_project' do
+    it 'return the current project' do
+      expect(@app.current_project).to eq @fake_current_project
     end
   end
 end

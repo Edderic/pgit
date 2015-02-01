@@ -2,35 +2,31 @@ require 'spec_helper'
 
 describe 'PGit::Command' do
   before { Rainbow.enabled = false }
+  describe '#to_save' do
+    xit 'need to write the test' do
+    end
+  end
+
+  describe '#project_key' do
+    xit 'pending' do
+    end
+  end
+
   describe '#remove!' do
-    it 'removes the given key from the current project' do
+    it 'removes the (optional) key-value pair from the current project' do
       name = "finish"
       steps = ["git checkout master", "git fetch"]
       command_hash = { name => steps }
-      old_commands_hash = {
-        "start" => ['echo hi', 'echo hello' ],
-      }
-      commands_hash = {
-        "start" => ['echo hi', 'echo hello' ],
-        "finish" => ["git checkout master", "git fetch"]
-      }
       fake_commands = double('hash', reject!: true)
       allow(fake_commands).to receive(:merge!).with(command_hash)
-      current_project = instance_double('PGit::CurrentProject', commands: fake_commands)
-      config_yaml = double('yaml')
-      fake_configuration = instance_double('PGit::Configuration', yaml: config_yaml)
-      allow(PGit::Configuration).to receive(:new).and_return(fake_configuration)
-      allow(PGit::CurrentProject).to receive(:new).with(config_yaml).and_return(current_project)
-      allow(current_project).to receive(:save)
+      current_project = instance_double('PGit::CurrentProject',
+                                        commands: fake_commands)
 
-      command = PGit::Command.new(name, steps)
+      command = PGit::Command.new(name, steps, current_project)
+      allow(current_project).to receive(:remove!).with(command)
       command.remove!
 
-      expect(fake_commands).to have_received(:reject!) do |k,v|
-        k == name
-      end
-
-      expect(current_project).to have_received(:save)
+      expect(current_project).to have_received(:remove!).with(command)
     end
   end
 
@@ -50,12 +46,9 @@ describe 'PGit::Command' do
       allow(fake_commands).to receive(:merge!).with(command_hash)
       current_project = instance_double('PGit::CurrentProject', commands: fake_commands)
       config_yaml = double('yaml')
-      fake_configuration = instance_double('PGit::Configuration', yaml: config_yaml)
-      allow(PGit::Configuration).to receive(:new).and_return(fake_configuration)
-      allow(PGit::CurrentProject).to receive(:new).with(config_yaml).and_return(current_project)
       allow(current_project).to receive(:save)
 
-      command = PGit::Command.new(name, steps)
+      command = PGit::Command.new(name, steps, current_project)
       command.save
 
       expect(current_project).to have_received(:save).with(command)
@@ -71,7 +64,9 @@ describe 'PGit::Command' do
       fake_second_step = "echo hello"
       name = "finish"
       steps = [fake_first_step, fake_second_step]
-      command = PGit::Command.new(name, steps)
+
+      fake_project = instance_double('PGit::CurrentProject')
+      command = PGit::Command.new(name, steps, fake_project)
       expected_hash = {
         "finish" => ["echo hi", "echo hello"],
         "start" => ["git checkout bla-123"]
@@ -90,7 +85,8 @@ describe 'PGit::Command' do
       fake_second_step = "echo hello"
       name = "finish"
       steps = [fake_first_step, fake_second_step]
-      command = PGit::Command.new(name, steps)
+      current_project = instance_double('PGit::CurrentProject')
+      command = PGit::Command.new(name, steps, current_project)
       expected_hash = {
         "finish" => ["echo hi", "echo hello"],
         "start" => ["git checkout bla-123"]
@@ -110,7 +106,8 @@ describe 'PGit::Command' do
       fake_second_step = "echo hello"
       name = "finish"
       steps = [fake_first_step, fake_second_step]
-      command = PGit::Command.new(name, steps)
+      current_project = instance_double('PGit::CurrentProject')
+      command = PGit::Command.new(name, steps, current_project)
       name = command.name
 
       expect(name).to eq "finish"
@@ -126,7 +123,8 @@ describe 'PGit::Command' do
       fake_second_step = "echo hello"
       steps = [fake_first_step, fake_second_step]
       name = "finish"
-      command = PGit::Command.new(name, steps)
+      current_project = instance_double('PGit::CurrentProject')
+      command = PGit::Command.new(name, steps, current_project)
       steps = command.steps
 
       expect(steps).to eq steps
@@ -149,7 +147,8 @@ describe 'PGit::Command' do
       fake_second_step = "echo hello"
       steps = [fake_first_step, fake_second_step]
       name = "finish"
-      command = PGit::Command.new(name, steps)
+      current_project = instance_double('PGit::CurrentProject')
+      command = PGit::Command.new(name, steps, current_project)
       string = command.to_s
 
       expect(string).to eq stringified
@@ -175,7 +174,8 @@ describe 'PGit::Command' do
       allow_any_instance_of(PGit::Command).to receive(:`).
         with(fake_second_step).and_return(fake_second_response)
       allow_any_instance_of(PGit::Command).to receive(:puts)
-      command = PGit::Command.new(name, steps)
+      current_project = instance_double('PGit::CurrentProject')
+      command = PGit::Command.new(name, steps, current_project)
 
       command.execute
 
@@ -197,7 +197,8 @@ describe 'PGit::Command' do
       allow_any_instance_of(PGit::Command).to receive(:puts)
       name = "finish"
       steps = [fake_command_step]
-      command = PGit::Command.new(name, steps)
+      current_project = instance_double('PGit::CurrentProject')
+      command = PGit::Command.new(name, steps, current_project)
 
       command.execute
 
@@ -213,7 +214,8 @@ describe 'PGit::Command' do
       name = "finish"
       message_to_be_executed = "About to execute 'echo hello'. Proceed? [Y/s/q]"
       steps = [fake_command_step]
-      command = PGit::Command.new(name, steps)
+      current_project = instance_double('PGit::CurrentProject')
+      command = PGit::Command.new(name, steps, current_project)
 
       command.execute
 
@@ -231,7 +233,8 @@ describe 'PGit::Command' do
         name = "finish"
         message_to_be_executed = "About to execute 'echo hello'. Proceed? [Y/s/q]"
         steps = [fake_command_step]
-        command = PGit::Command.new(name, steps)
+        current_project = instance_double('PGit::CurrentProject')
+        command = PGit::Command.new(name, steps, current_project)
 
         command.execute
 
@@ -250,7 +253,8 @@ describe 'PGit::Command' do
         name = "finish"
         message_to_be_executed = "Skipping..."
         steps = [fake_command_step]
-        command = PGit::Command.new(name, steps)
+        current_project = instance_double('PGit::CurrentProject')
+        command = PGit::Command.new(name, steps, current_project)
 
         command.execute
 
@@ -270,7 +274,8 @@ describe 'PGit::Command' do
         name = "finish"
         message_to_be_executed = "Quitting..."
         steps = [fake_first_step, fake_second_step]
-        command = PGit::Command.new(name, steps)
+        current_project = instance_double('PGit::CurrentProject')
+        command = PGit::Command.new(name, steps, current_project)
 
         command.execute
 
@@ -297,7 +302,8 @@ describe 'PGit::Command' do
 
         message = PGit::Helpers::Heredoc.remove_front_spaces(message)
         steps = [fake_command_step]
-        command = PGit::Command.new(name, steps)
+        current_project = instance_double('PGit::CurrentProject')
+        command = PGit::Command.new(name, steps, current_project)
 
         command.execute
 

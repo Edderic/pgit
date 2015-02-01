@@ -10,12 +10,14 @@ describe 'PGit::Command::Add' do
       args = []
       expected_message = "Command 'existent_command' already exists in the current project. If you want to update the command, see `pgit command update --help`"
       fake_command = instance_double('PGit::Command', name: name, steps: steps)
+      fake_project = instance_double('PGit::CurrentProject')
 
       fake_app = instance_double('PGit::Command::Application',
                                  commands: [fake_command],
                                  args: args,
                                  opts: opts,
-                                 global_opts: global_opts)
+                                 global_opts: global_opts,
+                                 current_project: fake_project)
 
       add = PGit::Command::Add.new(fake_app)
 
@@ -33,6 +35,7 @@ describe 'PGit::Command::Add' do
       opts = { name: non_existent_name, steps: non_existent_steps }
       args = []
       expected_message = "Successfully added command 'non_existent_command' to the current project!"
+      fake_project = instance_double('PGit::CurrentProject')
       fake_command = instance_double('PGit::Command',
                                      name: existent_name,
                                      steps: existent_steps,
@@ -43,13 +46,14 @@ describe 'PGit::Command::Add' do
                                      steps: non_existent_steps,
                                      save: nil)
 
-      allow(PGit::Command).to receive(:new).with(opts[:name], opts[:steps]).and_return(new_fake_command)
+      allow(PGit::Command).to receive(:new).with(opts[:name], opts[:steps], fake_project).and_return(new_fake_command)
 
       fake_app = instance_double('PGit::Command::Application',
                                  commands: [fake_command],
                                  args: args,
                                  opts: opts,
-                                 global_opts: global_opts)
+                                 global_opts: global_opts,
+                                 current_project: fake_project)
 
       add = PGit::Command::Add.new(fake_app)
       allow(add).to receive(:puts)

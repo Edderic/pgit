@@ -3,8 +3,7 @@ module PGit
     class Application
       attr_reader :commands, :global_opts, :opts, :args, :current_project
       def initialize(global_opts, opts, args)
-        config = PGit::Configuration.new
-        @current_project = PGit::CurrentProject.new(config.to_yaml)
+        @current_project = PGit::CurrentProject.new(PGit::Configuration.new)
         @global_opts = global_opts
         @args = args
         @opts = opts
