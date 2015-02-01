@@ -27,7 +27,7 @@ describe 'PGit::Command::Application' do
     allow(PGit::CurrentProject).to receive(:new).
       with(fake_configuration).and_return(@fake_current_project)
     allow(PGit::Command).to receive(:new).
-      with(existent_name, fake_steps).and_return(@fake_command)
+      with(existent_name, fake_steps, @fake_current_project).and_return(@fake_command)
 
     @app = SomeCommandApp.new(@global_opts, @opts, @args)
   end

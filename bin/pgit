@@ -62,7 +62,7 @@ command :cmd do |c|
                                      options,
                                      args)
 
-      show = PGit::CurrentProject::Command::Show.new(app)
+      show = PGit::Command::Show.new(app)
       show.execute!
     end
   end

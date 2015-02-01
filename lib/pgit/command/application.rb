@@ -15,7 +15,7 @@ module PGit
       def setup_commands
         @commands = []
         current_project.commands.each do |name, steps|
-          @commands << PGit::Command.new(name, steps)
+          @commands << PGit::Command.new(name, steps, current_project)
         end
       end
     end
