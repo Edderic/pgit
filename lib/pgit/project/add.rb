@@ -1,10 +1,13 @@
+require 'forwardable'
+
 module PGit
   module Project
     class Add
-      attr_reader :path
+      extend Forwardable
+      def_delegators :@app, :api_token, :path
 
-      def initialize(global_opts, opts, args)
-        @path = opts[:path] || Dir.pwd
+      def initialize(app)
+        @app = app
       end
     end
   end
