@@ -38,4 +38,21 @@ describe 'PGit::Project::Application' do
       expect(app.api_token).to eq :no_api_token_provided
     end
   end
+
+  describe '#id' do
+    it 'gets the id from the opts' do
+      fake_id = double('id')
+      global_opts, opts, args = {}, {id: fake_id}, []
+      app = PGit::Project::Application.new(global_opts, opts, args)
+
+      expect(app.id).to eq fake_id
+    end
+
+    it 'defaults to :no_id_provided' do
+      global_opts, opts, args = {}, {}, []
+      app = PGit::Project::Application.new(global_opts, opts, args)
+
+      expect(app.id).to eq :no_id_provided
+    end
+  end
 end

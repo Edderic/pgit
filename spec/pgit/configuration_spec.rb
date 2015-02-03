@@ -57,21 +57,6 @@ describe 'PGit::Configuration' do
     end
   end
 
-  # describe '#yaml=(some_hash)' do
-    # it 'sets the hash' do
-      # fake_validator = instance_double('PGit::Configuration::Validator')
-      # fake_yaml = { "some" => "hash" }
-      # allow(fake_validator).to receive(:yaml).and_return(fake_yaml)
-      # allow(PGit::Configuration::Validator).to receive(:new).with("~/.pgit.rc.yml").and_return fake_validator
-      # configuration = PGit::Configuration.new
-      # some_other_hash = { 'another' => 'hash' }
-      # configuration.yaml = some_other_hash
-      # config_yaml = configuration.yaml
-#
-      # expect(config_yaml).to eq some_other_hash
-    # end
-  # end
-
   describe '#projects' do
     it 'should return the projects' do
       fake_validator = instance_double('PGit::Configuration::Validator')

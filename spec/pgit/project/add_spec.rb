@@ -1,17 +1,14 @@
 require 'spec_helper'
 
 describe 'PGit::Project::Add' do
-  # describe 'when path is not given' do
-    # it 'defaults to the working directory' do
-      # app = instance_double('PGit::Project::Application')
-      # fake_path = double('fake_path')
-      # allow(Dir).to receive(:pwd).and_return(fake_path)
-#
-      # add = PGit::Project::Add.new(app)
-      # expect(add.path).to eq fake_path
-    # end
-  # end
-  #
+  describe 'user is on a project path that already exists' do
+    it 'raises an error' do
+      app = instance_double('PGit::Project::Application',
+                            has_project_path?: true)
+      expect{PGit::Project::Add.new(app)}.to raise_error(PGit::Error::User, 'Project path already exists')
+    end
+  end
+
   describe '#path' do
     it 'gets the path from app' do
       fake_path = double('path')
@@ -36,5 +33,9 @@ describe 'PGit::Project::Add' do
 
       expect(add.api_token).to eq fake_api_token
     end
+  end
+
+  describe '#execute!' do
+
   end
 end

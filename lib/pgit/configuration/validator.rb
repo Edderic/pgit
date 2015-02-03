@@ -4,9 +4,9 @@ module PGit
       attr_reader :yaml
 
       def initialize(config_path)
-        validate_existence_of_configuration(config_path)
-        validate_existence_of_at_least_one_project
-        validate_presence_of_items_in_each_project
+        # validate_existence_of_configuration(config_path)
+        # validate_existence_of_at_least_one_project
+        # validate_presence_of_items_in_each_project
       end
 
       private
