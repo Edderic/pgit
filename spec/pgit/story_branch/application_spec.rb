@@ -9,8 +9,7 @@ describe 'PGit::StoryBranch::Application' do
         opts = { start: 1234 }
         args = {}
         fake_story_branch = instance_double('PGit::StoryBranch')
-        fake_config_yaml = double('config_yaml')
-        fake_configuration = instance_double('PGit::Configuration', to_yaml: fake_config_yaml)
+        fake_configuration = instance_double('PGit::Configuration')
         allow(fake_story_branch).to receive(:start)
         fake_get_request_results = double('json_response')
         fake_story_id = double('fake_story_id')
@@ -19,7 +18,7 @@ describe 'PGit::StoryBranch::Application' do
         fake_story_class = class_double('PGit::Story', get: fake_get_request_results)
         fake_current_project = double('current_project')
         fake_name_parser = instance_double(PGit::StoryBranch::NameParser)
-        allow(PGit::CurrentProject).to receive(:new).with(fake_config_yaml).and_return(fake_current_project)
+        allow(PGit::CurrentProject).to receive(:new).with(fake_configuration).and_return(fake_current_project)
         allow(PGit::StoryBranch::NameParser).to receive(:new).with(fake_story).and_return(fake_name_parser)
         allow(PGit::Story).to receive(:get).with(1234, fake_current_project).and_return(fake_story)
         allow(PGit::StoryBranch).to receive(:new).with(fake_name_parser).and_return(fake_story_branch)
