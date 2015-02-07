@@ -26,28 +26,25 @@ module PGit
     end
 
     attr_accessor :projects
-    attr_reader :config_path
+    attr_reader :config_path, :expanded_path
 
     def initialize(config_path = '~/.pgit.rc.yml')
       @config_path = config_path
-      @validator = PGit::Configuration::Validator.new(config_path)
-      @yaml = @validator.yaml
-      @projects = @yaml["projects"]
+      @expanded_path = File.expand_path(config_path)
+      @hash = YAML::load_file(File.expand_path(config_path))
+      @projs = @hash.fetch("projects") { [] }
     end
 
-    def yaml
-      { 'projects' => projects }
+    def projects
+      @projs.map {|proj| PGit::Project.new(self, proj) }
     end
 
-    def save
-      expanded_path = File.expand_path(config_path)
-      f = File.open(expanded_path, 'w')
-
-      YAML.dump(yaml, f)
+    def to_hash
+      { 'projects' => projects.map { |proj| proj.to_hash } }
     end
 
-    def to_yaml
-      yaml
+    def save!
+      YAML.dump(to_hash, File.open(expanded_path, 'w'))
     end
   end
 end
