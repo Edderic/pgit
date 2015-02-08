@@ -41,6 +41,10 @@ module PGit
       remove_old_copy
     end
 
+    def exists?
+      configuration.projects.find {|p| p.path == path}
+    end
+
     private
 
     def remove_old_copy

@@ -348,4 +348,34 @@ describe 'PGit::Project' do
       expect(configuration.projects.size).to eq 0
     end
   end
+
+  describe '#exists?' do
+    it 'returns true if it is already in the configuration' do
+      matching_path = "/Therapy-Exercises-Online/some_other_project"
+      project = instance_double('PGit::Project', path: matching_path)
+      projects = [project]
+      configuration = instance_double('PGit::Configuration',
+                                      projects: projects,
+                                      save!: true)
+      proj = PGit::Project.new(configuration) do |p|
+        p["path"] = matching_path
+      end
+
+      expect(proj).to be_exists
+    end
+
+    it 'returns false if it is not in the configuration' do
+      matching_path = "/Therapy-Exercises-Online/some_other_project"
+      project = instance_double('PGit::Project', path: matching_path)
+      projects = [project]
+      configuration = instance_double('PGit::Configuration',
+                                      projects: projects,
+                                      save!: true)
+      proj = PGit::Project.new(configuration) do |p|
+        p["path"] = '/some/non-matching/path'
+      end
+
+      expect(proj).not_to be_exists
+    end
+  end
 end
