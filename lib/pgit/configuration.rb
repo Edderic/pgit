@@ -25,7 +25,6 @@ module PGit
       }
     end
 
-    attr_accessor :projects
     attr_reader :config_path, :expanded_path
 
     def initialize(config_path = '~/.pgit.rc.yml')
@@ -33,6 +32,10 @@ module PGit
       @expanded_path = File.expand_path(config_path)
       @hash = YAML::load_file(File.expand_path(config_path))
       @projs = @hash.fetch("projects") { [] }
+    end
+
+    def projects=(new_projects)
+      @projs = new_projects
     end
 
     def projects

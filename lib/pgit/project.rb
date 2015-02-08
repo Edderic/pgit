@@ -2,12 +2,11 @@ require 'pgit'
 
 module PGit
   class Project
-    attr_reader :path, :api_token, :id, :commands
+    attr_reader :path, :api_token, :id, :commands, :configuration
     def initialize(configuration=:no_config_provided,
-                   project_hash=:no_proj_hash_provided,
+                   proj={},
                    &block)
-      proj = Hash.new
-      block_given? ? yield(proj) : proj = project_hash
+      yield proj if block_given?
 
       @configuration = configuration
       @path = proj.fetch('path') { Dir.pwd }
@@ -27,8 +26,14 @@ module PGit
         "path" => path,
         "api_token" => api_token,
         "id" => id,
-        "commands" => @commands.map {|cmd| puts cmd.to_hash; cmd.to_hash}
+        "commands" => @commands.map {|cmd| cmd.to_hash}
       }
+    end
+
+    def save!
+      configuration.projects.reject! {|p| p.path == path}
+      configuration.projects << self
+      configuration.save!
     end
 
     private
