@@ -10,8 +10,8 @@ module PGit
 
       @configuration = configuration
       @path = proj.fetch('path') { Dir.pwd }
-      @api_token = proj.fetch('api_token')
-      @id = proj.fetch('id')
+      @api_token = proj.fetch('api_token') { :no_api_token_provided }
+      @id = proj.fetch('id') { :no_id_provided }
       @commands = build_commands(proj.fetch('commands') { Array.new })
     end
 
@@ -31,6 +31,9 @@ module PGit
     end
 
     def save!
+      raise PGit::Error::User, api_token if api_token == :no_api_token_provided
+      raise PGit::Error::User, id if id == :no_id_provided
+
       remove_old_copy { configuration.projects << self }
     end
 

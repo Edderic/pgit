@@ -263,6 +263,70 @@ describe 'PGit::Project' do
       expect(configuration.projects.first.id).to eq 54321
       expect(configuration.projects.size).to eq 1
     end
+
+    it 'raises an error if id does not exist' do
+      command = "command1"
+      steps = ["step1", "step2"]
+      command_hash = { command => steps }
+      old_project = instance_double('PGit::Project',
+                                    'path'=>"/Therapy-Exercises-Online/some_other_project",
+                                    'id'=> 12345,
+                                    'api_token'=> 'astoeuh',
+                                    'commands'=> [command_hash])
+      new_project = instance_double('PGit::Project',
+                                    'path'=>"/Therapy-Exercises-Online/some_other_project",
+                                    'id'=> 54321,
+                                    'api_token'=> 'astoeuh',
+                                    'commands'=> [command_hash])
+
+      projects = [old_project]
+      configuration = instance_double('PGit::Configuration',
+                                      projects: projects,
+                                      "projects=".to_sym => :success,
+                                      save!: :successful_save)
+
+      new_projs = [new_project]
+      allow(configuration).to receive(:projects=).with(new_projs)
+
+      proj = PGit::Project.new(configuration) do |p|
+        p["path"] = old_project.path
+        p["api_token"] = old_project.api_token
+      end
+
+      expect{proj.save!}.to raise_error(PGit::Error::User, :no_id_provided)
+    end
+
+    it 'raises an error if api_token does not exist' do
+      command = "command1"
+      steps = ["step1", "step2"]
+      command_hash = { command => steps }
+      old_project = instance_double('PGit::Project',
+                                    'path'=>"/Therapy-Exercises-Online/some_other_project",
+                                    'id'=> 12345,
+                                    'api_token'=> 'astoeuh',
+                                    'commands'=> [command_hash])
+      new_project = instance_double('PGit::Project',
+                                    'path'=>"/Therapy-Exercises-Online/some_other_project",
+                                    'id'=> 54321,
+                                    'api_token'=> 'astoeuh',
+                                    'commands'=> [command_hash])
+
+      projects = [old_project]
+      configuration = instance_double('PGit::Configuration',
+                                      projects: projects,
+                                      "projects=".to_sym => :success,
+                                      save!: :successful_save)
+
+      new_projs = [new_project]
+      allow(configuration).to receive(:projects=).with(new_projs)
+
+      proj = PGit::Project.new(configuration) do |p|
+        p["path"] = old_project.path
+        p["id"] = old_project.id
+      end
+
+      expect{proj.save!}.to raise_error(PGit::Error::User, :no_api_token_provided)
+    end
   end
 
   describe '#remove!' do
