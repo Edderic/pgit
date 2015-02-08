@@ -30,12 +30,12 @@ module PGit
     def initialize(config_path = '~/.pgit.rc.yml')
       @config_path = config_path
       @expanded_path = File.expand_path(config_path)
-      @hash = YAML::load_file(File.expand_path(config_path))
+      @hash = YAML::load_file(@expanded_path)
       @projs = @hash.fetch("projects") { [] }
     end
 
     def projects=(new_projects)
-      @projs = new_projects
+      @projs = new_projects.map {|p| p.to_hash}
     end
 
     def projects

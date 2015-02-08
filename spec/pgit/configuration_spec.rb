@@ -64,10 +64,10 @@ describe 'PGit::Configuration' do
 
   describe '#projects=(some projects)' do
     it 'should set the projects' do
-      proj1 = instance_double('PGit::Project')
-      proj2 = instance_double('PGit::Project')
       proj_hash1 = instance_double('Hash')
       proj_hash2 = instance_double('Hash')
+      proj1 = instance_double('PGit::Project', path: 'proj1/path', to_hash: proj_hash1)
+      proj2 = instance_double('PGit::Project', path: 'proj2/path', to_hash: proj_hash2)
       expanded_path = "/some/path/to/.pgit.rc.yml"
       projects = [proj1, proj2]
       project_hashes = [proj_hash1, proj_hash2]
@@ -85,7 +85,8 @@ describe 'PGit::Configuration' do
 
       configuration.projects = projects
 
-      expect(configuration.projects).to eq projects
+      expect(configuration.projects.first.path).to eq 'proj1/path'
+      expect(configuration.projects[1].path).to eq 'proj2/path'
     end
   end
 
