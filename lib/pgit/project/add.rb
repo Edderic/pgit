@@ -9,7 +9,11 @@ module PGit
       def initialize(app)
         @app = app
 
-        raise PGit::Error::User, 'Project path already exists' if app.has_project_path?
+        raise PGit::Error::User, 'Project path already exists. See `pgit proj update --help.`' if app.exists?
+      end
+
+      def execute!
+        @app.save!
       end
     end
   end

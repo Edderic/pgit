@@ -4,38 +4,20 @@ describe 'PGit::Project::Add' do
   describe 'user is on a project path that already exists' do
     it 'raises an error' do
       app = instance_double('PGit::Project::Application',
-                            has_project_path?: true)
-      expect{PGit::Project::Add.new(app)}.to raise_error(PGit::Error::User, 'Project path already exists')
-    end
-  end
-
-  describe '#path' do
-    it 'gets the path from app' do
-      fake_path = double('path')
-      fake_api_token = double('api_token')
-      app = instance_double('PGit::Project::Application',
-                            api_token: fake_api_token,
-                            path: fake_path)
-      add = PGit::Project::Add.new(app)
-
-      expect(add.path).to eq fake_path
-    end
-  end
-
-  describe '#api_token' do
-    it 'gets the api_token from app' do
-      fake_api_token = double('api_token')
-      fake_path = double('path')
-      app = instance_double('PGit::Project::Application',
-                            api_token: fake_api_token,
-                            path: fake_path)
-      add = PGit::Project::Add.new(app)
-
-      expect(add.api_token).to eq fake_api_token
+                            exists?: true)
+      expect{PGit::Project::Add.new(app)}.to raise_error(PGit::Error::User, 'Project path already exists. See `pgit proj update --help.`')
     end
   end
 
   describe '#execute!' do
+    it 'instantiates a project and saves it' do
+      app = instance_double('PGit::Project::Application',
+                            exists?: false)
+      add = PGit::Project::Add.new(app)
+      allow(app).to receive(:save!)
+      add.execute!
 
+      expect(app).to have_received(:save!)
+    end
   end
 end
