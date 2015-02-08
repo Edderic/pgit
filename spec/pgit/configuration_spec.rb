@@ -26,6 +26,8 @@ describe 'PGit::Configuration' do
       expanded_path = "/some/path/to/.pgit.rc.yml"
       config_path = '~/.pgit.rc.yml'
       allow(File).to receive(:expand_path).with(config_path).and_return(expanded_path)
+      file = instance_double('File', close: nil)
+      allow(File).to receive(:new).with(expanded_path, 'w').and_return(file)
       allow(YAML).to receive(:load_file).with(expanded_path).and_return(false)
 
       configuration = PGit::Configuration.new
@@ -42,6 +44,8 @@ describe 'PGit::Configuration' do
       expanded_path = "/some/path/to/.pgit.rc.yml"
       config_path = '~/.pgit.rc.yml'
       allow(File).to receive(:expand_path).with(config_path).and_return(expanded_path)
+      file = instance_double('File', close: nil)
+      allow(File).to receive(:new).with(expanded_path, 'w').and_return(file)
       allow(YAML).to receive(:load_file).with(expanded_path).and_return(hash)
 
       configuration = PGit::Configuration.new
@@ -63,6 +67,8 @@ describe 'PGit::Configuration' do
 
       config_path = '~/.pgit.rc.yml'
       allow(File).to receive(:expand_path).with(config_path).and_return(expanded_path)
+      file = instance_double('File', close: nil)
+      allow(File).to receive(:new).with(expanded_path, 'w').and_return(file)
 
       allow(YAML).to receive(:load_file).with(expanded_path).and_return(yaml)
 
@@ -88,6 +94,8 @@ describe 'PGit::Configuration' do
 
       config_path = '~/.pgit.rc.yml'
       allow(File).to receive(:expand_path).with(config_path).and_return(expanded_path)
+      file = instance_double('File', close: nil)
+      allow(File).to receive(:new).with(expanded_path, 'w').and_return(file)
 
       allow(YAML).to receive(:load_file).with(expanded_path).and_return(yaml)
 
@@ -115,12 +123,12 @@ describe 'PGit::Configuration' do
       yaml = { 'projects' => project_hashes }
 
       config_path = '~/.pgit.rc.yml'
-      config_file = instance_double('File', write: 1)
       allow(File).to receive(:expand_path).with(config_path).and_return(expanded_path)
-      allow(File).to receive(:open).with(expanded_path, 'w').and_return(config_file)
+      file = instance_double('File', close: nil)
+      allow(File).to receive(:new).with(expanded_path, 'w').and_return(file)
 
       allow(YAML).to receive(:load_file).with(expanded_path).and_return(yaml)
-      allow(YAML).to receive(:dump).with(yaml, config_file).and_return(yaml)
+      allow(YAML).to receive(:dump).with(yaml, file).and_return(yaml)
 
       configuration = PGit::Configuration.new
 
@@ -130,7 +138,7 @@ describe 'PGit::Configuration' do
       configuration.projects = projects
       configuration.save!
 
-      expect(YAML).to have_received(:dump).with(yaml, config_file)
+      expect(YAML).to have_received(:dump).with(yaml, file)
     end
   end
 end

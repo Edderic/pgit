@@ -25,11 +25,12 @@ module PGit
       }
     end
 
-    attr_reader :config_path, :expanded_path, :yaml
+    attr_reader :config_path, :file, :yaml
 
     def initialize(config_path = '~/.pgit.rc.yml')
       @config_path = config_path
       @expanded_path = File.expand_path(config_path)
+      @file = File.new(@expanded_path, 'w')
       @yaml = YAML::load_file(@expanded_path) || {}
       @projs = @yaml.fetch("projects") { [] }
     end
@@ -47,9 +48,8 @@ module PGit
     end
 
     def save!
-      f = File.open(expanded_path, 'w')
-      YAML.dump(to_hash, f)
-      f.close
+      YAML.dump(to_hash, file)
+      file.close
     end
   end
 end
