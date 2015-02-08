@@ -47,7 +47,9 @@ module PGit
     end
 
     def save!
-      YAML.dump(to_hash, File.open(expanded_path, 'w'))
+      f = File.open(expanded_path, 'w')
+      YAML.dump(to_hash, f)
+      f.close
     end
   end
 end
