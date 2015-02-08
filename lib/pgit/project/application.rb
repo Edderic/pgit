@@ -1,15 +1,17 @@
+require 'forwardable'
 
 module PGit
   class Project
     class Application
-      attr_reader :path, :api_token, :id
+      extend Forwardable
+      def_delegators :@project, :exists?, :save!
       def initialize(global_opts, opts, args)
-        @path = opts.fetch(:path) { Dir.pwd }
-        @api_token = opts.fetch(:api_token) { :no_api_token_provided }
-        @id = opts.fetch(:id) { :no_id_provided }
-      end
-
-      def has_project_path?
+        config = PGit::Configuration.new
+        @project = PGit::Project.new(config) do |p|
+          p["path"] = opts["path"]
+          p["api_token"] = opts["api_token"]
+          p["id"] = opts["id"]
+        end
       end
     end
   end

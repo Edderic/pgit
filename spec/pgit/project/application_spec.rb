@@ -1,58 +1,35 @@
 require 'spec_helper'
 
 describe 'PGit::Project::Application' do
-  describe '#path' do
-    it 'defaults to the current directory if not provided' do
-      fake_api_token = double('fake_api_token')
-      fake_path = double('fake_path')
-      global_opts, opts, args = {}, { api_token: fake_api_token }, []
-      allow(Dir).to receive(:pwd).and_return(fake_path)
+  describe '#exists?' do
+    it 'delegates to @project' do
+      global_opts = {}
+      opts = { 'path' => '/some/path',
+               'api_token' => 'someapitoken1234',
+               'id' => 12345}
+      args = []
+      configuration = instance_double('PGit::Configuration')
+      allow(PGit::Configuration).to receive(:new).and_return(configuration)
+      project_exists = double('response')
+      allow_any_instance_of(PGit::Project).to receive(:exists?).and_return(project_exists)
       app = PGit::Project::Application.new(global_opts, opts, args)
 
-      expect(app.path).to eq fake_path
+      expect(app.exists?).to eq project_exists
     end
 
-    it 'gets the directory of interest from opts' do
-      fake_path = double('fake_path')
-      fake_api_token = double('fake_api_token')
-      global_opts, opts, args = {}, { path: fake_path, api_token: fake_api_token }, []
+    it 'delegates to @project' do
+      global_opts = {}
+      opts = { 'path' => '/some/path',
+               'api_token' => 'someapitoken1234',
+               'id' => 12345}
+      args = []
+      configuration = instance_double('PGit::Configuration')
+      allow(PGit::Configuration).to receive(:new).and_return(configuration)
+      project_save = double('response')
+      allow_any_instance_of(PGit::Project).to receive(:save!).and_return(project_save)
       app = PGit::Project::Application.new(global_opts, opts, args)
 
-      expect(app.path).to eq fake_path
-    end
-  end
-
-  describe '#api_token' do
-    it 'gets api_token from opts' do
-      api_token = double('api_token')
-      global_opts, opts, args = {}, { api_token: api_token }, []
-      app = PGit::Project::Application.new(global_opts, opts, args)
-
-      expect(app.api_token).to eq api_token
-    end
-
-    it 'defaults to :no_api_token_provided' do
-      global_opts, opts, args = {}, {}, []
-      app = PGit::Project::Application.new(global_opts, opts, args)
-
-      expect(app.api_token).to eq :no_api_token_provided
-    end
-  end
-
-  describe '#id' do
-    it 'gets the id from the opts' do
-      fake_id = double('id')
-      global_opts, opts, args = {}, {id: fake_id}, []
-      app = PGit::Project::Application.new(global_opts, opts, args)
-
-      expect(app.id).to eq fake_id
-    end
-
-    it 'defaults to :no_id_provided' do
-      global_opts, opts, args = {}, {}, []
-      app = PGit::Project::Application.new(global_opts, opts, args)
-
-      expect(app.id).to eq :no_id_provided
+      expect(app.save!).to eq project_save
     end
   end
 end
