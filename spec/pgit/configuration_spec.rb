@@ -21,6 +21,19 @@ describe 'PGit::Configuration' do
     end
   end
 
+  describe '#yaml' do
+    it 'defaults to empty hash if configuration does not exist' do
+      expanded_path = "/some/path/to/.pgit.rc.yml"
+      config_path = '~/.pgit.rc.yml'
+      allow(File).to receive(:expand_path).with(config_path).and_return(expanded_path)
+      allow(YAML).to receive(:load_file).with(expanded_path).and_return(false)
+
+      configuration = PGit::Configuration.new
+
+      expect(configuration.yaml).to eq Hash.new
+    end
+  end
+
   describe '#to_hash' do
     it 'returns the hash' do
       fake_validator = instance_double('PGit::Configuration::Validator')
