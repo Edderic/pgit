@@ -31,12 +31,20 @@ module PGit
     end
 
     def save!
-      configuration.projects.reject! {|p| p.path == path}
-      configuration.projects << self
-      configuration.save!
+      remove_old_copy { configuration.projects << self }
+    end
+
+    def remove!
+      remove_old_copy
     end
 
     private
+
+    def remove_old_copy
+      configuration.projects.reject! {|p| p.path == path}
+      yield if block_given?
+      configuration.save!
+    end
 
     def build_commands(cmds)
       cmds.map do |cmd|

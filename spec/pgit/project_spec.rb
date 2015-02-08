@@ -264,4 +264,24 @@ describe 'PGit::Project' do
       expect(configuration.projects.size).to eq 1
     end
   end
+
+  describe '#remove!' do
+    it 'removes the project' do
+      matching_path = "/Therapy-Exercises-Online/some_other_project"
+      project_hash =  { "path" => matching_path,
+                        "id" => 12345,
+                        "api_token" => "astoeuh",
+                        "commands" => [] }
+      project = instance_double('PGit::Project', path: matching_path)
+      projects = [project]
+      configuration = instance_double('PGit::Configuration',
+                                      projects: projects,
+                                      save!: true)
+      proj = PGit::Project.new(configuration, project_hash)
+
+      proj.remove!
+
+      expect(configuration.projects.size).to eq 0
+    end
+  end
 end
