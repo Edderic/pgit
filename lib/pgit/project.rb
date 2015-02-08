@@ -9,9 +9,9 @@ module PGit
       yield proj if block_given?
 
       @configuration = configuration
-      @path = proj.fetch('path') { Dir.pwd }
-      @api_token = proj.fetch('api_token') { :no_api_token_provided }
-      @id = proj.fetch('id') { :no_id_provided }
+      @path = proj['path'] || Dir.pwd
+      @api_token = proj['api_token'] || :no_api_token_provided
+      @id = proj['id'] || :no_id_provided
       @commands = build_commands(proj.fetch('commands') { Array.new })
     end
 
@@ -34,7 +34,7 @@ module PGit
       raise PGit::Error::User, api_token if api_token == :no_api_token_provided
       raise PGit::Error::User, id if id == :no_id_provided
 
-      remove_old_copy { configuration.projects << self }
+      remove_old_copy { configuration.projects = configuration.projects << self }
     end
 
     def remove!
