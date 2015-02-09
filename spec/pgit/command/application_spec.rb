@@ -14,13 +14,13 @@ describe 'PGit::Command::Application' do
 
     fake_steps = ["git fetch origin master",
                   "git push origin :STORY_BRANCH"]
-    fake_commands = { existent_name => fake_steps }
     fake_command_string = double('fake_command_string')
     @fake_command = instance_double('PGit::Command', to_s: fake_command_string, name: existent_name)
+    @fake_commands = [@fake_command]
     fake_yaml = double('fake_yaml')
     fake_configuration = instance_double('PGit::Configuration', to_yaml: fake_yaml)
     @fake_current_project = instance_double('PGit::CurrentProject',
-                                           commands: fake_commands)
+                                           commands: @fake_commands)
 
     allow(PGit::Configuration).to receive(:new).
       and_return(fake_configuration)
@@ -34,7 +34,7 @@ describe 'PGit::Command::Application' do
 
   describe '#commands' do
     it 'returns the commands' do
-      expect(@app.commands).to eq [@fake_command]
+      expect(@app.commands).to eq @fake_commands
     end
   end
 
