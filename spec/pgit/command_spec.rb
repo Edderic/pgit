@@ -7,7 +7,6 @@ describe 'PGit::Command' do
     it 'removes the (optional) key-value pair from the current project' do
       name = "finish"
       steps = ["git checkout master", "git fetch"]
-      command_hash = { name => steps }
       fake_commands = instance_double('Array', reject!: nil, :<< => nil)
       current_project = instance_double('PGit::CurrentProject',
                                         commands: fake_commands,
@@ -26,7 +25,6 @@ describe 'PGit::Command' do
     it 'saves the command if the key does not exist for the current project' do
       name = "finish"
       steps = ["git checkout master", "git fetch"]
-      command_hash = { name => steps }
       fake_commands = instance_double('Array', reject!: nil, :<< => nil)
       current_project = instance_double('PGit::CurrentProject',
                                         commands: fake_commands,
