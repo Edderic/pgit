@@ -30,7 +30,7 @@ module PGit
       end
 
       def check_command_exists_for_add
-        raise PGit::Error::User.new "Command '#{name}' already exists in the current project. If you want to update the command, see `pgit command update --help`" if exists?
+        raise PGit::Error::User.new "Command '#{name}' already exists in the current project. If you want to update the command, see `pgit cmd edit --help`" if exists?
       end
     end
   end

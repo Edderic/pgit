@@ -13,7 +13,7 @@ module PGit
       end
 
       def execute!
-        error_message = "No commands are listed for this project. Run `pgit command add --help` for more info."
+        error_message = "No commands are listed for this project. Run `pgit cmd add --help` for more info."
         raise PGit::Error::User, error_message if commands.empty?
 
         if search.empty?
