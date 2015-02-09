@@ -12,7 +12,7 @@ module PGit
       @path = proj['path'] || Dir.pwd
       @api_token = proj['api_token'] || :no_api_token_provided
       @id = proj['id'] || :no_id_provided
-      @cmds = build_commands(proj.fetch('commands') { Array.new })
+      @cmds = proj.fetch('commands') { Array.new }
     end
 
     [:id, :path, :api_token].each do |method_name|
@@ -26,7 +26,7 @@ module PGit
     end
 
     def commands
-      @cmds
+      build_commands(@cmds)
     end
 
     def to_hash
@@ -63,7 +63,11 @@ module PGit
 
     def build_commands(cmds)
       cmds.map do |cmd|
-        cmd.map { |k,v| PGit::Command.new(k, v, self) }.first
+        if cmd.respond_to?(:name) && cmd.respond_to?(:steps)
+          cmd
+        else
+          cmd.map { |k,v| PGit::Command.new(k, v, self) }.first
+        end
       end
     end
   end

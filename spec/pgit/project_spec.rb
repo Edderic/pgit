@@ -7,6 +7,8 @@ describe 'PGit::Project' do
       command = instance_double('PGit::Command')
       command_name = 'command_name'
       command_steps = ['subcommand1', 'subcommand2']
+      new_command = instance_double('PGit::Command', name: command_name,
+                                                     steps: command_steps)
       project_hash =  { "path" => "/Therapy-Exercises-Online/some_other_project",
                         "id" => 12345,
                         "api_token" => "astoeuh",
@@ -15,9 +17,9 @@ describe 'PGit::Project' do
       allow(PGit::Command).to receive(:new).and_return(command)
       configuration = instance_double('PGit::Configuration')
       proj = PGit::Project.new(configuration, project_hash)
-      proj.commands = [some_other_proj]
+      proj.commands = [new_command]
 
-      expect(proj.commands.first).to eq some_other_proj
+      expect(proj.commands.first).to eq new_command
     end
   end
 
