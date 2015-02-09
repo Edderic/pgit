@@ -46,7 +46,7 @@ describe 'PGit::Command::Remove' do
       global_opts = {}
       opts = { name: non_existent_name }
       args = []
-      expected_message = "Cannot remove a command that does not exist in the current project. See `pgit command add --help` if you want to add a new command"
+      expected_message = "Cannot remove a command that does not exist in the current project. See `pgit cmd add --help` if you want to add a new command"
       project = instance_double('PGit::CurrentProject')
       fake_command = instance_double('PGit::Command',
                                      name: existent_name,
