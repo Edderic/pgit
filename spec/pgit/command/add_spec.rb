@@ -39,12 +39,12 @@ describe 'PGit::Command::Add' do
       fake_command = instance_double('PGit::Command',
                                      name: existent_name,
                                      steps: existent_steps,
-                                     save: nil)
+                                     save!: nil)
 
       new_fake_command = instance_double('PGit::Command',
                                      name: non_existent_name,
                                      steps: non_existent_steps,
-                                     save: nil)
+                                     save!: nil)
 
       allow(PGit::Command).to receive(:new).with(opts[:name], opts[:steps], fake_project).and_return(new_fake_command)
 
@@ -60,7 +60,7 @@ describe 'PGit::Command::Add' do
 
       add.execute!
 
-      expect(new_fake_command).to have_received(:save)
+      expect(new_fake_command).to have_received(:save!)
       expect(add).to have_received(:puts).with(expected_message)
     end
   end

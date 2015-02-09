@@ -16,7 +16,7 @@ module PGit
       def execute!
         check_command_exists_for_add
 
-        command.save
+        command.save!
         display_success_msg(:added, :to)
       end
 
