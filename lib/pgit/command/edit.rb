@@ -29,7 +29,7 @@ module PGit
       end
 
       def check_command_exists_for_update
-        raise PGit::Error::User.new "Cannot edit a command that does not exist in the current project. See `pgit command add --help` if you want to add a new command" unless exists?
+        raise PGit::Error::User.new "Cannot edit a command that does not exist in the current project. See `pgit cmd add --help` if you want to add a new command" unless exists?
       end
     end
   end

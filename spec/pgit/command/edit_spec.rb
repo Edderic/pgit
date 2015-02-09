@@ -35,7 +35,7 @@ describe 'PGit::Command::Edit' do
       global_opts = {}
       opts = { name: non_existent_name, steps: non_existent_steps }
       args = []
-      expected_message = "Cannot edit a command that does not exist in the current project. See `pgit command add --help` if you want to add a new command"
+      expected_message = "Cannot edit a command that does not exist in the current project. See `pgit cmd add --help` if you want to add a new command"
       fake_command = instance_double('PGit::Command',
                                      name: existent_name,
                                      steps: existent_steps,
