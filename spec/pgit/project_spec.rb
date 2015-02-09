@@ -13,7 +13,6 @@ describe 'PGit::Project' do
                         "id" => 12345,
                         "api_token" => "astoeuh",
                         "commands" => [{'command_name' => command_steps }] }
-      some_other_proj = instance_double('PGit::Project')
       allow(PGit::Command).to receive(:new).and_return(command)
       configuration = instance_double('PGit::Configuration')
       proj = PGit::Project.new(configuration, project_hash)
