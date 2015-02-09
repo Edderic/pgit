@@ -9,11 +9,13 @@ describe 'PGit::Command::Add' do
       opts = { name: name, steps: steps }
       args = []
       expected_message = "Command 'existent_command' already exists in the current project. If you want to update the command, see `pgit command update --help`"
+      new_command = instance_double('PGit::Command', name: name, steps: steps)
       fake_command = instance_double('PGit::Command', name: name, steps: steps)
       fake_project = instance_double('PGit::CurrentProject')
 
       fake_app = instance_double('PGit::Command::Application',
                                  commands: [fake_command],
+                                 command: new_command,
                                  args: args,
                                  opts: opts,
                                  global_opts: global_opts,
@@ -46,10 +48,9 @@ describe 'PGit::Command::Add' do
                                      steps: non_existent_steps,
                                      save!: nil)
 
-      allow(PGit::Command).to receive(:new).with(opts[:name], opts[:steps], fake_project).and_return(new_fake_command)
-
       fake_app = instance_double('PGit::Command::Application',
                                  commands: [fake_command],
+                                 command: new_fake_command,
                                  args: args,
                                  opts: opts,
                                  global_opts: global_opts,

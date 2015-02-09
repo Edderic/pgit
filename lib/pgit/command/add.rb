@@ -1,16 +1,15 @@
 require 'forwardable'
+require 'pry-byebug'
 
 module PGit
   class Command
     class Add
       extend Forwardable
-      def_delegators :@app, :commands, :args, :global_opts, :opts, :current_project
-      def_delegators :@command, :name
+      def_delegators :@app, :commands, :command, :args, :global_opts, :opts, :current_project
+      def_delegators :command, :name
 
-      attr_reader :command
       def initialize(app)
         @app = app
-        @command = PGit::Command.new(opts.fetch(:name), opts.fetch(:steps), current_project)
       end
 
       def execute!
