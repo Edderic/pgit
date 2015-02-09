@@ -10,8 +10,8 @@ module PGit
         configuration = PGit::Configuration.new
         @current_project = PGit::CurrentProject.new(configuration)
         @global_opts = global_opts
-        @command = PGit::Command.new(opts.fetch("name"),
-                                     opts.fetch("steps") { :no_steps_provided},
+        @command = PGit::Command.new(opts.fetch("name") { :no_name_provided },
+                                     opts.fetch("steps") { :no_steps_provided },
                                      @current_project)
         @args = args
         @opts = opts
