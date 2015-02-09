@@ -11,16 +11,19 @@ describe 'PGit::Command::Remove' do
       expected_message = "Successfully removed command 'existent_command' from the current project!"
       fake_command = instance_double('PGit::Command', name: name,
                                                       steps: steps,
-                                                      save: nil,
+                                                      save!: nil,
                                                       remove!: nil)
+
+      project = instance_double('PGit::CurrentProject')
 
       fake_app = instance_double('PGit::Command::Application',
                                  commands: [fake_command],
                                  args: args,
                                  opts: opts,
-                                 global_opts: global_opts)
+                                 global_opts: global_opts,
+                                 current_project: project)
 
-      allow(PGit::Command).to receive(:new).with(name, ['fake_steps']).and_return(fake_command)
+      allow(PGit::Command).to receive(:new).with(name, ['fake_steps'], project).and_return(fake_command)
       remove = PGit::Command::Remove.new(fake_app)
       allow(remove).to receive(:puts).with(expected_message)
       remove.execute!
@@ -39,23 +42,25 @@ describe 'PGit::Command::Remove' do
       opts = { name: non_existent_name }
       args = []
       expected_message = "Cannot remove a command that does not exist in the current project. See `pgit command add --help` if you want to add a new command"
+      project = instance_double('PGit::CurrentProject')
       fake_command = instance_double('PGit::Command',
                                      name: existent_name,
                                      steps: existent_steps,
-                                     save: nil)
+                                     save!: nil)
 
       new_fake_command = instance_double('PGit::Command',
                                      name: non_existent_name,
                                      steps: non_existent_steps,
-                                     save: nil)
+                                     save!: nil)
 
-      allow(PGit::Command).to receive(:new).with(opts[:name], ['fake_steps']).and_return(new_fake_command)
+      allow(PGit::Command).to receive(:new).with(opts[:name], ['fake_steps'], project).and_return(new_fake_command)
 
       fake_app = instance_double('PGit::Command::Application',
                                  commands: [fake_command],
                                  args: args,
                                  opts: opts,
-                                 global_opts: global_opts)
+                                 global_opts: global_opts,
+                                 current_project: project)
 
       remove = PGit::Command::Remove.new(fake_app)
 
