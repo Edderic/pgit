@@ -13,11 +13,16 @@ describe 'PGit::Command::Remove' do
                                                       steps: steps,
                                                       save!: nil,
                                                       remove!: nil)
+      new_command = instance_double('PGit::Command', name: name,
+                                                      steps: steps,
+                                                      save!: nil,
+                                                      remove!: nil)
 
       project = instance_double('PGit::CurrentProject')
 
       fake_app = instance_double('PGit::Command::Application',
                                  commands: [fake_command],
+                                 command: new_command,
                                  args: args,
                                  opts: opts,
                                  global_opts: global_opts,
@@ -25,7 +30,7 @@ describe 'PGit::Command::Remove' do
 
       allow(PGit::Command).to receive(:new).with(name, ['fake_steps'], project).and_return(fake_command)
       remove = PGit::Command::Remove.new(fake_app)
-      allow(remove).to receive(:puts).with(expected_message)
+      allow(remove).to receive(:puts)
       remove.execute!
 
       expect(remove).to have_received(:puts).with(expected_message)
@@ -56,6 +61,7 @@ describe 'PGit::Command::Remove' do
       allow(PGit::Command).to receive(:new).with(opts[:name], ['fake_steps'], project).and_return(new_fake_command)
 
       fake_app = instance_double('PGit::Command::Application',
+                                 command: new_fake_command,
                                  commands: [fake_command],
                                  args: args,
                                  opts: opts,
