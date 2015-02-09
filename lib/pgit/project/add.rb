@@ -14,6 +14,7 @@ module PGit
 
       def execute!
         @app.save!
+        puts "Successfully added the project!"
       end
     end
   end

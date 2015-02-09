@@ -15,9 +15,11 @@ describe 'PGit::Project::Add' do
                             exists?: false)
       add = PGit::Project::Add.new(app)
       allow(app).to receive(:save!)
+      allow(add).to receive(:puts).with("Successfully added the project!")
       add.execute!
 
       expect(app).to have_received(:save!)
+      expect(add).to have_received(:puts).with("Successfully added the project!")
     end
   end
 end
