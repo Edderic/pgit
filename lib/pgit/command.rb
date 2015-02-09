@@ -53,12 +53,15 @@ module PGit
       steps.inject(Rainbow("#{name}:\n").bright) {|accum, step| accum + "  #{step}\n" }
     end
 
-    def save
-      current_project.save(self)
+    def save!
+      current_project.commands.reject! {|cmd| cmd.name == name}
+      current_project.commands = current_project.commands << self
+      current_project.save!
     end
 
     def remove!
-      current_project.remove!(self)
+      current_project.commands.reject! {|cmd| cmd.name == name}
+      current_project.save!
     end
 
     private

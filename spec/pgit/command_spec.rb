@@ -2,56 +2,42 @@ require 'spec_helper'
 
 describe 'PGit::Command' do
   before { Rainbow.enabled = false }
-  describe '#to_save' do
-    xit 'need to write the test' do
-    end
-  end
-
-  describe '#project_key' do
-    xit 'pending' do
-    end
-  end
 
   describe '#remove!' do
     it 'removes the (optional) key-value pair from the current project' do
       name = "finish"
       steps = ["git checkout master", "git fetch"]
       command_hash = { name => steps }
-      fake_commands = double('hash', reject!: true)
-      allow(fake_commands).to receive(:merge!).with(command_hash)
+      fake_commands = instance_double('Array', reject!: nil, :<< => nil)
       current_project = instance_double('PGit::CurrentProject',
-                                        commands: fake_commands)
+                                        commands: fake_commands,
+                                        save!: nil)
 
       command = PGit::Command.new(name, steps, current_project)
       allow(current_project).to receive(:remove!).with(command)
       command.remove!
 
-      expect(current_project).to have_received(:remove!).with(command)
+      expect(current_project.commands).to have_received(:reject!)
+      expect(current_project).to have_received(:save!)
     end
   end
 
-  describe '#save' do
+  describe '#save!' do
     it 'saves the command if the key does not exist for the current project' do
       name = "finish"
       steps = ["git checkout master", "git fetch"]
       command_hash = { name => steps }
-      old_commands_hash = {
-        "start" => ['echo hi', 'echo hello' ],
-      }
-      commands_hash = {
-        "start" => ['echo hi', 'echo hello' ],
-        "finish" => ["git checkout master", "git fetch"]
-      }
-      fake_commands = double('hash')
-      allow(fake_commands).to receive(:merge!).with(command_hash)
-      current_project = instance_double('PGit::CurrentProject', commands: fake_commands)
-      config_yaml = double('yaml')
-      allow(current_project).to receive(:save)
+      fake_commands = instance_double('Array', reject!: nil, :<< => nil)
+      current_project = instance_double('PGit::CurrentProject',
+                                        commands: fake_commands,
+                                        :commands= => nil)
+      allow(current_project).to receive(:save!)
 
       command = PGit::Command.new(name, steps, current_project)
-      command.save
+      command.save!
 
-      expect(current_project).to have_received(:save).with(command)
+      expect(current_project.commands).to have_received(:reject!)
+      expect(current_project).to have_received(:save!)
     end
   end
 
