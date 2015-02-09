@@ -1,5 +1,4 @@
 require 'forwardable'
-require 'pry-byebug'
 
 module PGit
   class Command

@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'byebug'
 
 describe 'PGit::Project' do
   describe '#commands=' do
