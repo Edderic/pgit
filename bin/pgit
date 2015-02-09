@@ -199,13 +199,9 @@ on_error do |exception|
 
   # Error logic here
   # return false to skip default error handling
-  if exception.class.ancestors.include?(PGit::Error)
-    warn Rainbow("error: #{exception}").color(:red)
-    exception.backtrace.each { |e| warn Rainbow(e).color(:red) } if TRACE
-    exit 1
-  else
-    true
-  end
+  warn Rainbow("error: #{exception}").color(:red)
+  exception.backtrace.each { |e| warn Rainbow(e).color(:red) } if TRACE
+  exit 1
 end
 
 exit run(ARGV)
