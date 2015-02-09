@@ -25,14 +25,19 @@ module PGit
       }
     end
 
-    attr_reader :config_path, :file, :yaml
+    attr_reader :config_path, :yaml
 
     def initialize(config_path = '~/.pgit.rc.yml')
       @config_path = config_path
       @expanded_path = File.expand_path(config_path)
-      @file = File.new(@expanded_path, 'w')
       @yaml = YAML::load_file(@expanded_path) || {}
       @projs = @yaml.fetch("projects") { [] }
+    rescue Exception => e
+      if e.message.match(/No such file or directory/)
+        f = File.new(@expanded_path, 'w');
+        f.close
+        retry
+      end
     end
 
     def projects=(new_projects)
@@ -48,6 +53,7 @@ module PGit
     end
 
     def save!
+      file = File.new(@expanded_path, 'w')
       YAML.dump(to_hash, file)
       file.close
     end
