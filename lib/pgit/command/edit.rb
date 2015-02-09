@@ -4,19 +4,17 @@ module PGit
   class Command
     class Edit
       extend Forwardable
-      def_delegators :@app, :commands, :args, :global_opts, :opts
-      def_delegators :@command, :name
+      def_delegators :@app, :commands, :command,  :args, :global_opts, :opts
+      def_delegators :command, :name
 
-      attr_reader :command
       def initialize(app)
         @app = app
-        @command = PGit::Command.new(opts.fetch(:name), opts.fetch(:steps))
       end
 
       def execute!
         check_command_exists_for_update
 
-        command.save
+        command.save!
         display_success_msg
       end
 

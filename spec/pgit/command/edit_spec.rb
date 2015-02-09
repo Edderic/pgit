@@ -9,15 +9,15 @@ describe 'PGit::Command::Edit' do
       opts = { name: name, steps: steps }
       args = []
       expected_message = "Successfully edited command 'existent_command' of the current project!"
-      fake_command = instance_double('PGit::Command', name: name, steps: steps, save: nil)
+      fake_command = instance_double('PGit::Command', name: name, steps: steps, save!: nil)
 
       fake_app = instance_double('PGit::Command::Application',
+                                 command: fake_command,
                                  commands: [fake_command],
                                  args: args,
                                  opts: opts,
                                  global_opts: global_opts)
 
-      allow(PGit::Command).to receive(:new).with(name, steps).and_return(fake_command)
       edit = PGit::Command::Edit.new(fake_app)
       allow(edit).to receive(:puts).with(expected_message)
       edit.execute!
@@ -39,16 +39,15 @@ describe 'PGit::Command::Edit' do
       fake_command = instance_double('PGit::Command',
                                      name: existent_name,
                                      steps: existent_steps,
-                                     save: nil)
+                                     save!: nil)
 
       new_fake_command = instance_double('PGit::Command',
                                      name: non_existent_name,
                                      steps: non_existent_steps,
-                                     save: nil)
-
-      allow(PGit::Command).to receive(:new).with(opts[:name], opts[:steps]).and_return(new_fake_command)
+                                     save!: nil)
 
       fake_app = instance_double('PGit::Command::Application',
+                                 command: new_fake_command,
                                  commands: [fake_command],
                                  args: args,
                                  opts: opts,
