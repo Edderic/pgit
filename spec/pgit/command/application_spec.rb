@@ -10,11 +10,14 @@ describe 'PGit::Command::Application' do
   before do
     existent_name = 'existent_name'
     some_other_existent_name = 'some_other_existent_name'
-    @global_opts, @opts, @args = [], [], [existent_name]
+    new_name = 'new_name'
+    new_steps = ['echo step1', 'echo step2']
+    @global_opts, @opts, @args = {}, { 'name' => new_name, 'steps' => new_steps}, [existent_name]
 
     fake_steps = ["git fetch origin master",
                   "git push origin :STORY_BRANCH"]
     fake_command_string = double('fake_command_string')
+    @new_command = instance_double('PGit::Command', name: new_name, steps: new_steps)
     @fake_command = instance_double('PGit::Command', to_s: fake_command_string, name: existent_name)
     @fake_commands = [@fake_command]
     fake_yaml = double('fake_yaml')
@@ -28,6 +31,8 @@ describe 'PGit::Command::Application' do
       with(fake_configuration).and_return(@fake_current_project)
     allow(PGit::Command).to receive(:new).
       with(existent_name, fake_steps, @fake_current_project).and_return(@fake_command)
+    allow(PGit::Command).to receive(:new).
+      with(new_name, new_steps, @fake_current_project).and_return(@new_command)
 
     @app = SomeCommandApp.new(@global_opts, @opts, @args)
   end
@@ -59,6 +64,12 @@ describe 'PGit::Command::Application' do
   describe '#current_project' do
     it 'return the current project' do
       expect(@app.current_project).to eq @fake_current_project
+    end
+  end
+
+  describe '#command' do
+    it 'returns the command' do
+      expect(@app.command).to eq @new_command
     end
   end
 end
