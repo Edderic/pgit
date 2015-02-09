@@ -1,6 +1,26 @@
 require 'spec_helper'
+require 'byebug'
 
 describe 'PGit::Project' do
+  describe '#commands=' do
+    it 'sets the commands' do
+      command = instance_double('PGit::Command')
+      command_name = 'command_name'
+      command_steps = ['subcommand1', 'subcommand2']
+      project_hash =  { "path" => "/Therapy-Exercises-Online/some_other_project",
+                        "id" => 12345,
+                        "api_token" => "astoeuh",
+                        "commands" => [{'command_name' => command_steps }] }
+      some_other_proj = instance_double('PGit::Project')
+      allow(PGit::Command).to receive(:new).and_return(command)
+      configuration = instance_double('PGit::Configuration')
+      proj = PGit::Project.new(configuration, project_hash)
+      proj.commands = [some_other_proj]
+
+      expect(proj.commands.first).to eq some_other_proj
+    end
+  end
+
   describe '#commands' do
     it 'returns the commands if they exist' do
       command = instance_double('PGit::Command')
@@ -242,13 +262,26 @@ describe 'PGit::Project' do
                                     'commands'=> [command_hash])
 
       projects = [old_project]
-      configuration = instance_double('PGit::Configuration',
-                                      projects: projects,
-                                      "projects=".to_sym => :success,
-                                      save!: :successful_save)
 
-      new_projs = [new_project]
-      allow(configuration).to receive(:projects=).with(new_projs)
+      class SomeConfig
+        def initialize(fake_proj)
+          @projs = [] << fake_proj
+        end
+
+        def projects
+          @projs
+        end
+
+        def projects=(projArr)
+          @projs = projArr
+        end
+
+        def save!
+        end
+      end
+
+      configuration = SomeConfig.new(old_project)
+      allow(configuration).to receive(:save!)
 
       proj = PGit::Project.new(configuration) do |p|
         p["path"] = old_project.path
@@ -337,10 +370,26 @@ describe 'PGit::Project' do
                         "api_token" => "astoeuh",
                         "commands" => [] }
       project = instance_double('PGit::Project', path: matching_path)
-      projects = [project]
-      configuration = instance_double('PGit::Configuration',
-                                      projects: projects,
-                                      save!: true)
+
+      class SomeConfig
+        def initialize(fake_proj)
+          @projs = [] << fake_proj
+        end
+
+        def projects
+          @projs
+        end
+
+        def projects=(projArr)
+          @projs = projArr
+        end
+
+        def save!
+        end
+      end
+
+      configuration = SomeConfig.new(project)
+      allow(configuration).to receive(:save!)
       proj = PGit::Project.new(configuration, project_hash)
 
       proj.remove!

@@ -2,7 +2,7 @@ require 'pgit'
 
 module PGit
   class Project
-    attr_reader :path, :api_token, :id, :commands, :configuration
+    attr_reader :path, :api_token, :id, :configuration
     def initialize(configuration=:no_config_provided,
                    proj={},
                    &block)
@@ -12,7 +12,7 @@ module PGit
       @path = proj['path'] || Dir.pwd
       @api_token = proj['api_token'] || :no_api_token_provided
       @id = proj['id'] || :no_id_provided
-      @commands = build_commands(proj.fetch('commands') { Array.new })
+      @cmds = build_commands(proj.fetch('commands') { Array.new })
     end
 
     [:id, :path, :api_token].each do |method_name|
@@ -21,12 +21,20 @@ module PGit
       end
     end
 
+    def commands=(some_commands)
+      @cmds = some_commands
+    end
+
+    def commands
+      @cmds
+    end
+
     def to_hash
       {
         "path" => path,
         "api_token" => api_token,
         "id" => id,
-        "commands" => @commands.map {|cmd| cmd.to_hash}
+        "commands" => commands.map {|cmd| cmd.to_hash}
       }
     end
 
@@ -48,7 +56,7 @@ module PGit
     private
 
     def remove_old_copy
-      configuration.projects.reject! {|p| p.path == path}
+      configuration.projects = configuration.projects.reject {|p| p.path == path}
       yield if block_given?
       configuration.save!
     end
