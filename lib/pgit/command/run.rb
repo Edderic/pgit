@@ -5,11 +5,9 @@ module PGit
     class Run
       extend Forwardable
       def_delegators :@app, :commands, :args, :global_opts, :opts, :current_project
-      attr_reader :command
 
       def initialize(app)
         @app = app
-        @command = PGit::Command.new(search, opts.fetch(:steps) { :no_steps_provided }, current_project)
       end
 
       def execute!
