@@ -36,7 +36,7 @@ command :proj do |p|
 
     a.desc "the id associated to the Pivotal Tracker project"
     a.arg_name '12030405'
-    a.flag :d, :id, required: true
+    a.flag :d, :id
 
     a.desc "the filepath that is going to be associated to the Pivotal Tracker and Git project"
     a.arg_name '"/some/file/path"'
@@ -44,7 +44,7 @@ command :proj do |p|
 
     a.desc "your Pivotal Tracker API token"
     a.arg_name "token"
-    a.flag :t, :api_token, required: true
+    a.flag :t, :api_token
 
     a.action do |global_options,options,args|
       app = PGit::Project::Application.new(global_options, options, args)
