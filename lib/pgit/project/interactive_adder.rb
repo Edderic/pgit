@@ -1,9 +1,11 @@
 require 'forwardable'
+require 'pgit'
+
 module PGit
   class Project
     class InteractiveAdder
       extend Forwardable
-      def_delegators :@project, :api_token, :id, :save!
+      def_delegators :@project, :api_token, :id, :save!, :configuration
       attr_reader :project
 
       def initialize(project)
@@ -19,8 +21,19 @@ module PGit
 
       def gather(var_name, proper_value, question)
         if @project.send(var_name) == proper_value
-          puts question
-          @project.send("#{var_name}=", STDIN.gets.chomp)
+          if configuration.projects.any?
+            question1 = 'There is at least one project saved in the configuration file. Do you want to reuse a project id? [Y/n]'
+            puts question1
+            if STDIN.gets.chomp.letter?('y')
+              projects = configuration.projects
+              ids = projects.map_with_index {|proj, i| "#{i}. path: #{proj.path}, id: #{proj.id}"}
+              ids.inject("Which one?") {|accum, item| accum + "#{item}\n"}
+            else
+            end
+          else
+            puts question
+            @project.send("#{var_name}=", STDIN.gets.chomp)
+          end
         end
       end
 
