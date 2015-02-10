@@ -2,6 +2,7 @@ require 'pgit'
 
 module PGit
   class Project
+    attr_writer :api_token, :id
     attr_reader :path, :api_token, :id, :configuration
     def initialize(configuration=:no_config_provided,
                    proj={},

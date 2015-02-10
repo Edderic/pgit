@@ -11,14 +11,18 @@ describe 'PGit::Project::Add' do
 
   describe '#execute!' do
     it 'instantiates a project and saves it' do
+      project = instance_double('PGit::Project')
       app = instance_double('PGit::Project::Application',
-                            exists?: false)
+                            exists?: false,
+                            project: project)
+      adder = instance_double('PGit::Project::InteractiveAdder', save!: true)
+      allow(PGit::Project::InteractiveAdder).to receive(:new).with(project).and_return(adder)
       add = PGit::Project::Add.new(app)
-      allow(app).to receive(:save!)
       allow(add).to receive(:puts).with("Successfully added the project!")
+
       add.execute!
 
-      expect(app).to have_received(:save!)
+      expect(adder).to have_received(:save!)
       expect(add).to have_received(:puts).with("Successfully added the project!")
     end
   end

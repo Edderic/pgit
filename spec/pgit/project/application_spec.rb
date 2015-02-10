@@ -32,4 +32,20 @@ describe 'PGit::Project::Application' do
       expect(app.save!).to eq project_save
     end
   end
+
+  describe '#project' do
+    it 'returns the project' do
+      global_opts = {}
+      opts = { 'path' => '/some/path',
+               'api_token' => 'someapitoken1234',
+               'id' => 12345}
+      args = []
+      proj = instance_double('PGit::Project')
+      allow(PGit::Project).to receive(:new).and_return(proj)
+
+      app = PGit::Project::Application.new(global_opts, opts, args)
+      expect(app.project).to eq proj
+    end
+  end
 end
+
