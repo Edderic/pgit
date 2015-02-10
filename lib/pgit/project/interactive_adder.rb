@@ -8,18 +8,30 @@ module PGit
 
       def initialize(project)
         @project = project
+      end
 
-        if api_token == :no_api_token_provided
+      def gather_missing_data
+        gather_api_token
+        gather_id
+      end
 
-          puts "What's the Pivotal Tracker API token? (See 'Profile' section at http://pivotaltracker.com)"
-          @project.api_token = STDIN.gets.chomp
+      private
+
+      def gather(var_name, proper_value, question)
+        if @project.send(var_name) == proper_value
+          puts question
+          @project.send("#{var_name}=", STDIN.gets.chomp)
         end
+      end
 
-        if id == :no_id_provided
+      def gather_api_token
+        question = "What's the Pivotal Tracker API token (See http://pivotaltracker.com/profile)?"
+        gather('api_token', :no_api_token_provided, question)
+      end
 
-          puts "What's the id of this project (i.e. https://www.pivotaltracker.com/n/projects/XXXX wher XXXX is the id)?"
-          @project.id = STDIN.gets.chomp
-        end
+      def gather_id
+        question =  "What's the id of this project (i.e. https://www.pivotaltracker.com/n/projects/XXXX where XXXX is the id)?"
+        gather('id', :no_id_provided, question)
       end
     end
   end

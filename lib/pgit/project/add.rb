@@ -15,6 +15,7 @@ module PGit
       end
 
       def execute!
+        @adder.gather_missing_data
         @adder.save!
         puts "Successfully added the project!"
       end
