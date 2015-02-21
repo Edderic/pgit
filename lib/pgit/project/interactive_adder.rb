@@ -14,7 +14,7 @@ module PGit
         @project = app.project
       end
 
-      def gather_missing_data
+      def execute!
         gather_api_token
         gather_id
       end
