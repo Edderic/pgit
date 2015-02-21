@@ -1,38 +1,51 @@
 require 'spec_helper'
+require 'byebug'
+
 describe 'PGit::Project::InteractiveAdder.new(proj)' do
   describe 'api_token does not exist' do
     it 'asks what the api token associated for the project is' do
       question = "What's the Pivotal Tracker API token (See http://pivotaltracker.com/profile)?"
-      proj = instance_double('PGit::Project', api_token: :no_api_token_provided,
+      projects = []
+      project = instance_double('PGit::Project', api_token: :no_api_token_provided,
                                               id: 12345)
+
+      app = instance_double('PGit::Project::Application',
+                            projects: projects,
+                            project: project)
       allow_any_instance_of(PGit::Project::InteractiveAdder).to receive(:puts).with(question)
       api_token = 'SOMEAPITOKEN'
       response = instance_double('String', chomp: api_token)
       allow(STDIN).to receive(:gets).and_return(response)
-      allow(proj).to receive(:api_token=).with(api_token)
-      adder = PGit::Project::InteractiveAdder.new(proj)
+      allow(project).to receive(:api_token=).with(api_token)
+      adder = PGit::Project::InteractiveAdder.new(app)
       adder.gather_missing_data
 
       expect(adder).to have_received(:puts).with(question)
-      expect(proj).to have_received(:api_token=).with(api_token)
+      expect(project).to have_received(:api_token=).with(api_token)
     end
   end
 
   describe 'id does not exist' do
     it 'asks what the id associated for the project is' do
       question = "What's the id of this project (i.e. https://www.pivotaltracker.com/n/projects/XXXX where XXXX is the id)?"
-      proj = instance_double('PGit::Project', id: :no_id_provided,
+      projects = []
+      project = instance_double('PGit::Project', id: :no_id_provided,
                                               api_token: '12349798072thstueohoheu')
+      allow(project).to receive(:id=)
+      app = instance_double('PGit::Project::Application',
+                            projects: projects,
+                            project: project)
       allow_any_instance_of(PGit::Project::InteractiveAdder).to receive(:puts).with(question)
-      id = 12345678
-      response = instance_double('String', chomp: id)
+      api_token = 'SOMEAPITOKEN'
+      response = instance_double('String', chomp: api_token)
       allow(STDIN).to receive(:gets).and_return(response)
-      allow(proj).to receive(:id=).with(id)
-      adder = PGit::Project::InteractiveAdder.new(proj)
+      allow(project).to receive(:api_token=).with(api_token)
+      adder = PGit::Project::InteractiveAdder.new(app)
       adder.gather_missing_data
 
       expect(adder).to have_received(:puts).with(question)
-      expect(proj).to have_received(:id=).with(id)
+      byebug
+      expect(project).to have_received(:id=).with(id)
     end
 
     describe 'user already has a project somewhere' do

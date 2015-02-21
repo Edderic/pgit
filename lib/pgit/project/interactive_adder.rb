@@ -5,11 +5,13 @@ module PGit
   class Project
     class InteractiveAdder
       extend Forwardable
-      def_delegators :@project, :api_token, :id, :save!, :configuration
+      def_delegators :@project, :api_token, :id, :save!
+      def_delegators :@app, :project, :projects
       attr_reader :project
 
-      def initialize(project)
-        @project = project
+      def initialize(app)
+        @app = app
+        @project = app.project
       end
 
       def gather_missing_data
@@ -21,11 +23,10 @@ module PGit
 
       def gather(var_name, proper_value, question)
         if @project.send(var_name) == proper_value
-          if configuration.projects.any?
+          if projects.any?
             question1 = 'There is at least one project saved in the configuration file. Do you want to reuse a project id? [Y/n]'
             puts question1
             if STDIN.gets.chomp.letter?('y')
-              projects = configuration.projects
               ids = projects.map_with_index {|proj, i| "#{i}. path: #{proj.path}, id: #{proj.id}"}
               ids.inject("Which one?") {|accum, item| accum + "#{item}\n"}
             else
