@@ -40,6 +40,7 @@ command :proj do |p|
 
     a.desc "the filepath that is going to be associated to the Pivotal Tracker and Git project"
     a.arg_name '"/some/file/path"'
+    a.default_value Dir.pwd
     a.flag :p, :path
 
     a.desc "your Pivotal Tracker API token"
