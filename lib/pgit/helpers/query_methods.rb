@@ -7,21 +7,21 @@ module PGit
         end
       end
 
-      def not_provided(attribute)
-        "no_#{attribute}_provided".to_sym
+      def not_given(attribute)
+        "no_#{attribute}_given".to_sym
       end
 
-      def ensure_provided_queries
-        given_attrs.each {|attr| ensure_provided_attr(attr) }
+      def ensure_given_queries
+        given_attrs.each {|attr| ensure_given_attr(attr) }
       end
 
-      def ensure_provided_attrs(*attributes)
-        attributes.each { |attr| ensure_provided_attr(attr) }
+      def ensure_given_attrs(*attributes)
+        attributes.each { |attr| ensure_given_attr(attr) }
       end
 
-      def ensure_provided_attr(attribute)
+      def ensure_given_attr(attribute)
         attr = send(attribute)
-        raise PGit::Error::User, attr if attr == not_provided(attribute)
+        raise PGit::Error::User, attr if attr == not_given(attribute)
       end
 
       def attr_query(*args)
@@ -30,7 +30,7 @@ module PGit
       end
 
       def set_default_attr(attribute)
-        set_attr(attribute) { not_provided(attribute) }
+        set_attr(attribute) { not_given(attribute) }
       end
 
       def set_default_attrs(*attributes)
@@ -56,7 +56,7 @@ module PGit
       def attr_given(args)
         args.each do |item|
           define_method "given_#{item}?" do
-            instance_variable_get("@#{item}") != not_provided(item)
+            instance_variable_get("@#{item}") != not_given(item)
           end
         end
       end

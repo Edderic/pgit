@@ -9,7 +9,7 @@ module PGit
     attr_reader :path, :api_token, :id, :configuration
     attr_query :id, :path, :api_token
 
-    def initialize(configuration=:no_config_provided,
+    def initialize(configuration=:no_config_given,
                    proj={},
                    &block)
       yield self if block_given?
@@ -37,7 +37,7 @@ module PGit
     end
 
     def save!
-      ensure_provided_queries
+      ensure_given_queries
 
       remove_old_copy { configuration.projects = configuration.projects << self }
     end
