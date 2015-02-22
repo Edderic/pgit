@@ -185,6 +185,8 @@ pre do |global,command,options,args|
   # chosen command
   # Use skips_pre before a command to skip this block
   # on that command only
+  # $trace = true if global.fetch(:trace)
+  $trace = true if global.fetch(:trace)
   Rainbow.enabled = global.fetch(:color)
   true
 end
@@ -196,12 +198,10 @@ post do |global,command,options,args|
 end
 
 on_error do |exception|
-  TRACE = ARGV.include?('--trace')
-
   # Error logic here
   # return false to skip default error handling
   warn Rainbow("error: #{exception}").color(:red)
-  exception.backtrace.each { |e| warn Rainbow(e).color(:red) } if TRACE
+  exception.backtrace.each { |e| warn Rainbow(e).color(:red) } if $trace
   exit 1
 end
 
