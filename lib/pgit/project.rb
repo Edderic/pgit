@@ -13,7 +13,7 @@ module PGit
                    proj={},
                    &block)
       yield self if block_given?
-      @proj_hash = proj
+      @query_hash = proj
       @configuration = configuration
       @cmds = proj.fetch('commands') { Array.new }
       set_default_queries
