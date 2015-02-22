@@ -41,6 +41,12 @@ module PGit
         given_attrs.each {|attr| set_default_attr(attr) }
       end
 
+      # attributes that have been set to default values
+      def defaulted_attrs
+        given_attrs.reject {|attr| send("given_#{attr}?")}
+      end
+
+      # attributes that have corresponding #given_attr? methods
       def given_attrs
         methods.grep(/^given_.+\?$/).map { |m| m.to_s.gsub(/^given_/, '').gsub(/\?$/, '')}
       end
