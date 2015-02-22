@@ -42,6 +42,7 @@ module PGit
     def save!
       ensure_provided(:api_token)
       ensure_provided(:id)
+      ensure_provided(:path)
 
       remove_old_copy { configuration.projects = configuration.projects << self }
     end

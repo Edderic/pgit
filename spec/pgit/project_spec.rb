@@ -387,6 +387,38 @@ describe 'PGit::Project' do
 
       expect{proj.save!}.to raise_error(PGit::Error::User, :no_api_token_provided)
     end
+
+    it 'raises an error if path does not exist' do
+      command = "command1"
+      steps = ["step1", "step2"]
+      command_hash = { command => steps }
+      old_project = instance_double('PGit::Project',
+                                    'path'=>"/Therapy-Exercises-Online/some_other_project",
+                                    'id'=> 12345,
+                                    'api_token'=> 'astoeuh',
+                                    'commands'=> [command_hash])
+      new_project = instance_double('PGit::Project',
+                                    'path'=>"/Therapy-Exercises-Online/some_other_project",
+                                    'id'=> 54321,
+                                    'api_token'=> 'astoeuh',
+                                    'commands'=> [command_hash])
+
+      projects = [old_project]
+      configuration = instance_double('PGit::Configuration',
+                                      projects: projects,
+                                      "projects=".to_sym => :success,
+                                      save!: :successful_save)
+
+      new_projs = [new_project]
+      allow(configuration).to receive(:projects=).with(new_projs)
+
+      proj = PGit::Project.new(configuration) do |p|
+        p.id = old_project.id
+        p.api_token = old_project.api_token
+      end
+
+      expect{proj.save!}.to raise_error(PGit::Error::User, :no_path_provided)
+    end
   end
 
   describe '#remove!' do
