@@ -1,9 +1,11 @@
 require 'pgit'
+require 'byebug'
 
 module PGit
   class Project
     attr_writer :api_token, :id
     attr_reader :path, :api_token, :id, :configuration
+
     def initialize(configuration=:no_config_provided,
                    proj={},
                    &block)
@@ -11,8 +13,8 @@ module PGit
 
       @configuration = configuration
       @path = proj['path'] || Dir.pwd
-      @api_token = proj['api_token'] || :no_api_token_provided
-      @id = proj['id'] || :no_id_provided
+      @api_token = proj['api_token'] || not_provided(:api_token)
+      @id = proj['id'] || not_provided(:id)
       @cmds = proj.fetch('commands') { Array.new }
     end
 
@@ -24,7 +26,7 @@ module PGit
 
     [:api_token, :id].each do |item|
       define_method "given_#{item}?" do
-        instance_variable_get("@#{item}") != "no_#{item}_provided".to_sym
+        instance_variable_get("@#{item}") != not_provided(item)
       end
     end
 
@@ -46,8 +48,8 @@ module PGit
     end
 
     def save!
-      raise PGit::Error::User, api_token if api_token == :no_api_token_provided
-      raise PGit::Error::User, id if id == :no_id_provided
+      ensure_provided(:api_token)
+      ensure_provided(:id)
 
       remove_old_copy { configuration.projects = configuration.projects << self }
     end
@@ -61,6 +63,15 @@ module PGit
     end
 
     private
+
+    def ensure_provided(attribute)
+      attr = send(attribute)
+      raise PGit::Error::User, attr if attr == not_provided(attribute)
+    end
+
+    def not_provided(attribute)
+      "no_#{attribute}_provided".to_sym
+    end
 
     def remove_old_copy
       configuration.projects = configuration.projects.reject {|p| p.path == path}
