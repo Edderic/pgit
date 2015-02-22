@@ -17,9 +17,9 @@ module PGit
       yield self if block_given?
       @proj_hash = proj
       @configuration = configuration
-      set_attr('path') { Dir.pwd }
-      set_attr('api_token') { not_provided(:api_token) }
-      set_attr('id') { not_provided(:id) }
+      set_attr(:path) { Dir.pwd }
+      set_attr(:api_token) { not_provided(:api_token) }
+      set_attr(:id) { not_provided(:id) }
       @cmds = proj.fetch('commands') { Array.new }
     end
 

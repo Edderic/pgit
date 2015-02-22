@@ -3,7 +3,7 @@ module PGit
     module QueryMethods
       def set_attr(attribute)
         unless instance_variable_get("@#{attribute}")
-          instance_variable_set("@#{attribute}", @proj_hash[attribute] || yield)
+          instance_variable_set("@#{attribute}", @proj_hash[attribute.to_s] || yield)
         end
       end
 
