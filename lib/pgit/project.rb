@@ -3,18 +3,18 @@ require 'byebug'
 
 module PGit
   class Project
-    attr_writer :api_token, :id
+    attr_writer :api_token, :id, :path
     attr_reader :path, :api_token, :id, :configuration
 
     def initialize(configuration=:no_config_provided,
                    proj={},
                    &block)
-      yield proj if block_given?
-
+      yield self if block_given?
+      @proj_hash = proj
       @configuration = configuration
-      @path = proj['path'] || Dir.pwd
-      @api_token = proj['api_token'] || not_provided(:api_token)
-      @id = proj['id'] || not_provided(:id)
+      set_attr('path') { Dir.pwd }
+      set_attr('api_token') { not_provided(:api_token) }
+      set_attr('id') { not_provided(:id) }
       @cmds = proj.fetch('commands') { Array.new }
     end
 
@@ -63,6 +63,11 @@ module PGit
     end
 
     private
+    def set_attr(attribute)
+      unless instance_variable_get("@#{attribute}")
+        instance_variable_set("@#{attribute}", @proj_hash[attribute] || yield)
+      end
+    end
 
     def ensure_provided(attribute)
       attr = send(attribute)

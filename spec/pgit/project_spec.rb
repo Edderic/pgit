@@ -9,8 +9,9 @@ describe 'PGit::Project' do
 
     it 'should return true if api_token is provided' do
       proj = PGit::Project.new do |p|
-        p['api_token'] = 'someapitoken'
+        p.api_token = 'someapitoken'
       end
+
       expect(proj).to be_given_api_token
     end
   end
@@ -23,7 +24,7 @@ describe 'PGit::Project' do
 
     it 'should return true if api_token is provided' do
       proj = PGit::Project.new do |p|
-        p['id'] = 'someid'
+        p.id = 'someid'
       end
       expect(proj).to be_given_id
     end
@@ -95,8 +96,8 @@ describe 'PGit::Project' do
       id = 12345
       allow(Dir).to receive(:pwd).and_return(fake_path)
       proj = PGit::Project.new(configuration) do |p|
-        p["api_token"] = api_token
-        p["id"] = id
+        p.api_token = api_token
+        p.id = id
       end
 
       expect(proj.path).to eq fake_path
@@ -208,10 +209,10 @@ describe 'PGit::Project' do
       configuration = instance_double('PGit::Configuration')
 
       proj = PGit::Project.new(configuration) do |p|
-        p["path"] = path
-        p["api_token"] = api_token
-        p["id"] = id
-        p["commands"] = commands
+        p.path = path
+        p.api_token = api_token
+        p.id = id
+        p.commands = commands
       end
 
       expect(proj.path).to eq path
@@ -261,9 +262,9 @@ describe 'PGit::Project' do
       allow(configuration).to receive(:projects=).with(new_projs)
 
       proj = PGit::Project.new(configuration) do |p|
-        p["path"] = new_project.path
-        p["api_token"] = new_project.api_token
-        p["id"] = 54321
+        p.path = new_project.path
+        p.api_token = new_project.api_token
+        p.id = 54321
       end
 
       proj.save!
@@ -312,9 +313,9 @@ describe 'PGit::Project' do
       allow(configuration).to receive(:save!)
 
       proj = PGit::Project.new(configuration) do |p|
-        p["path"] = old_project.path
-        p["api_token"] = old_project.api_token
-        p["id"] = 54321
+        p.path = old_project.path
+        p.api_token = old_project.api_token
+        p.id = 54321
       end
 
       proj.save!
@@ -350,8 +351,8 @@ describe 'PGit::Project' do
       allow(configuration).to receive(:projects=).with(new_projs)
 
       proj = PGit::Project.new(configuration) do |p|
-        p["path"] = old_project.path
-        p["api_token"] = old_project.api_token
+        p.path = old_project.path
+        p.api_token = old_project.api_token
       end
 
       expect{proj.save!}.to raise_error(PGit::Error::User, :no_id_provided)
@@ -382,8 +383,8 @@ describe 'PGit::Project' do
       allow(configuration).to receive(:projects=).with(new_projs)
 
       proj = PGit::Project.new(configuration) do |p|
-        p["path"] = old_project.path
-        p["id"] = old_project.id
+        p.path = old_project.path
+        p.id = old_project.id
       end
 
       expect{proj.save!}.to raise_error(PGit::Error::User, :no_api_token_provided)
@@ -435,7 +436,7 @@ describe 'PGit::Project' do
                                       projects: projects,
                                       save!: true)
       proj = PGit::Project.new(configuration) do |p|
-        p["path"] = matching_path
+        p.path = matching_path
       end
 
       expect(proj).to be_exists
@@ -449,7 +450,7 @@ describe 'PGit::Project' do
                                       projects: projects,
                                       save!: true)
       proj = PGit::Project.new(configuration) do |p|
-        p["path"] = '/some/non-matching/path'
+        p.path = '/some/non-matching/path'
       end
 
       expect(proj).not_to be_exists
