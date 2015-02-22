@@ -7,8 +7,7 @@ module PGit
 
     attr_writer :api_token, :id, :path
     attr_reader :path, :api_token, :id, :configuration
-    attr_has :id, :path, :api_token
-    attr_given :id, :api_token
+    attr_query :id, :path, :api_token
 
     def initialize(configuration=:no_config_provided,
                    proj={},
@@ -16,10 +15,8 @@ module PGit
       yield self if block_given?
       @proj_hash = proj
       @configuration = configuration
-      set_attr(:path) { not_provided(:path) }
-      set_attr(:api_token) { not_provided(:api_token) }
-      set_attr(:id) { not_provided(:id) }
       @cmds = proj.fetch('commands') { Array.new }
+      set_default_attrs(:path, :api_token, :id)
     end
 
     def commands=(some_commands)
@@ -40,9 +37,7 @@ module PGit
     end
 
     def save!
-      ensure_provided(:api_token)
-      ensure_provided(:id)
-      ensure_provided(:path)
+      ensure_provided_attrs(:api_token, :id, :path)
 
       remove_old_copy { configuration.projects = configuration.projects << self }
     end
