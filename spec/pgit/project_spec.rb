@@ -89,18 +89,16 @@ describe 'PGit::Project' do
       expect(proj.path).to eq project_hash.fetch('path')
     end
 
-    it 'defaults to Dir.pwd' do
+    it 'defaults to :no_path_provided' do
       configuration = instance_double('PGit::Configuration')
-      fake_path = double('path')
       api_token = 's3cret'
       id = 12345
-      allow(Dir).to receive(:pwd).and_return(fake_path)
       proj = PGit::Project.new(configuration) do |p|
         p.api_token = api_token
         p.id = id
       end
 
-      expect(proj.path).to eq fake_path
+      expect(proj.path).to eq :no_path_provided
     end
   end
 

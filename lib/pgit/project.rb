@@ -1,5 +1,4 @@
 require 'pgit'
-require 'byebug'
 
 module PGit
   class Project
@@ -17,7 +16,7 @@ module PGit
       yield self if block_given?
       @proj_hash = proj
       @configuration = configuration
-      set_attr(:path) { Dir.pwd }
+      set_attr(:path) { not_provided(:path) }
       set_attr(:api_token) { not_provided(:api_token) }
       set_attr(:id) { not_provided(:id) }
       @cmds = proj.fetch('commands') { Array.new }
