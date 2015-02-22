@@ -11,6 +11,10 @@ module PGit
         "no_#{attribute}_provided".to_sym
       end
 
+      def ensure_provided_queries
+        given_attrs.each {|attr| ensure_provided_attr(attr) }
+      end
+
       def ensure_provided_attrs(*attributes)
         attributes.each { |attr| ensure_provided_attr(attr) }
       end
@@ -31,6 +35,14 @@ module PGit
 
       def set_default_attrs(*attributes)
         attributes.each { |attr| set_default_attr(attr) }
+      end
+
+      def set_default_queries
+        given_attrs.each {|attr| set_default_attr(attr) }
+      end
+
+      def given_attrs
+        methods.grep(/^given_.+\?$/).map { |m| m.to_s.gsub(/^given_/, '').gsub(/\?$/, '')}
       end
 
       def attr_has(args)

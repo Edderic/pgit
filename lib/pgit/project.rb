@@ -16,7 +16,7 @@ module PGit
       @proj_hash = proj
       @configuration = configuration
       @cmds = proj.fetch('commands') { Array.new }
-      set_default_attrs(:path, :api_token, :id)
+      set_default_queries
     end
 
     def commands=(some_commands)
@@ -37,7 +37,7 @@ module PGit
     end
 
     def save!
-      ensure_provided_attrs(:api_token, :id, :path)
+      ensure_provided_queries
 
       remove_old_copy { configuration.projects = configuration.projects << self }
     end
