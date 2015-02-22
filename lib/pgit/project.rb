@@ -3,8 +3,13 @@ require 'byebug'
 
 module PGit
   class Project
+    include PGit::Helpers::QueryMethods
+    extend PGit::Helpers::QueryMethods
+
     attr_writer :api_token, :id, :path
     attr_reader :path, :api_token, :id, :configuration
+    attr_has :id, :path, :api_token
+    attr_given :id, :api_token
 
     def initialize(configuration=:no_config_provided,
                    proj={},
@@ -16,18 +21,6 @@ module PGit
       set_attr('api_token') { not_provided(:api_token) }
       set_attr('id') { not_provided(:id) }
       @cmds = proj.fetch('commands') { Array.new }
-    end
-
-    [:id, :path, :api_token].each do |method_name|
-      define_method "has_#{method_name}?" do |val|
-        instance_variable_get("@#{method_name}") == val
-      end
-    end
-
-    [:api_token, :id].each do |item|
-      define_method "given_#{item}?" do
-        instance_variable_get("@#{item}") != not_provided(item)
-      end
     end
 
     def commands=(some_commands)
@@ -63,20 +56,6 @@ module PGit
     end
 
     private
-    def set_attr(attribute)
-      unless instance_variable_get("@#{attribute}")
-        instance_variable_set("@#{attribute}", @proj_hash[attribute] || yield)
-      end
-    end
-
-    def ensure_provided(attribute)
-      attr = send(attribute)
-      raise PGit::Error::User, attr if attr == not_provided(attribute)
-    end
-
-    def not_provided(attribute)
-      "no_#{attribute}_provided".to_sym
-    end
 
     def remove_old_copy
       configuration.projects = configuration.projects.reject {|p| p.path == path}
