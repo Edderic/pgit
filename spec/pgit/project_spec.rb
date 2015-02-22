@@ -1,13 +1,41 @@
 require 'spec_helper'
 
 describe 'PGit::Project' do
+  describe '#given_api_token?' do
+    it 'should return false if no api_token provided' do
+      p = PGit::Project.new
+      expect(p).not_to be_given_api_token
+    end
+
+    it 'should return true if api_token is provided' do
+      proj = PGit::Project.new do |p|
+        p['api_token'] = 'someapitoken'
+      end
+      expect(proj).to be_given_api_token
+    end
+  end
+
+  describe '#given_id?' do
+    it 'should return false if no api_token provided' do
+      p = PGit::Project.new
+      expect(p).not_to be_given_id
+    end
+
+    it 'should return true if api_token is provided' do
+      proj = PGit::Project.new do |p|
+        p['id'] = 'someid'
+      end
+      expect(proj).to be_given_id
+    end
+  end
+
   describe '#commands=' do
     it 'sets the commands' do
       command = instance_double('PGit::Command')
       command_name = 'command_name'
       command_steps = ['subcommand1', 'subcommand2']
       new_command = instance_double('PGit::Command', name: command_name,
-                                                     steps: command_steps)
+                                    steps: command_steps)
       project_hash =  { "path" => "/Therapy-Exercises-Online/some_other_project",
                         "id" => 12345,
                         "api_token" => "astoeuh",

@@ -22,6 +22,12 @@ module PGit
       end
     end
 
+    [:api_token, :id].each do |item|
+      define_method "given_#{item}?" do
+        instance_variable_get("@#{item}") != "no_#{item}_provided".to_sym
+      end
+    end
+
     def commands=(some_commands)
       @cmds = some_commands
     end
