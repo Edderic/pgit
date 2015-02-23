@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'PGit::Story' do
+describe 'PGit::Pivotal::Story' do
   describe '#get' do
     it 'should generate the story' do
       story_id = '123'
@@ -24,9 +24,9 @@ describe 'PGit::Story' do
          "url": "http://localhost/story/show/555"
       }
       GOOD_JSON
-      allow(PGit::Story).to receive(:`).with(get_request).and_return(fake_good_json)
+      allow(PGit::Pivotal::Story).to receive(:`).with(get_request).and_return(fake_good_json)
 
-      story = PGit::Story.get(story_id, current_project)
+      story = PGit::Pivotal::Story.get(story_id, current_project)
 
       expect(story.name).to eq "Bring me the passengers"
       expect(story.description).to eq "ignore the droids"
