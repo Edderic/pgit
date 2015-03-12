@@ -1,45 +1,24 @@
-#
-#   Wrapper for a Pivotal Tracker story
-#
+require 'pgit'
 
 module PGit
   module Pivotal
-    class Story
-      class << self
-        def get(id, current_project)
-          @id = id
-          @project_id = current_project.id
-          @api_token = current_project.api_token
+    class Story < PGit::Pivotal::Request
+      attr_accessor :estimate
 
-          define_methods(get!)
+      def initialize(project, story_id=:story_id_not_given)
+        @id = story_id
+        @project_id = project.id
+        @api_token = project.api_token
+      end
 
-          new
-        end
+      def to_hash
+        {
+          "estimate": estimate
+        }
+      end
 
-        def define_methods(json)
-          JSON.parse(json).each do |key, value|
-            define_method key do
-              value
-            end
-          end
-        end
-
-        def api_version
-          "v5"
-        end
-
-        def get!
-          validator = PGit::PivotalRequestValidator.new `#{get_request}`
-          validator.request
-        end
-
-        def link
-          "'https://www.pivotaltracker.com/services/#{api_version}/projects/#{@project_id}/stories/#{@id}'"
-        end
-
-        def get_request
-          "curl -X GET -H 'X-TrackerToken: #{@api_token}' #{link}"
-        end
+      def link
+        super("projects/#{@project_id}/stories/#{@id}")
       end
     end
   end

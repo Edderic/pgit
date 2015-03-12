@@ -1,9 +1,12 @@
 require 'pgit'
 
 module PGit
-  class Project
+  class Project < PGit::Pivotal::Request
+    include ActiveModel::Validations
     include PGit::Helpers::QueryMethods
     extend PGit::Helpers::QueryMethods
+
+    validates_with PGit::Validators::ProjectValidator
 
     attr_writer :api_token, :id, :path
     attr_reader :path, :api_token, :id, :configuration

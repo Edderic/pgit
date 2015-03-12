@@ -7,7 +7,7 @@ describe 'PGit::StoryBranch::NameParser' do
 
       unparsed_name = "Deemphasize the Clue on the stimulus screen of multi-screen exercises."
       story_id = '12345'
-      fake_story = double('PGit::Story', id: story_id, name: unparsed_name)
+      fake_story = double('PGit::Pivotal::Story', id: story_id, name: unparsed_name)
 
       name_parser = PGit::StoryBranch::NameParser.new(fake_story)
       parsed = name_parser.name
@@ -19,7 +19,7 @@ describe 'PGit::StoryBranch::NameParser' do
       unparsed_name = "Some don't like putin's dictatorship"
       story_id = '29292'
 
-      fake_story = double('PGit::Story', id: story_id, name: unparsed_name)
+      fake_story = double('PGit::Pivotal::Story', id: story_id, name: unparsed_name)
 
       name_parser = PGit::StoryBranch::NameParser.new(fake_story)
       parsed = name_parser.name
@@ -31,7 +31,7 @@ describe 'PGit::StoryBranch::NameParser' do
       unparsed_name = "Some *@#   don't like ,putin's dictator-ship"
       story_id = '29292'
 
-      fake_story = double('PGit::Story', id: story_id, name: unparsed_name)
+      fake_story = double('PGit::Pivotal::Story', id: story_id, name: unparsed_name)
 
       name_parser = PGit::StoryBranch::NameParser.new(fake_story)
       parsed = name_parser.name

@@ -4,7 +4,8 @@ module PGit
       def initialize(global_options, options, arguments)
         if story_id = options[:start]
           current_project = PGit::CurrentProject.new(PGit::Configuration.new)
-          story = PGit::Story.get(story_id, current_project)
+          story = PGit::Pivotal::Story.new(current_project, story_id)
+          story.get!
           name_parser = PGit::StoryBranch::NameParser.new(story)
           story_branch = PGit::StoryBranch.new(name_parser)
 

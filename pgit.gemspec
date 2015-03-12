@@ -23,6 +23,7 @@ spec = Gem::Specification.new do |s|
   s.add_development_dependency('pry-byebug', '~> 3.0.1')
   s.add_development_dependency('byebug', '~> 3.5.1')
   s.add_runtime_dependency('gli','2.12.2')
+  s.add_runtime_dependency('activemodel','~> 4.2.0')
   s.add_runtime_dependency('rainbow', '~> 2.0.0')
   s.license = 'MIT'
   s.requirements << 'At least one project that uses Pivotal Tracker and Git'
