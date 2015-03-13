@@ -53,6 +53,9 @@ module PGit
       configuration.projects.find {|p| p.path == path}
     end
 
+    def sublink
+      "projects/#{id}"
+    end
     private
 
     def remove_old_copy

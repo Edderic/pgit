@@ -17,8 +17,8 @@ module PGit
         }
       end
 
-      def link
-        super("projects/#{@project_id}/stories/#{@id}")
+      def sublink
+        "projects/#{@project_id}/stories/#{@id}"
       end
     end
   end

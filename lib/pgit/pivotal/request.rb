@@ -10,10 +10,14 @@ module PGit
       end
 
       def get!
-        self.class.define_methods `curl -X GET -H 'X-TrackerToken: #{@api_token}' #{link}`
+        self.class.define_methods get_request
       end
 
-      def link(sublink)
+      def get_request
+        `curl -X GET -H 'X-TrackerToken: #{@api_token}' #{link}`
+      end
+
+      def link
         "https://www.pivotaltracker.com/services/#{api_version}/#{sublink}"
       end
 

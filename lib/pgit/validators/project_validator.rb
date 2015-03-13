@@ -11,7 +11,7 @@ module PGit
         end
 
         if project.respond_to?(:kind) && project.kind == 'error'
-          project.errors[:project_api_token_or_id] << "is not valid."
+          project.errors[:base] << "Project api_token or id is not valid."
           puts project.errors.full_messages
         end
       end

@@ -102,6 +102,19 @@ describe 'PGit::Project' do
     end
   end
 
+  describe '#sublink' do
+    it 'returns the sublink' do
+      project_hash =  { "path" => "/Therapy-Exercises-Online/some_other_project",
+                        "id" => 12345,
+                        "api_token" => "astoeuh",
+                        "commands" => [] }
+      configuration = instance_double('PGit::Configuration')
+      proj = PGit::Project.new(configuration, project_hash)
+
+      expect(proj.sublink).to eq "projects/#{proj.id}"
+    end
+  end
+
   describe '#api_token' do
     it 'returns the api_token' do
       project_hash =  { "path" => "/Therapy-Exercises-Online/some_other_project",
