@@ -13,7 +13,7 @@ module PGit
 
       def to_hash
         {
-          "estimate": estimate
+          "estimate" => estimate
         }
       end
 
