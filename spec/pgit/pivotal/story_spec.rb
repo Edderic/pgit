@@ -67,35 +67,4 @@ describe 'PGit::Pivotal::Story' do
       expect(story).to have_received(:`).with(put_request)
     end
   end
-
-  describe '#current_state' do
-    it 'estimate' do
-      {
-        "kind":"story",
-        "id":87947638,
-        "project_id":1228944,
-        "name":"pgit proj add tests connection to see if api_token and id are correct",
-        "description":"If CURL issue (no internet connection),
-        ask user if user wants to have it saved anyway into the configuration.\n\nif wrong,
-        should reject saving the project into the config file: \"Something is wrong with either the id or api_token. Please check them and try again.\"\n\nIf correct,
-        should notify: 'Successfully added project!'\n\n ",
-        "story_type":"bug",
-        "current_state":"started",
-        "requested_by_id":1121520,
-        "owned_by_id":1121520,
-        "owner_ids":[1121520],
-        "labels":[
-          {"kind":"label",
-                   "id":10378716,
-                   "project_id":1228944,
-                   "name":"project",
-                   "created_at":"2015-01-05T11:42:35Z",
-                   "updated_at":"2015-01-05T11:42:35Z"}
-          ],
-         "created_at":"2015-02-09T16:14:45Z",
-         "updated_at":"2015-02-23T12:20:02Z",
-         "url":"https://www.pivotaltracker.com/story/show/87947638"
-      }
-    end
-  end
 end
