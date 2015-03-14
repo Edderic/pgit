@@ -8,6 +8,18 @@ module PGit
       def index?
         match(/^[1-9][0-9]*$/)
       end
+
+      def yes?
+        letter?('y')
+      end
+
+      def no?
+        letter?('n')
+      end
+
+      def cancel?
+        letter?('c')
+      end
     end
   end
 end

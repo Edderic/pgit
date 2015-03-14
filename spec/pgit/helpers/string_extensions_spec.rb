@@ -22,4 +22,28 @@ describe 'PGit::Helpers::StringExtensions' do
       end
     end
   end
+
+  describe '#yes?' do
+    it 'returns true if letter is y and false if not' do
+      expect('y').to be_yes
+      expect('Y').to be_yes
+      expect('2').not_to be_yes
+    end
+  end
+
+  describe '#no?' do
+    it 'returns false if letter is not and false if not' do
+      expect('n').to be_no
+      expect('N').to be_no
+      expect('y').not_to be_no
+    end
+  end
+
+  describe '#cancel?' do
+    it 'returns true if letter is c and false if not' do
+      expect('c').to be_cancel
+      expect('C').to be_cancel
+      expect('y').not_to be_cancel
+    end
+  end
 end
