@@ -15,10 +15,10 @@ describe 'PGit::Project::ReuseApiTokenAdder' do
 
         message = "Do you want to reuse an api token? [Y/n]"
         adder = PGit::Project::ReuseApiTokenAdder.new(project, projects)
-        letter = 'y'
-        response = instance_double('String', chomp: letter)
+        yes_response = instance_double('String', chomp: 'y')
+        cancel_response = instance_double('String', chomp: 'c')
         allow(adder).to receive(:puts)
-        allow(STDIN).to receive(:gets).and_return(response)
+        allow(STDIN).to receive(:gets).and_return(yes_response, cancel_response)
 
         adder.execute!
         expect(adder).to have_received(:puts).with(message)
@@ -39,8 +39,7 @@ describe 'PGit::Project::ReuseApiTokenAdder' do
           option_one_message = "  1.  #{path}: #{api_token}"
 
           adder = PGit::Project::ReuseApiTokenAdder.new(project, projects)
-          letter = 'y'
-          response = instance_double('String', chomp: letter)
+          response = instance_double('String', chomp: 'y')
           cancel_response = instance_double('String', chomp: 'c')
           allow(adder).to receive(:puts)
           allow(STDIN).to receive(:gets).and_return(response, cancel_response)
@@ -59,32 +58,7 @@ describe 'PGit::Project::ReuseApiTokenAdder' do
                                                 path: path)
             projects = [project_in_config]
             project = instance_double('PGit::Project')
-
-            message = "Do you want to reuse an api token? [Y/n]"
-            which_one_message = "Which one? [1/c]"
-            option_one_message = "  1.  #{path}: #{api_token}"
-
-            adder = PGit::Project::ReuseApiTokenAdder.new(project, projects)
-            yes_response = instance_double('String', chomp: 'y')
-            first_option_response = instance_double('String', chomp: '1')
-            allow(adder).to receive(:puts)
-            allow(STDIN).to receive(:gets).and_return(yes_response, first_option_response)
-            allow(project).to receive(:api_token=).with(api_token)
-
-            adder.execute!
-
-            expect(project).to have_received(:api_token=).with(api_token)
-          end
-        end
-
-        describe 'user responds "c"' do
-          it 'goes on without assigning an api_token to the project' do
-            api_token = 'someapitoken123'
-            path = '/some/path'
-            project_in_config = instance_double('PGit::Project',
-                                                api_token: api_token,
-                                                path: path)
-            projects = [project_in_config]
+            allow(STDIN).to receive(:gets)
             project = instance_double('PGit::Project')
 
             message = "Do you want to reuse an api token? [Y/n]"
@@ -108,14 +82,21 @@ describe 'PGit::Project::ReuseApiTokenAdder' do
           it 'should reprint the options' do
             api_token = 'someapitoken123'
             path = '/some/path'
+            another_api_token = 'someotherapitoken'
+            another_path = '/some/other/path'
+            another_project_in_config = instance_double('PGit::Project',
+                                                api_token: another_api_token,
+                                                path: another_path)
+
             project_in_config = instance_double('PGit::Project',
                                                 api_token: api_token,
                                                 path: path)
-            projects = [project_in_config]
+
+            projects = [project_in_config, another_project_in_config]
             project = instance_double('PGit::Project')
 
             message = "Do you want to reuse an api token? [Y/n]"
-            which_one_message = "Which one? [1/c]"
+            which_one_message = "Which one? [1/2/c]"
             option_one_message = "  1.  #{path}: #{api_token}"
 
             adder = PGit::Project::ReuseApiTokenAdder.new(project, projects)
@@ -124,7 +105,7 @@ describe 'PGit::Project::ReuseApiTokenAdder' do
             unexpected_response = instance_double('String', chomp: 'a')
 
             allow(adder).to receive(:puts)
-            allow(STDIN).to receive(:gets).and_return(yes_response, unexpected_response)
+            allow(STDIN).to receive(:gets).and_return(yes_response, unexpected_response, cancel_response)
             allow(project).to receive(:api_token=).with(api_token)
 
             adder.execute!

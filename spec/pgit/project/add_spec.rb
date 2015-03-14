@@ -23,21 +23,29 @@ describe 'PGit::Project::Add' do
       end
 
       project = SomeProject.new
+      config_project = instance_double('PGit::Project')
+      projects = [config_project]
       app = instance_double('PGit::Project::Application',
                             exists?: false,
-                            project: project)
+                            project: project,
+                            projects: projects)
       adder = instance_double('PGit::Project::InteractiveAdder',
                               execute!: nil,
                               project: project,
                               save!: nil)
+      reuse_adder = instance_double('PGit::Project::ReuseApiTokenAdder',
+                                    execute!: nil,
+                                    project: project)
       allow(PGit::Project::InteractiveAdder).to receive(:new).with(project).and_return(adder)
+      allow(PGit::Project::ReuseApiTokenAdder).to receive(:new).with(project, projects).and_return(reuse_adder)
       add = PGit::Project::Add.new(app)
       allow(add).to receive(:puts).with("Successfully added the project!")
 
       add.execute!
 
-      expect(adder).to have_received(:save!)
+      expect(reuse_adder).to have_received(:execute!)
       expect(adder).to have_received(:execute!)
+      expect(adder).to have_received(:save!)
       expect(add).to have_received(:puts).with("Successfully added the project!")
     end
   end
@@ -47,13 +55,22 @@ describe 'PGit::Project::Add' do
       error1_message = "Project id or api token might be invalid."
       errors = double('errors', full_messages: [error1_message])
       project = instance_double('PGit::Project', save!: nil, valid?: false, errors: errors)
+      config_project = instance_double('PGit::Project')
+      projects = [config_project]
       app = instance_double('PGit::Project::Application',
                             exists?: false,
-                            project: project)
+                            project: project,
+                            projects: projects)
       adder = instance_double('PGit::Project::InteractiveAdder',
                               execute!: nil,
                               project: project,
                               save!: nil)
+
+      reuse_adder = instance_double('PGit::Project::InteractiveAdder',
+                              execute!: nil,
+                              project: project,
+                              )
+      allow(PGit::Project::ReuseApiTokenAdder).to receive(:new).with(project, projects).and_return(reuse_adder)
       allow(PGit::Project::InteractiveAdder).to receive(:new).with(project).and_return(adder)
       add = PGit::Project::Add.new(app)
       allow(add).to receive(:puts).with("Successfully added the project!")

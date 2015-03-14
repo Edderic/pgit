@@ -14,18 +14,19 @@ module PGit
 
         puts "Do you want to reuse an api token? [Y/n]"
 
-        if response.letter?('y')
-          print_options
-
-          r = response
-
-          if r.index?
-            index = r.to_i
-            project.api_token = projects[index - 1].api_token
-          elsif r.letter?('c')
-
-          else
+        if response.yes?
+          resp = 'invalid'
+          while resp == 'invalid' do
             print_options
+            resp = response
+
+            if resp.index?
+              index = resp.to_i
+              project.api_token = projects[index - 1].api_token
+            elsif resp.cancel?
+            else
+              resp = 'invalid'
+            end
           end
         end
       end
@@ -33,7 +34,7 @@ module PGit
       private
 
       def print_options
-        puts "Which one? [#{projects.length}/c]"
+        puts "Which one? [#{indices}c]"
         projects.each_with_index do |p, i|
           puts "  #{i+1}.  #{p.path}: #{p.api_token}"
         end
@@ -41,6 +42,12 @@ module PGit
 
       def response
         STDIN.gets.chomp
+      end
+
+      def indices
+        str = ''
+        projects.length.times { |i| str += "#{i+1}/" }
+        str
       end
     end
   end
