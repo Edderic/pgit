@@ -15,23 +15,27 @@ module PGit
         puts "Do you want to reuse an api token? [Y/n]"
 
         if response.yes?
-          resp = 'invalid'
-          while resp == 'invalid' do
-            print_options
-            resp = response
-
-            if resp.index?
-              index = resp.to_i
-              project.api_token = projects[index - 1].api_token
-            elsif resp.cancel?
-            else
-              resp = 'invalid'
-            end
-          end
+          ask_which_one_and_wait_for_response
         end
       end
 
       private
+
+      def ask_which_one_and_wait_for_response
+        resp = 'invalid'
+        while resp == 'invalid' do
+          print_options
+          resp = response
+
+          if resp.index?
+            index = resp.to_i
+            project.api_token = projects[index - 1].api_token
+          elsif resp.cancel?
+          else
+            resp = 'invalid'
+          end
+        end
+      end
 
       def print_options
         puts "Which one? [#{indices}c]"
