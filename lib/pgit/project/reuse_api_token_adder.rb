@@ -12,10 +12,10 @@ module PGit
       def execute!
         return false if @projects.empty?
 
-        puts "Do you want to reuse an api token? [Y/n]"
-
-        if response.yes?
-          ask_which_one_and_wait_for_response
+        reuse_question.ask_and_wait_for_valid_response do |reuse_response|
+          if reuse_response.yes?
+            ask_which_one_and_wait_for_response
+          end
         end
       end
 
@@ -52,6 +52,13 @@ module PGit
         str = ''
         projects.length.times { |i| str += "#{i+1}/" }
         str
+      end
+
+      def reuse_question
+        Interactive::Question.new do |q|
+          q.question = "Do you want to reuse an api token?"
+          q.options = [:yes, :no]
+        end
       end
     end
   end

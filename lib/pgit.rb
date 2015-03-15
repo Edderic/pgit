@@ -1,5 +1,6 @@
 require 'json'
 require 'rainbow'
+require 'interactive'
 require 'active_model'
 require 'pgit/validators/project_validator'
 require 'pgit/pivotal/request'

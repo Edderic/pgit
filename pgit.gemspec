@@ -25,6 +25,7 @@ spec = Gem::Specification.new do |s|
   s.add_runtime_dependency('gli','2.12.2')
   s.add_runtime_dependency('activemodel','~> 4.2.0')
   s.add_runtime_dependency('rainbow', '~> 2.0.0')
+  s.add_runtime_dependency('interactive', '~> 0.0.0')
   s.license = 'MIT'
   s.requirements << 'At least one project that uses Pivotal Tracker and Git'
   s.requirements << 'cURL, at least 7.35.0'

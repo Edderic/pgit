@@ -13,15 +13,16 @@ describe 'PGit::Project::ReuseApiTokenAdder' do
         project = instance_double('PGit::Project')
         allow(project).to receive(:api_token=).with(api_token)
 
-        message = "Do you want to reuse an api token? [Y/n]"
+        message = "Do you want to reuse an api token? [y/n]"
         adder = PGit::Project::ReuseApiTokenAdder.new(project, projects)
         yes_response = instance_double('String', chomp: 'y')
         cancel_response = instance_double('String', chomp: 'c')
+        allow_any_instance_of(Interactive::Question).to receive(:puts)
         allow(adder).to receive(:puts)
         allow(STDIN).to receive(:gets).and_return(yes_response, cancel_response)
 
+        expect_any_instance_of(Interactive::Question).to receive(:puts).with(message)
         adder.execute!
-        expect(adder).to have_received(:puts).with(message)
       end
 
       describe 'user responds "y"' do
