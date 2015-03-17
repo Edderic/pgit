@@ -21,6 +21,21 @@ describe 'PGit::Configuration' do
     end
   end
 
+  describe '#new while file did not exist' do
+    it 'should create the file' do
+      file = instance_double('File', close: nil)
+      config_path = '~/.pgit.rc.yml'
+      expanded_path = '/expanded/.pgit.rc.yml'
+      error = "No such file or directory"
+      allow(File).to receive(:expand_path).with(config_path).and_return(expanded_path)
+      allow(YAML).to receive(:load_file).with(expanded_path).and_raise(error)
+      allow(File).to receive(:new).with(expanded_path, 'w').and_return(file)
+
+      PGit::Configuration.new
+      expect(file).to have_received(:close)
+    end
+  end
+
   describe '#yaml' do
     it 'defaults to empty hash if configuration does not exist' do
       expanded_path = "/some/path/to/.pgit.rc.yml"

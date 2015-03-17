@@ -36,7 +36,6 @@ module PGit
       if e.message.match(/No such file or directory/)
         f = File.new(@expanded_path, 'w');
         f.close
-        retry
       end
     end
 
