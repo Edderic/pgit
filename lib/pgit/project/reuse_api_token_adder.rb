@@ -25,10 +25,6 @@ module PGit
 
       private
 
-      def response
-        STDIN.gets.chomp
-      end
-
       def reuse_question
         Interactive::Question.new do |q|
           q.question = "Do you want to reuse an api token?"
