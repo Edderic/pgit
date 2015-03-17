@@ -10,7 +10,7 @@ module PGit
       end
 
       def get!
-        self.class.define_methods get_request
+        define_methods get_request
       end
 
       def get_request
@@ -21,9 +21,9 @@ module PGit
         "https://www.pivotaltracker.com/services/#{api_version}/#{sublink}"
       end
 
-      def self.define_methods(json)
+      def define_methods(json)
         JSON.parse(json).each do |key, value|
-          define_method key do
+          define_singleton_method key do
             value
           end
         end
