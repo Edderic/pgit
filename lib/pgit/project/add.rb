@@ -1,5 +1,6 @@
 require 'pgit'
 
+#TODO: Find a way to make execute! just be a call on children tasks
 module PGit
   class Project
     class Add
