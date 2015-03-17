@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'PGit::Project::ReuseApiTokenAdder' do
   describe '#execute' do
     describe 'there is already a project in the configuration file' do
-      it 'asks if you want to reuse an api token and uses that api_token if so' do
+      it 'asks the right questions and the responses can be queried properly' do
         api_token = 'someapitoken123'
         path = 'some/path'
         project_in_config = instance_double('PGit::Project',
@@ -19,14 +19,17 @@ describe 'PGit::Project::ReuseApiTokenAdder' do
                                                              :options= => nil)
         reuse_response = double('response', yes?: true)
         which_response = double('response', whole_number?: true, to_i: 0)
-        allow(Interactive::Question).to receive(:new).and_return(question1, question2)
+        allow(Interactive::Question).to receive(:new).and_yield(question1).and_yield(question2).and_return(question1, question2)
         allow(question1).to receive(:ask_and_wait_for_valid_response).and_yield(reuse_response)
         allow(question2).to receive(:ask_and_wait_for_valid_response).and_yield(which_response)
 
         adder = PGit::Project::ReuseApiTokenAdder.new(project, projects)
         adder.execute!
 
-        expect(project).to have_received(:api_token=).with api_token
+        expect(question1).to have_received(:question=).with "Do you want to reuse an api token?"
+        expect(question1).to have_received(:options=).with [:yes, :no]
+        expect(question2).to have_received(:question=).with "Which one?"
+        expect(question2).to have_received(:options=).with [["#{path}: #{api_token}"], :cancel]
       end
     end
   end
