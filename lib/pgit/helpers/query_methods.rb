@@ -15,10 +15,6 @@ module PGit
         given_attrs.each {|attr| ensure_given_attr(attr) }
       end
 
-      def ensure_given_attrs(*attributes)
-        attributes.each { |attr| ensure_given_attr(attr) }
-      end
-
       def ensure_given_attr(attribute)
         attr = send(attribute)
         raise PGit::Error::User, attr if attr == not_given(attribute)
@@ -31,10 +27,6 @@ module PGit
 
       def set_default_attr(attribute)
         set_attr(attribute) { not_given(attribute) }
-      end
-
-      def set_default_attrs(*attributes)
-        attributes.each { |attr| set_default_attr(attr) }
       end
 
       def set_default_queries
