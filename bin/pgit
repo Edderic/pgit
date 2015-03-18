@@ -153,8 +153,6 @@ command :install do |c|
                                                         args)
     completer.write_completer_file
     completer.source_completer_from_bashrc
-
-    PGit::Installer::Configuration.new(global_options, options, args)
   end
 end
 
