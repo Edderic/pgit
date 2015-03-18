@@ -2,9 +2,6 @@ require 'spec_helper'
 
 describe 'PGit::Command::Application' do
   class SomeCommandApp < PGit::Command::Application
-    def search
-      args.first
-    end
   end
 
   before do
