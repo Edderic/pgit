@@ -3,6 +3,8 @@ require 'pgit'
 module PGit
   class Project
     class ReuseApiTokenAdder
+      include Interactive
+
       attr_reader :projects, :project
       def initialize(project_to_add_to, projects_in_config)
         @project = project_to_add_to
@@ -26,14 +28,14 @@ module PGit
       private
 
       def reuse_question
-        Interactive::Question.new do |q|
+        Question.new do |q|
           q.question = "Do you want to reuse an api token?"
           q.options = [:yes, :no]
         end
       end
 
       def which_to_reuse_question
-        Interactive::Question.new do |q|
+        Question.new do |q|
           q.question = "Which one?"
           q.options = [projects.map{|proj| "#{proj.path}: #{proj.api_token}"}, :cancel]
         end
