@@ -37,14 +37,6 @@ module PGit
       to_hash
     end
 
-    def to_save
-      { project_key => to_hash }
-    end
-
-    def project_key
-      'commands'
-    end
-
     def to_hash
       { name => steps }
     end
