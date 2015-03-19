@@ -53,6 +53,21 @@ command :proj do |p|
       add.execute!
     end
   end
+
+  p.desc "remove a project"
+  p.command :rm do |a|
+
+    a.desc "the path whose pgit project will be removed"
+    a.arg_name '"/some/file/path"'
+    a.default_value Dir.pwd
+    a.flag :p, :path
+
+    a.action do |global_options,options,args|
+      app = PGit::Project::Application.new(global_options, options, args)
+      rm = PGit::Project::Remove.new(app)
+      rm.execute!
+    end
+  end
 end
 
 desc "Work with custom commands defined in the current project"
