@@ -41,6 +41,7 @@ module PGit
 
     def save!
       ensure_given_queries
+      raise PGit::Error::User, errors.full_messages.first unless valid?
 
       remove_old_copy { configuration.projects = configuration.projects << self }
     end

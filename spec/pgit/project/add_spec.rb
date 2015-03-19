@@ -49,33 +49,4 @@ describe 'PGit::Project::Add' do
       expect(add).to have_received(:puts).with("Successfully added the project!")
     end
   end
-
-  describe 'the project is not valid' do
-    it 'should raise an error' do
-      error1_message = "Project id or api token might be invalid."
-      errors = double('errors', full_messages: [error1_message])
-      project = instance_double('PGit::Project', save!: nil, valid?: false, errors: errors)
-      config_project = instance_double('PGit::Project')
-      projects = [config_project]
-      app = instance_double('PGit::Project::Application',
-                            exists?: false,
-                            project: project,
-                            projects: projects)
-      adder = instance_double('PGit::Project::InteractiveAdder',
-                              execute!: nil,
-                              project: project,
-                              save!: nil)
-
-      reuse_adder = instance_double('PGit::Project::InteractiveAdder',
-                              execute!: nil,
-                              project: project,
-                              )
-      allow(PGit::Project::ReuseApiTokenAdder).to receive(:new).with(project, projects).and_return(reuse_adder)
-      allow(PGit::Project::InteractiveAdder).to receive(:new).with(project).and_return(adder)
-      add = PGit::Project::Add.new(app)
-      allow(add).to receive(:puts).with("Successfully added the project!")
-
-      expect{ add.execute! }.to raise_error(PGit::Error::User, error1_message)
-    end
-  end
 end

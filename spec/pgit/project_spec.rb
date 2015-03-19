@@ -278,6 +278,7 @@ describe 'PGit::Project' do
         p.id = 54321
       end
 
+      allow(proj).to receive(:valid?).and_return(true)
       proj.save!
 
       expect(configuration).to have_received(:save!)
@@ -329,6 +330,7 @@ describe 'PGit::Project' do
         p.id = 54321
       end
 
+      allow(proj).to receive(:valid?).and_return(true)
       proj.save!
 
       expect(configuration).to have_received(:save!)

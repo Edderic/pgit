@@ -19,8 +19,6 @@ module PGit
         @adder = PGit::Project::InteractiveAdder.new(@reuse_adder.project)
 
         adder.execute!
-
-        raise PGit::Error::User, adder.project.errors.full_messages.first unless adder.project.valid?
         adder.save!
 
         puts "Successfully added the project!"
