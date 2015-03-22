@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-describe 'PGit::Pivotal::Request' do
+describe 'PGit::Pivotal::IndividualRequest' do
   describe '#get!' do
     it 'does a cURL request' do
-      class SomeSubclass < PGit::Pivotal::Request
+      class SomeSubclass < PGit::Pivotal::IndividualRequest
         attr_reader :api_token
         def initialize
           @api_token

@@ -1,6 +1,6 @@
 module PGit
   module Pivotal
-    class Request
+    class IndividualRequest
       def put!
         `curl -X PUT -H 'X-TrackerToken: #{@api_token}' -H 'Content-Type: application/json' -d '#{JSON.generate(to_hash)}' #{link}`
       end

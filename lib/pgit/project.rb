@@ -1,7 +1,7 @@
 require 'pgit'
 
 module PGit
-  class Project < PGit::Pivotal::Request
+  class Project < PGit::Pivotal::IndividualRequest
     include ActiveModel::Validations
     include PGit::Helpers::QueryMethods
     extend PGit::Helpers::QueryMethods

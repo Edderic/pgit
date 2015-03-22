@@ -27,7 +27,7 @@ describe 'PGit::Pivotal::Story' do
 
       story = PGit::Pivotal::Story.new(current_project, story_id)
       allow(story).to receive(:`).with(get_request).and_return(fake_good_json)
-      allow_any_instance_of(PGit::Pivotal::Request).to receive(:`).with(get_request).and_return(fake_good_json)
+      allow_any_instance_of(PGit::Pivotal::IndividualRequest).to receive(:`).with(get_request).and_return(fake_good_json)
       story.get!
 
       expect(story.name).to eq "Bring me the passengers"

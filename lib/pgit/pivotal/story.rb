@@ -2,7 +2,7 @@ require 'pgit'
 
 module PGit
   module Pivotal
-    class Story < PGit::Pivotal::Request
+    class Story < PGit::Pivotal::IndividualRequest
       attr_accessor :estimate
 
       def initialize(project, story_id=:story_id_not_given)
