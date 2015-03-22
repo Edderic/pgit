@@ -3,22 +3,35 @@ require 'pgit'
 module PGit
   module Pivotal
     class Story < PGit::Pivotal::IndividualRequest
-      attr_accessor :estimate
+      ATTRIBUTES = :estimate, :id, :project_id, :follower_ids, :group, :name, :description,
+                    :story_type, :current_state, :accepted_at, :deadline, :requested_by_id,
+                    :owner_ids, :labels, :label_ids, :before_id, :after_id, :integration_id,
+                    :external_id
 
-      def initialize(project, story_id=:story_id_not_given)
-        @id = story_id
-        @project_id = project.id
-        @api_token = project.api_token
+      attr_reader *ATTRIBUTES
+
+      ATTRIBUTES.each do |attr|
+        define_method "#{attr}=" do |value|
+          @changed_attributes ||= []
+          @changed_attributes << attr
+          instance_variable_set("@#{attr}", value)
+        end
       end
 
-      def to_hash
-        {
-          "estimate" => estimate
-        }
+      def initialize(id=:no_story_id_given, &block)
+        before_initialize
+        @changed_attributes = []
+        @id = id
+        @follower_ids = []
+        yield self if block_given?
       end
 
       def sublink
-        "projects/#{@project_id}/stories/#{@id}"
+        "projects/#{@project_id}/stories/#{id}"
+      end
+
+      def attributes
+        ATTRIBUTES
       end
     end
   end

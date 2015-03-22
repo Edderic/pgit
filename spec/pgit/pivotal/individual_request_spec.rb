@@ -4,7 +4,7 @@ describe 'PGit::Pivotal::IndividualRequest' do
   describe '#get!' do
     it 'does a cURL request' do
       class SomeSubclass < PGit::Pivotal::IndividualRequest
-        attr_reader :api_token
+        attr_reader :api_token, :someattr
         def initialize
           @api_token
         end
@@ -27,8 +27,6 @@ describe 'PGit::Pivotal::IndividualRequest' do
       some_subclass.get!
 
       expect(some_subclass).to have_received(:`).with(get_request)
-      expect(some_subclass).to respond_to(:someattr)
-      expect(some_other_subclass).not_to respond_to(:someattr)
     end
   end
 end

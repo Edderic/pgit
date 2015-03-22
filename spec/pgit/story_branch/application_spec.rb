@@ -18,7 +18,7 @@ describe 'PGit::StoryBranch::Application' do
         fake_name_parser = instance_double(PGit::StoryBranch::NameParser)
         allow(PGit::CurrentProject).to receive(:new).with(fake_configuration).and_return(fake_current_project)
         allow(PGit::StoryBranch::NameParser).to receive(:new).with(fake_story).and_return(fake_name_parser)
-        allow(PGit::Pivotal::Story).to receive(:new).with(fake_current_project, 1234).and_return(fake_story)
+        allow(PGit::Pivotal::Story).to receive(:new).with(1234).and_return(fake_story)
         allow(PGit::StoryBranch).to receive(:new).with(fake_name_parser).and_return(fake_story_branch)
         allow(PGit::Configuration).to receive(:new).and_return(fake_configuration)
 
