@@ -6,6 +6,8 @@ describe PGit::Pivotal::Iteration do
       iterations_string = File.read(File.join(PGit.root, 'spec', 'fixtures', 'iterations'))
       iteration_hashes = JSON.parse(iterations_string)
       first_iteration_hash = iteration_hashes.first
+      current_project = instance_double('PGit::CurrentProject', id: 123, api_token: 'haba')
+      allow(PGit::CurrentProject).to receive(:new).and_return(current_project)
       iteration = PGit::Pivotal::Iteration.new do |iteration|
         iteration.hash = first_iteration_hash
       end
