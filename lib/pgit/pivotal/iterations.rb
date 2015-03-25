@@ -1,9 +1,9 @@
 module PGit
   module Pivotal
     class Iterations < Pivotal::CollectionRequest
-      def initialize(project, query='')
-        @api_token = project.api_token
-        @project_id = project.id
+      def initialize(query='')
+        # use better naming
+        before_initialize
         @query = PGit::Pivotal::Request::Query.new(query)
       end
 
