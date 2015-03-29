@@ -5,7 +5,6 @@ module PGit
     class Story
       include Interactive
       attr_reader :question
-
       def initialize(options)
         raise PGit::Error::User, "Invalid options. See `pgit iteration -h` for valid options." unless options_has_valid_scope(options)
 
@@ -15,9 +14,8 @@ module PGit
       end
 
       def execute!
-        @question.ask do |which_response|
-          options = {response: which_response, stories: stories, parent_question: @question}
-          PGit::Bilateral::HandleChooseStory.new(options).execute!
+        @question.ask do |response|
+          PGit::Bilateral::HandleChooseStory.new(options(response)).execute!
         end
       end
 
@@ -26,6 +24,10 @@ module PGit
       end
 
       private
+
+      def options(new_response)
+        {response: new_response, stories: stories, parent_question: @question}
+      end
 
       def _question
         Question.new do |q|

@@ -4,7 +4,6 @@ module PGit
   module Bilateral
     class HandleChooseStory
       def initialize(options)
-        @options = options
         @response = options.fetch(:response)
         @stories = options.fetch(:stories)
         @parent_question = options.fetch(:parent_question)
@@ -13,8 +12,7 @@ module PGit
       def execute!
         if response_can_be_handled?
           question.ask do |new_response|
-            options = { response: new_response, stories: @stories, parent_question: @parent_question }
-            PGit::Bilateral::HandleBack.new(options).execute!
+            PGit::Bilateral::HandleBack.new(options(new_response)).execute!
           end
         end
       end
@@ -27,6 +25,10 @@ module PGit
 
       def string_options
         ["start it", "start it and branch out"]
+      end
+
+      def options(new_response)
+        { response: new_response, stories: @stories, parent_question: @parent_question }
       end
 
       def question
