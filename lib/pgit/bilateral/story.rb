@@ -13,6 +13,7 @@ module PGit
 
       def execute!
         which_question.ask do |which_response|
+          PGit::Bilateral::HandleChooseStory.new(which_response, stories).execute!
         end
       end
 
@@ -21,10 +22,10 @@ module PGit
       end
 
       def which_question
-        Question.new do |which_question|
-          which_question.question = "Which story are you interested in?"
-          which_question.options = [stories, :back]
-          which_question.columns = [:index, :story_type, :estimate, :name, :current_state]
+        Question.new do |q|
+          q.question = "Which story are you interested in?"
+          q.options = [stories, :back]
+          q.columns = [:index, :story_type, :estimate, :name, :current_state]
         end
       end
 
