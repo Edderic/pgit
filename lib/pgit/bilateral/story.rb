@@ -2,21 +2,15 @@ require 'pgit'
 
 module PGit
   module Bilateral
-    class Story
+    class Story < ResponseHandler
       include Interactive
-      attr_reader :question
       def initialize(options)
         raise PGit::Error::User, "Invalid options. See `pgit iteration -h` for valid options." unless options_has_valid_scope(options)
 
         @iterations_obj = PGit::Pivotal::Iterations.new(get_scope_hash(options))
         @iterations = @iterations_obj.get!
         @question = _question
-      end
-
-      def execute!
-        @question.ask do |response|
-          PGit::Bilateral::HandleChooseStory.new(options(response)).execute!
-        end
+        @response_handlers = [PGit::Bilateral::HandleChooseStory]
       end
 
       def stories

@@ -2,19 +2,13 @@ require 'pgit'
 
 module PGit
   module Bilateral
-    class HandleChooseStory
+    class HandleChooseStory < PGit::ResponseHandler
       def initialize(options)
         @response = options.fetch(:response)
         @stories = options.fetch(:stories)
         @parent_question = options.fetch(:parent_question)
-      end
-
-      def execute!
-        if response_can_be_handled?
-          question.ask do |new_response|
-            PGit::Bilateral::HandleBack.new(options(new_response)).execute!
-          end
-        end
+        @response_handlers = [PGit::Bilateral::HandleBack]
+        @question = _question
       end
 
       private
@@ -31,7 +25,7 @@ module PGit
         { response: new_response, stories: @stories, parent_question: @parent_question }
       end
 
-      def question
+      def _question
         Interactive::Question.new do |q|
           q.question = "What would you like to do with #{Rainbow(chosen_story.name).bright}?"
           q.options = [string_options, :back]
