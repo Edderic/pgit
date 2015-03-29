@@ -77,8 +77,8 @@ command :cmd do |c|
   c.command :show do |s|
     s.action do |global_options,options,args|
       app = PGit::Command::Application.new(global_options,
-                                     options,
-                                     args)
+                                           options,
+                                           args)
 
       show = PGit::Command::Show.new(app)
       show.execute!
@@ -90,8 +90,8 @@ command :cmd do |c|
   c.command :run do |r|
     r.action do |global_options,options,args|
       app = PGit::Command::Application.new(global_options,
-                                 options,
-                                 args)
+                                           options,
+                                           args)
       run = PGit::Command::Run.new(app)
       run.execute!
     end
@@ -112,8 +112,8 @@ command :cmd do |c|
 
     a.action do |global_options,options,args|
       app = PGit::Command::Application.new(global_options,
-                                 options,
-                                 args)
+                                           options,
+                                           args)
       add = PGit::Command::Add.new(app)
       add.execute!
     end
@@ -134,8 +134,8 @@ command :cmd do |c|
 
     a.action do |global_options,options,args|
       app = PGit::Command::Application.new(global_options,
-                                 options,
-                                 args)
+                                           options,
+                                           args)
       edit = PGit::Command::Edit.new(app)
       edit.execute!
     end
@@ -152,8 +152,8 @@ command :cmd do |c|
 
     a.action do |global_options,options,args|
       app = PGit::Command::Application.new(global_options,
-                                 options,
-                                 args)
+                                           options,
+                                           args)
       remove = PGit::Command::Remove.new(app)
       remove.execute!
     end
@@ -191,8 +191,11 @@ end
 desc 'Deal with iterations'
 
 command :iteration do |c|
+  c.desc "The scope of the iteration. Valid scopes are 'current', 'current_backlog', 'backlog', and 'done'"
+  c.default_value :current_backlog
+  c.flag :s, :scope
   c.action do |global_options,options,args|
-    bilateral_story = PGit::Bilateral::Story.new
+    bilateral_story = PGit::Bilateral::Story.new(options)
     bilateral_story.execute!
   end
 end
