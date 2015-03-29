@@ -4,16 +4,20 @@ module PGit
   module Bilateral
     class Story
       include Interactive
+      attr_reader :question
+
       def initialize(options)
         raise PGit::Error::User, "Invalid options. See `pgit iteration -h` for valid options." unless options_has_valid_scope(options)
 
         @iterations_obj = PGit::Pivotal::Iterations.new(get_scope_hash(options))
         @iterations = @iterations_obj.get!
+        @question = _question
       end
 
       def execute!
-        which_question.ask do |which_response|
-          PGit::Bilateral::HandleChooseStory.new(which_response, stories).execute!
+        @question.ask do |which_response|
+          options = {response: which_response, stories: stories, parent_question: @question}
+          PGit::Bilateral::HandleChooseStory.new(options).execute!
         end
       end
 
@@ -21,15 +25,15 @@ module PGit
         @iterations.inject([]) { |accum, iteration| accum | iteration.stories }
       end
 
-      def which_question
+      private
+
+      def _question
         Question.new do |q|
           q.question = "Which story are you interested in?"
           q.options = [stories, :back]
           q.columns = [:index, :story_type, :estimate, :name, :current_state]
         end
       end
-
-      private
 
       def get_scope_hash(options)
         options.select {|k,v| k == :scope}

@@ -87,14 +87,15 @@ describe PGit::Bilateral::Story do
           to receive(:new).with(query).and_return(iterations_obj)
         config = double('config', :question= => nil, :options= => nil, :columns= => nil)
         question = instance_double('Interactive::Question', ask: nil)
-        response = instance_double('Interactive::Response')
+        response = instance_double('Interactive::Response', valid?: true)
         allow(question).to receive(:ask).and_yield(response)
         allow(Interactive::Question).to receive(:new).and_yield(config).and_return(question)
         handle_choose_story = instance_double('PGit::Bilateral::HandleChooseStory',
                                              execute!: nil)
-        allow(PGit::Bilateral::HandleChooseStory).to receive(:new).with(response, stories).
-          and_return(handle_choose_story)
         interactive_story = PGit::Bilateral::Story.new(options)
+        response_options = {response: response, stories: stories, parent_question: interactive_story.question}
+        allow(PGit::Bilateral::HandleChooseStory).to receive(:new).with(response_options).
+          and_return(handle_choose_story)
         interactive_story.execute!
 
         expect(config).to have_received(:question=).with("Which story are you interested in?")
