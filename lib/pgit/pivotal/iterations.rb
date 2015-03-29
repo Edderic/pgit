@@ -2,7 +2,7 @@ module PGit
   module Pivotal
     class Iterations < Pivotal::CollectionRequest
       def initialize(query='')
-        # use better naming
+        # TODO: use better naming
         before_initialize
         @query = PGit::Pivotal::Request::Query.new(query)
       end
