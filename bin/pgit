@@ -214,10 +214,8 @@ command :story do |c|
   c.command :put do |p|
     p.action do |global_options,options,args|
       story = PGit::Pivotal::Story.new(90856856)
-      story.project_id = 1300676
-      story.name = "hello world"
-      story.description = "hello world"
-      story.current_state = "started"
+      # story.story_type = "feature"
+      story.current_state = "finished"
       puts story.put!
     end
   end
