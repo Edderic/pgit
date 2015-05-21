@@ -2,6 +2,7 @@ module PGit
   module Pivotal
     class IndividualRequest < Pivotal::Request
       def put!
+        require 'byebug'; byebug
         `curl -X PUT -H 'X-TrackerToken: #{api_token}' -H 'Content-Type: application/json' -d '#{JSON.generate(to_hash)}' #{link}`
         @changed_attributes = []
       end
