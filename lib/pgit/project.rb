@@ -9,7 +9,7 @@ module PGit
     validates_with PGit::Validators::ProjectValidator
 
     attr_writer :api_token, :id, :path
-    attr_reader :path, :api_token, :id, :configuration
+    attr_reader :path, :api_token, :id, :configuration, :kind
     attr_query :id, :path, :api_token
 
     def initialize(configuration=:no_config_given,

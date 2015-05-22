@@ -1,6 +1,15 @@
 require 'spec_helper'
 
 describe 'PGit::Project' do
+  describe 'kind' do
+    it 'should give "project"' do
+      p = PGit::Project.new
+      p.instance_variable_set("@kind", 'project')
+
+      expect(p.kind).to eq 'project'
+    end
+  end
+
   describe '#given_api_token?' do
     it 'should return false if no api_token given' do
       p = PGit::Project.new
