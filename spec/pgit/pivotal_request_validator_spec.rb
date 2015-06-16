@@ -28,22 +28,6 @@ describe 'PGit::PivotalRequestValidator' do
     end
   end
 
-  describe 'when the request has "kind": "error"' do
-    it 'should raise an error' do
-      request = <<-REQUEST
-        {
-          "code": "unfound_resource",
-          "kind": "error",
-          "error": "The object you tried to access could not be found.  It may have been removed by another user, you may be using the ID of another object type, or you may be trying to access a sub-resource at the wrong point in a tree."
-        }
-      REQUEST
-
-      expect do
-        PGit::PivotalRequestValidator.new(request)
-      end.to raise_error(PGit::Error::External)
-    end
-  end
-
   describe 'when the request has no "kind"' do
     it 'should raise a PGit::Error::External' do
       request = <<-REQUEST

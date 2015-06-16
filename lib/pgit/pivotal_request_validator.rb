@@ -11,7 +11,7 @@ module PGit
     private
 
     def validate
-      if kind_error? || no_kind?
+      if no_kind?
         raise PGit::Error::External.new(@request)
       end
     end
