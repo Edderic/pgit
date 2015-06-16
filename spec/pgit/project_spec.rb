@@ -377,7 +377,7 @@ describe 'PGit::Project' do
         p.api_token = old_project.api_token
       end
 
-      expect{proj.save!}.to raise_error(PGit::Error::User, :no_id_given)
+      expect{proj.save!}.to raise_error(PGit::Error::User, 'no_id_given')
     end
 
     it 'raises an error if api_token does not exist' do
