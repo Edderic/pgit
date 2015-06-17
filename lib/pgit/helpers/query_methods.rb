@@ -17,7 +17,7 @@ module PGit
 
       def ensure_given_attr(attribute)
         attr = send(attribute)
-        raise PGit::Error::User, attr.to_s if attr == not_given(attribute)
+        raise PGit::Error::User.new(attr.to_s) if attr == not_given(attribute)
       end
 
       def attr_query(*args)

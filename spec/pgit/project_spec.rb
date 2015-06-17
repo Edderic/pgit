@@ -409,7 +409,7 @@ describe 'PGit::Project' do
         p.id = old_project.id
       end
 
-      expect{proj.save!}.to raise_error(PGit::Error::User, :no_api_token_given)
+      expect{proj.save!}.to raise_error(PGit::Error::User, 'no_api_token_given')
     end
 
     it 'raises an error if path does not exist' do
@@ -441,7 +441,7 @@ describe 'PGit::Project' do
         p.api_token = old_project.api_token
       end
 
-      expect{proj.save!}.to raise_error(PGit::Error::User, :no_path_given)
+      expect{proj.save!}.to raise_error(PGit::Error::User, 'no_path_given')
     end
   end
 
