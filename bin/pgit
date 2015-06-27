@@ -190,7 +190,7 @@ end
 
 desc 'Deal with iterations'
 
-command :iteration do |c|
+command :branch do |c|
   c.desc "The scope of the iteration. Valid scopes are 'current', 'current_backlog', 'backlog', and 'done'"
   c.default_value :current_backlog
   c.flag :s, :scope
