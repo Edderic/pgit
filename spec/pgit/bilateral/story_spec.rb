@@ -57,7 +57,7 @@ describe PGit::Bilateral::Story do
         interactive_story = PGit::Bilateral::Story.new(options)
         interactive_story.execute!
 
-        expect(config).to have_received(:question=).with("Which story are you interested in?")
+        expect(config).to have_received(:question=).with("Which story do you want to branch-ify?")
         expect(config).to have_received(:options=).with([stories, :back])
         expect(config).to have_received(:columns=).with([:index, :story_type, :estimate, :name, :current_state])
         expect(question).to have_received(:ask)
@@ -98,7 +98,7 @@ describe PGit::Bilateral::Story do
           and_return(handle_choose_story)
         interactive_story.execute!
 
-        expect(config).to have_received(:question=).with("Which story are you interested in?")
+        expect(config).to have_received(:question=).with("Which story do you want to branch-ify?")
         expect(config).to have_received(:options=).with([stories, :back])
         expect(config).to have_received(:columns=).with([:index, :story_type, :estimate, :name, :current_state])
         expect(question).to have_received(:ask)
@@ -133,7 +133,7 @@ describe PGit::Bilateral::Story do
         interactive_story = PGit::Bilateral::Story.new(options)
         interactive_story.execute!
 
-        expect(config).to have_received(:question=).with("Which story are you interested in?")
+        expect(config).to have_received(:question=).with("Which story do you want to branch-ify?")
         expect(config).to have_received(:options=).with([stories, :back])
         expect(config).to have_received(:columns=).with([:index, :story_type, :estimate, :name, :current_state])
         expect(question).to have_received(:ask)
@@ -168,7 +168,7 @@ describe PGit::Bilateral::Story do
         interactive_story = PGit::Bilateral::Story.new(options)
         interactive_story.execute!
 
-        expect(config).to have_received(:question=).with("Which story are you interested in?")
+        expect(config).to have_received(:question=).with("Which story do you want to branch-ify?")
         expect(config).to have_received(:options=).with([stories, :back])
         expect(config).to have_received(:columns=).with([:index, :story_type, :estimate, :name, :current_state])
         expect(question).to have_received(:ask)

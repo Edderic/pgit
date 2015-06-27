@@ -25,7 +25,7 @@ module PGit
 
       def _question
         Question.new do |q|
-          q.question = "Which story are you interested in?"
+          q.question = "Which story do you want to branch-ify?"
           q.options = [stories, :back]
           q.columns = [:index, :story_type, :estimate, :name, :current_state]
         end
