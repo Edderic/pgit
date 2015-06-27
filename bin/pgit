@@ -199,30 +199,6 @@ command :branch do |c|
     bilateral_story.execute!
   end
 end
-desc 'Work with Pivotal Tracker stories'
-long_desc 'Manage Pivotal Tracker stories associated with the project of the
-current path'
-
-command :story do |c|
-  c.action do |global_options,options,args|
-    app = PGit::Project::Application.new(global_options, options, args)
-    interactive_story = PGit::Interactive::Story.new(app)
-    interactive_story.execute!
-  end
-
-  c.desc 'test put'
-  c.command :put do |p|
-    p.action do |global_options,options,args|
-      story = PGit::Pivotal::Story.new(90856856)
-      story.project_id = 1300676
-      story.name = "hello world"
-      story.description = "hello world"
-      story.current_state = "started"
-      puts story.put!
-    end
-  end
-end
-
 desc 'Initializes configuration file'
 arg_name 'path/to/config_file'
 
