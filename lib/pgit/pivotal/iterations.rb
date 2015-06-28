@@ -8,8 +8,8 @@ module PGit
       end
 
       def get!
-        iterations.map do |iteration_hash|
-          PGit::Pivotal::Iteration.new {|iter| iter.hash = iteration_hash}
+        hashes_of_items.map do |item_hash|
+          PGit::Pivotal::Iteration.new {|iter| iter.hash = item_hash}
         end
       end
 
@@ -19,7 +19,7 @@ module PGit
 
       private
 
-      def iterations
+      def hashes_of_items
         JSON.parse(get_request)
       end
     end
