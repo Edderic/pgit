@@ -37,7 +37,10 @@ module PGit
       def which_to_reuse_question
         Question.new do |q|
           q.question = "Which one?"
-          q.options = [projects.map{|proj| "#{proj.path}: #{proj.api_token}"}, :cancel]
+          q.options = [projects.map do |proj|
+            OpenStruct.new(api_token: proj.api_token, path: proj.path)
+          end, :cancel]
+          q.columns = [:index, :api_token, :path]
         end
       end
     end
