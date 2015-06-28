@@ -14,9 +14,26 @@ module PGit
       end
 
       def execute!
-        project.defaulted_attrs.each do |attr|
-          puts "What's the project #{attr}?"
-          project.send("#{attr}=", STDIN.gets.chomp)
+        if project.api_token == :no_api_token_given
+          puts "What's the project api_token?"
+          project.api_token = STDIN.gets.chomp
+        end
+
+        get_projects
+      end
+
+      def get_projects
+        projects = PGit::Pivotal::Projects.new(api_token: project.api_token).get!
+        question = Interactive::Question.new do |q|
+          q.question = "Which project do you want to associate with the working directory?"
+          q.options = [projects]
+          q.columns = [:index, :name]
+        end
+
+        question.ask do |response|
+          if response.whole_number?
+            project.id = projects[response.to_i].id
+          end
         end
       end
     end
