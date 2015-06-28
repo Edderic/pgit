@@ -1,6 +1,10 @@
 module PGit
   module Pivotal
     class IndividualRequest < Pivotal::Request
+      def initialize(&block)
+        yield self if block_given?
+      end
+
       def put!
         `curl -X PUT -H 'X-TrackerToken: #{api_token}' -H 'Content-Type: application/json' -d '#{JSON.generate(to_hash)}' #{link}`
         @changed_attributes = []
