@@ -23,7 +23,7 @@ describe PGit::Status do
       args = double('args')
       current_branch = instance_double('PGit::CurrentBranch', story_id: story_id)
       allow(PGit::CurrentBranch).to receive(:new).and_return(current_branch)
-      story_hash = {'kind': 'story'}
+      story_hash = {'kind' => 'story'}
       story = double('PGit::Story', get!: story_hash)
       allow(PGit::Pivotal::Story).to receive(:new).with(current_branch.story_id).and_return(story)
       table = double('table')
