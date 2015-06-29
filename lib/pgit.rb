@@ -46,6 +46,7 @@ require 'pgit/story_branch'
 require 'pgit/story_branch/name_parser'
 require 'pgit/story_branch/story_id_parser'
 require 'pgit/story_branch/application'
+require 'pgit/status'
 require 'pgit/version.rb'
 require 'yaml'
 
