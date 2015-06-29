@@ -21,27 +21,50 @@ will create a branch for you named `implement-really-cool-feature-10102004`
 
 ## Installation
 
-* Install via RubyGems:
+### Install via RubyGems:
 
 ```
 $ gem install pgit
 ```
 
-* Setup configuration file:
-
+### Create autocompletion script and configuration file
 ```
 $ pgit install
 ```
 
-This will generate a YAML file under `~/.pgit.rc.yml`. Edit that file to add
-information about projects that you're working on.  Each project needs a
-project `id`, Pivotal Tracker `api_token`, and `path`.
+### Add a project
 
-The `api_token` can be found here: https://www.pivotaltracker.com/profile
+The following will ask you questions as to which Pivotal Tracker project to associate to your working directory:
 
-The project id is in the URL when visiting a project (i.e.
-https://pivotaltracker.com/projects/12345678)
+```
+$ pgit proj add
+```
+
+### Create a branch
+
+Once your working directory is associated to a Pivotal Tracker project,
+this will ask you which branch to create:
+
+```
+$ pgit branch
+```
+
+### Add a command for deployment
+
+Do you want to automate the merging/rebasing process?
+`STORY_BRANCH` is the memoized current branch.
+
+```
+pgit cmd add --name="finish" --steps="git fetch origin master, git rebase origin/master, git checkout master, git merge STORY_BRANCH, git branch -d STORY_BRANCH, git push origin :STORY_BRANCH, git push origin master"
+```
+
+You can run the steps of the command as follows:
+
+```
+$ pgit cmd run finish
+```
 
 
 ## Development
+
 See https://www.pivotaltracker.com/n/projects/1228944 for information.
